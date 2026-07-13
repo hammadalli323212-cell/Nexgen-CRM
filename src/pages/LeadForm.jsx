@@ -520,6 +520,7 @@ const LeadForm = ({ isOrder = false }) => {
                   <option value=""></option>
                   <option value="Zelle">Zelle</option>
                   <option value="Credit Card">Credit Card</option>
+                  <option value="Cash">Cash</option>
                   <option value="Cash App">Cash App</option>
                   <option value="Venmo">Venmo</option>
                   <option value="Paypal">Paypal</option>
@@ -561,6 +562,7 @@ const LeadForm = ({ isOrder = false }) => {
                   <option value=""></option>
                   <option value="Zelle">Zelle</option>
                   <option value="Credit Card">Credit Card</option>
+                  <option value="Cash">Cash</option>
                   <option value="Cash App">Cash App</option>
                   <option value="Venmo">Venmo</option>
                   <option value="Paypal">Paypal</option>
