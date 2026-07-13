@@ -14,6 +14,7 @@ const columnHelper = createColumnHelper();
 
 const Leads = () => {
   const [leads, setLeads] = useState([]);
+  const [selectedLeads, setSelectedLeads] = useState(new Set());
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const { user } = useAuth();
@@ -78,13 +79,14 @@ const Leads = () => {
     fetchLeads();
   }, []);
 
-  const handleWipeAllLeads = async () => {
-    if (!window.confirm('Are you absolutely sure you want to delete ALL leads? This is irreversible!')) return;
-    const toastId = toast.loading('Deleting all leads...');
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete ${selectedLeads.size} leads? This cannot be undone.`)) return;
+    const toastId = toast.loading(`Deleting ${selectedLeads.size} leads...`);
     try {
-      const { error } = await supabase.from('leads').delete().neq('lead_number', 0);
+      const { error } = await supabase.from('leads').delete().in('lead_number', Array.from(selectedLeads));
       if (error) throw error;
-      toast.success('All leads deleted successfully!', { id: toastId });
+      toast.success('Leads deleted successfully!', { id: toastId });
+      setSelectedLeads(new Set());
       fetchLeads();
     } catch (err) {
       console.error('Delete error:', err);
@@ -248,8 +250,38 @@ const Leads = () => {
     e.target.value = null;
   };
 
+  const toggleSelection = (id) => {
+    const newSet = new Set(selectedLeads);
+    if (newSet.has(id)) newSet.delete(id);
+    else newSet.add(id);
+    setSelectedLeads(newSet);
+  };
+
+  const toggleAll = () => {
+    if (selectedLeads.size === leads.length && leads.length > 0) setSelectedLeads(new Set());
+    else setSelectedLeads(new Set(leads.map(l => l.id)));
+  };
+
   const columns = useMemo(
     () => [
+      columnHelper.accessor('select', {
+        header: () => (
+          <input 
+            type="checkbox" 
+            checked={leads.length > 0 && selectedLeads.size === leads.length} 
+            onChange={toggleAll} 
+            style={{ cursor: 'pointer' }}
+          />
+        ),
+        cell: info => (
+          <input 
+            type="checkbox" 
+            checked={selectedLeads.has(info.row.original.id)} 
+            onChange={() => toggleSelection(info.row.original.id)} 
+            style={{ cursor: 'pointer' }}
+          />
+        ),
+      }),
       columnHelper.accessor('id', {
         header: 'Lead #',
         cell: info => <Link to={`/leads/${info.getValue()}`} style={{ color: 'var(--brand-blue)', textDecoration: 'none' }}>{info.row.original.displayId}</Link>,
@@ -343,13 +375,15 @@ const Leads = () => {
             ref={fileInputRef} 
             onChange={handleImport} 
           />
-          <button 
-            className={styles.btnSecondary} 
-            style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
-            onClick={handleWipeAllLeads}
-          >
-            Clear Old Data
-          </button>
+          {selectedLeads.size > 0 && (
+            <button 
+              className={styles.btnSecondary} 
+              style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
+              onClick={handleBulkDelete}
+            >
+              Delete Selected ({selectedLeads.size})
+            </button>
+          )}
           <button 
             className={styles.btnSecondary} 
             style={{ marginRight: '10px' }} 
