@@ -13,6 +13,7 @@ const BookingAuth = () => {
   const [maskedEmail, setMaskedEmail] = useState('');
   const [maskedPhone, setMaskedPhone] = useState('');
   const [customerData, setCustomerData] = useState(null);
+  const [activeTab, setActiveTab] = useState('phone'); // 'phone' or 'email'
 
   useEffect(() => {
     const loadCustomerData = async () => {
@@ -122,28 +123,44 @@ const BookingAuth = () => {
       <div className={styles.authBox}>
         <h1 className={styles.title}>Confirm your identity</h1>
         
-        <div className={styles.formGroup}>
-          <label>Enter email address that matches this pattern: {maskedEmail || '***@***.com'}</label>
-          <input 
-            type="text" 
-            className={styles.input} 
-            value={emailInput}
-            onChange={(e) => setEmailInput(e.target.value)}
-            placeholder="Email Address"
-          />
+        <div className={styles.tabs}>
+          <button 
+            className={activeTab === 'phone' ? styles.activeTab : styles.tab} 
+            onClick={() => { setActiveTab('phone'); setError(''); }}
+          >
+            Phone Number
+          </button>
+          <button 
+            className={activeTab === 'email' ? styles.activeTab : styles.tab} 
+            onClick={() => { setActiveTab('email'); setError(''); }}
+          >
+            Email Address
+          </button>
         </div>
 
-        <div className={styles.orText}>Or, enter phone number which ends in {maskedPhone || '******0000'}</div>
-        
-        <div className={styles.formGroup} style={{ marginTop: '-15px' }}>
-          <input 
-            type="tel" 
-            className={styles.input} 
-            value={phoneInput}
-            onChange={(e) => setPhoneInput(e.target.value)}
-            placeholder="Phone Number"
-          />
-        </div>
+        {activeTab === 'email' ? (
+          <div className={styles.formGroup}>
+            <label>Enter email address that matches this pattern: {maskedEmail || '***@***.com'}</label>
+            <input 
+              type="text" 
+              className={styles.input} 
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="Email Address"
+            />
+          </div>
+        ) : (
+          <div className={styles.formGroup}>
+            <label>Enter phone number which ends in {maskedPhone || '******0000'}</label>
+            <input 
+              type="tel" 
+              className={styles.input} 
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              placeholder="Phone Number"
+            />
+          </div>
+        )}
 
         {error && <div className={styles.error}>{error}</div>}
 
