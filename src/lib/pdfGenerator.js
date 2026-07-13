@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress, action = 'download') => {
+export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download') => {
   let previewWindow = null;
   if (action === 'preview') {
     previewWindow = window.open('', '_blank');
@@ -138,14 +138,20 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
         head: [['Pricing Summary', '']],
         body: [
             ['Total Tariff:', `$${tariff.toFixed(2)}`],
-            ['1st Payment:', `$${deposit.toFixed(2)}`],
-            [`Final Payment (${paymentMethod}):`, `$${nextPayment.toFixed(2)}`]
+            ['First Payment:', `$${deposit.toFixed(2)}`],
+            [`Due: ${firstPaymentDue}`, `Method: ${firstPaymentMethod}`],
+            [`Final Payment:`, `$${nextPayment.toFixed(2)}`],
+            [`Due: ${finalPaymentDue}`, `Method: ${finalPaymentMethod}`]
         ],
         didParseCell: function (data) {
-            // Highlight the balance due
-            if (data.row.index === 2 && data.section === 'body') {
+            if (data.row.index === 3 && data.section === 'body') {
                 data.cell.styles.fontStyle = 'bold';
-                data.cell.styles.textColor = [220, 38, 38]; // Red for balance due
+                data.cell.styles.textColor = [220, 38, 38]; 
+            }
+            if ((data.row.index === 2 || data.row.index === 4) && data.section === 'body') {
+                data.cell.styles.fontStyle = 'italic';
+                data.cell.styles.textColor = [100, 116, 139]; 
+                data.cell.styles.fontSize = 8;
             }
         }
     });

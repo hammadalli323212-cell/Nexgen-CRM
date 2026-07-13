@@ -191,7 +191,12 @@ const BookingWizard = () => {
   
   const nextPayment = tariff - deposit;
   const expirationDate = leadData.price_expiration_date ? new Date(leadData.price_expiration_date).toLocaleDateString() : 'Pending';
-  const paymentMethod = leadData.payment_method || 'Cash On Delivery';
+  
+  const firstPaymentDue = leadData.broker_fee_terms || 'Payment on Order';
+  const firstPaymentMethod = leadData.payment_method || 'Credit Card';
+  const finalPaymentDue = leadData.carrier_pay_terms || 'Payment on Delivery';
+  const finalPaymentMethod = leadData.carrier_payment_method || 'Cash / Certified Funds';
+
   const vehicles = leadData.lead_vehicles || [];
   const cargoLabel = vehicles.length > 0 
     ? vehicles.map(v => `${v.vehicle_year || ''} ${v.vehicle_make || ''} ${v.vehicle_model || ''}`).join(', ') 
@@ -240,13 +245,13 @@ const BookingWizard = () => {
             <h2 style={{ fontSize: '2rem', color: '#0b132b', marginBottom: '10px' }}>Order Successfully Submitted!</h2>
             <p style={{ color: '#555', fontSize: '1.1rem', marginBottom: '30px' }}>Your signed contract has been received and stored securely.</p>
             <button 
-              onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress, 'download')}
+              onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'download')}
               style={{ background: '#0b132b', color: 'var(--text-primary)', border: 'none', padding: '15px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '15px', width: '100%', maxWidth: '350px' }}
             >
               Download PDF Contract
             </button>
             <button 
-              onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress, 'preview')}
+              onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'preview')}
               style={{ background: '#f8fafc', color: '#0b132b', border: '2px solid #0b132b', padding: '13px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', width: '100%', maxWidth: '350px' }}
             >
               Preview PDF
@@ -436,13 +441,18 @@ const BookingWizard = () => {
                 <span>First Payment</span>
                 <span>${deposit.toFixed(2)}</span>
               </div>
-              <div className={styles.priceRow}>
-                <span>Next Payment</span>
+              <div className={styles.priceRow} style={{ color: '#555', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
+                <span style={{flex: 1}}>Due: {firstPaymentDue}</span>
+                <span style={{textAlign: 'right'}}>{firstPaymentMethod}</span>
+              </div>
+              
+              <div className={styles.priceRow} style={{ marginTop: '10px' }}>
+                <span>Final Payment</span>
                 <span>${nextPayment.toFixed(2)}</span>
               </div>
-              <div className={styles.priceRow}>
-                <span>Balance Payment</span>
-                <span style={{ textAlign: 'right', fontSize: '0.9rem', color: '#0b132b', fontWeight: '500' }}>{paymentMethod}</span>
+              <div className={styles.priceRow} style={{ color: '#555', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
+                <span style={{flex: 1}}>Due: {finalPaymentDue}</span>
+                <span style={{textAlign: 'right'}}>{finalPaymentMethod}</span>
               </div>
             </div>
           </div>
