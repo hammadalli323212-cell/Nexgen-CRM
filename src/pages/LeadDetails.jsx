@@ -51,9 +51,11 @@ const LeadDetails = () => {
             lead_number, 
             is_archived,
             created_at, 
+            origin_address,
             origin_city, 
             origin_state, 
             origin_zip,
+            destination_address,
             destination_city, 
             destination_state, 
             destination_zip,
@@ -403,9 +405,11 @@ const LeadDetails = () => {
       });
     } else if (panel === 'logistics') {
       setDraftData({
+        origin_address: lead.origin_address || '',
         origin_city: lead.origin_city || '',
         origin_state: lead.origin_state || '',
         origin_zip: lead.origin_zip || '',
+        destination_address: lead.destination_address || '',
         destination_city: lead.destination_city || '',
         destination_state: lead.destination_state || '',
         destination_zip: lead.destination_zip || '',
@@ -486,9 +490,9 @@ const LeadDetails = () => {
       email: lead.customers?.email || '',
       phone: lead.customers?.phone || '',
       pickupDate: lead.ship_date || 'TBD',
-      originAddress: '',
+      originAddress: lead.origin_address || '',
       originCity: `${lead.origin_city}, ${lead.origin_state} ${lead.origin_zip}`,
-      destAddress: '',
+      destAddress: lead.destination_address || '',
       destCity: `${lead.destination_city}, ${lead.destination_state} ${lead.destination_zip}`
     };
 
@@ -624,6 +628,12 @@ const LeadDetails = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', gap: '8px' }}>
                      <div style={{ flex: 1 }}>
+                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin Address</label>
+                       <input type="text" value={draftData.origin_address} onChange={e => setDraftData({...draftData, origin_address: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                     </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                     <div style={{ flex: 1 }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin City</label>
                        <input type="text" value={draftData.origin_city} onChange={e => setDraftData({...draftData, origin_city: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                      </div>
@@ -637,6 +647,12 @@ const LeadDetails = () => {
                      </div>
                   </div>
                   
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                     <div style={{ flex: 1 }}>
+                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destination Address</label>
+                       <input type="text" value={draftData.destination_address} onChange={e => setDraftData({...draftData, destination_address: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                     </div>
+                  </div>
                   <div style={{ display: 'flex', gap: '8px' }}>
                      <div style={{ flex: 1 }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dest City</label>
@@ -666,11 +682,17 @@ const LeadDetails = () => {
                 <div className={styles.infoGrid}>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Origin</span>
-                    <span className={styles.infoValue}>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</span>
+                    <span className={styles.infoValue}>
+                      {lead.origin_address ? <div>{lead.origin_address}</div> : null}
+                      <div>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</div>
+                    </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Destination</span>
-                    <span className={styles.infoValue}>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</span>
+                    <span className={styles.infoValue}>
+                      {lead.destination_address ? <div>{lead.destination_address}</div> : null}
+                      <div>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</div>
+                    </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Estimated Ship Date</span>

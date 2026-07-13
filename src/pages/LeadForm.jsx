@@ -27,8 +27,8 @@ const LeadForm = ({ isOrder = false }) => {
   const [originalData, setOriginalData] = useState(null); // For diffing logs
   const [customer, setCustomer] = useState({ id: null, name: '', phone: '', email: '', leadSource: '', orderId: '' });
   const [locations, setLocations] = useState({ 
-    pickupLocation: '', pickupZip: '', 
-    dropoffLocation: '', dropoffZip: '',
+    pickupAddress: '', pickupLocation: '', pickupZip: '', 
+    dropoffAddress: '', dropoffLocation: '', dropoffZip: '',
     estPickupDate: '', estDropoffDate: ''
   });
   const [vehicles, setVehicles] = useState([{ ...initialVehicle }]);
@@ -129,8 +129,10 @@ const LeadForm = ({ isOrder = false }) => {
           });
 
           setLocations({
+            pickupAddress: data.origin_address || '',
             pickupLocation: data.origin_city || '',
             pickupZip: data.origin_zip || '',
+            dropoffAddress: data.destination_address || '',
             dropoffLocation: data.destination_city || '',
             dropoffZip: data.destination_zip || '',
             estPickupDate: data.ship_date || '',
@@ -222,8 +224,10 @@ const LeadForm = ({ isOrder = false }) => {
         customer_id: customerId,
         order_id: customer.orderId,
         source: customer.leadSource || 'Manual',
+        origin_address: locations.pickupAddress,
         origin_city: locations.pickupLocation,
         origin_zip: locations.pickupZip,
+        destination_address: locations.dropoffAddress,
         destination_city: locations.dropoffLocation,
         destination_zip: locations.dropoffZip,
         ship_date: locations.estPickupDate || null,
@@ -365,8 +369,18 @@ const LeadForm = ({ isOrder = false }) => {
         </div>
 
         {/* Logistics and Dates */}
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>Logistics</div>
+        <div className={`${styles.section} ${styles.fullWidth}`}>
+          <h2 className={styles.sectionTitle}>Locations & Dates</h2>
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label>Pickup Address</label>
+              <input type="text" className={styles.input} value={locations.pickupAddress} onChange={e => setLocations({...locations, pickupAddress: e.target.value})} placeholder="e.g. 123 Main St" />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Dropoff Address</label>
+              <input type="text" className={styles.input} value={locations.dropoffAddress} onChange={e => setLocations({...locations, dropoffAddress: e.target.value})} placeholder="e.g. 456 Market St" />
+            </div>
+          </div>
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label>Pickup Location (City, ST)</label>
