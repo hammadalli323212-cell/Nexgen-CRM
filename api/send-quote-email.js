@@ -95,7 +95,7 @@ ${bookingLink ? `
 
 <div style="background:#f8fafc;padding:16px;border-radius:8px;margin:0 0 24px;text-align:center">
 <p style="margin:0 0 4px;font-size:14px;color:#4b5563;font-weight:600">Questions? We're here to help.</p>
-<p style="margin:0;font-size:18px;color:#1e3a5f;font-weight:700">📞 (800) 555-0199</p>
+<p style="margin:0;font-size:18px;color:#1e3a5f;font-weight:700">📞 (832) 886-1321</p>
 </div>
 
 <p style="color:#374151;margin:0">Best regards,</p>
