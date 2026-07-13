@@ -2,6 +2,14 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress, action = 'download') => {
+  let previewWindow = null;
+  if (action === 'preview') {
+    previewWindow = window.open('', '_blank');
+    if (previewWindow) {
+      previewWindow.document.write('<html><body style="font-family:sans-serif;padding:20px;">Generating secure PDF preview...</body></html>');
+    }
+  }
+
   try {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -265,12 +273,17 @@ Terms & Conditions
     if (action === 'preview') {
       const pdfBlob = doc.output('blob');
       const blobUrl = URL.createObjectURL(pdfBlob);
-      window.open(blobUrl, '_blank');
+      if (previewWindow) {
+        previewWindow.location.href = blobUrl;
+      } else {
+        window.open(blobUrl, '_blank');
+      }
     } else {
       doc.save(`NexGen_Order_${quoteNumber}.pdf`);
     }
   } catch (error) {
     console.error("PDF Generation Error:", error);
+    if (previewWindow) previewWindow.close();
     alert(`Error generating PDF: ${error.message}`);
   }
 };
