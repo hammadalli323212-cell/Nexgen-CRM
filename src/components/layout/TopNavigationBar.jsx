@@ -1,0 +1,133 @@
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { ChevronDown, Search, Bell, Star, PlusCircle, LogOut, Users, Sun, Moon } from 'lucide-react';
+import { useAuth } from '../../lib/AuthContext';
+import styles from './TopNavigationBar.module.css';
+
+const TopNavigationBar = ({ onSearchClick }) => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const { user, role, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/login');
+  };
+
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const navItems = [
+    { name: 'Dashboard', path: '/' },
+    { name: 'My Tasks', path: '/tasks' },
+    { 
+      name: 'Leads', 
+      path: '/leads', 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'Active Leads', icon: <Star size={14} />, path: '/leads' },
+        { name: 'Archived Records', icon: <Star size={14} style={{opacity: 0.5}} />, path: '/archive' }
+      ]
+    },
+    { name: 'Orders', path: '/orders', hasDropdown: true },
+    { name: 'Dispatch', path: '/dispatch' },
+    { name: 'Customers', path: '/customers' },
+    { name: 'Carriers', path: '/carriers', hasDropdown: true },
+    { name: 'Reports', path: '/reports', hasDropdown: true },
+  ];
+
+  return (
+    <header className={styles.navbar}>
+      <div className={styles.logoArea}>
+        <div style={{ width: 24, height: 24, backgroundColor: 'var(--text-primary)', maskImage: 'url("/vite.svg")', WebkitMaskImage: 'url("/vite.svg")' }} />
+        NEXGEN
+      </div>
+      
+      <nav className={styles.navLinks}>
+        {navItems.map((item) => (
+          <div 
+            key={item.name}
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setActiveDropdown(item.name)}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <NavLink
+              to={item.path}
+              className={({ isActive }) => 
+                `${styles.navItem} ${isActive ? styles.active : ''}`
+              }
+            >
+              {item.name}
+              {item.hasDropdown && <ChevronDown size={14} />}
+            </NavLink>
+            
+            {item.hasDropdown && activeDropdown === item.name && item.dropdownItems && (
+              <div className={styles.dropdownMenu}>
+                {item.dropdownItems.map((dItem, idx) => (
+                  <NavLink key={idx} to={dItem.path} className={styles.dropdownItem}>
+                    {dItem.icon}
+                    {dItem.name}
+                  </NavLink>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </nav>
+      
+      <div className={styles.rightActions}>
+        <button className={styles.iconButton} onClick={toggleTheme} title="Toggle Theme">
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+        <button className={styles.iconButton} onClick={onSearchClick} title="Search (Ctrl+K)">
+          <Search size={18} />
+        </button>
+        <button className={styles.iconButton}>
+          <Bell size={18} />
+        </button>
+        
+        <div 
+          className={styles.userProfile} 
+          style={{ position: 'relative', cursor: 'pointer' }}
+          onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+        >
+          <div className={styles.avatar}>
+            {user?.user_metadata?.full_name ? user.user_metadata.full_name.substring(0, 2).toUpperCase() : 'U'}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <span>{user?.user_metadata?.full_name || user?.email || 'User'}</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{role?.toUpperCase() || 'USER'}</span>
+          </div>
+
+          {profileDropdownOpen && (
+            <div className={styles.dropdownMenu} style={{ top: '45px', right: 0, left: 'auto', minWidth: '180px' }}>
+              {isAdmin && (
+                <NavLink to="/admin/users" className={styles.dropdownItem}>
+                  <Users size={14} /> User Management
+                </NavLink>
+              )}
+              <div 
+                className={styles.dropdownItem} 
+                onClick={handleSignOut}
+                style={{ borderTop: '1px solid var(--border-color)', marginTop: '4px', paddingTop: '8px' }}
+              >
+                <LogOut size={14} /> Sign Out
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default TopNavigationBar;

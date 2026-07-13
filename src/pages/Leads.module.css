@@ -1,0 +1,42 @@
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+.pageTitle h1 {
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.pageTitle p {
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.btnPrimary {
+  background-color: var(--brand-blue);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btnPrimary:hover {
+  background-color: var(--brand-blue-hover);
+}
+
+.tableWrapper {
+  background-color: var(--bg-panel);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  padding: var(--space-lg);
+}

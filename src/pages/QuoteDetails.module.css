@@ -1,0 +1,228 @@
+.pageContainer {
+  height: calc(100vh - 60px); /* Account for navbar */
+  display: flex;
+  flex-direction: column;
+  background-color: #2b3136; /* Dark background from screenshot */
+  padding-bottom: 60px; /* Space for action bar */
+  overflow: hidden;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: 350px 1fr 350px; /* Left col, middle col, right col */
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .topGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .topGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.panelHeader {
+  background-color: var(--brand-blue);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  background-color: var(--text-secondary);
+  color: var(--text-primary);
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 0.75rem;
+}
+
+.panelBody {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.formRow label {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.inputField {
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+select.inputField {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+}
+
+.textHighlight {
+  color: var(--danger);
+}
+
+.routeItem {
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Tabs Section */
+.tabsContainer {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-top: var(--space-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabList {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tabBtn.active {
+  color: var(--brand-blue);
+  border-bottom-color: var(--brand-blue);
+}
+
+.tabContent {
+  padding: var(--space-md);
+}
+
+.vehicleGrid {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--space-md);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.vCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.vLabel {
+  color: var(--text-secondary);
+  text-align: right;
+  flex: 1;
+  padding-right: 8px;
+}
+
+.vValue {
+  color: var(--text-primary);
+  flex: 1;
+  font-weight: 500;
+}
+
+.vValue.success {
+  color: var(--success);
+}
+
+/* Action Bar Footer */
+.actionBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--bg-panel);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  z-index: 100;
+}
+
+.actionBtn {
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.actionBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

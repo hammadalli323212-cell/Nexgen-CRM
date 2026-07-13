@@ -1,0 +1,4 @@
+.pageContainer {
+  height: 100%;
+  /* Calendar handles its own padding/background */
+}

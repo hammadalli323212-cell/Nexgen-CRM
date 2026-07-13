@@ -1,0 +1,98 @@
+.tableContainer {
+  width: '100%';
+  overflow-x: auto;
+  background-color: var(--bg-panel);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: var(--bg-header);
+  color: var(--text-secondary);
+  padding: var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.table th:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  transition: var(--transition);
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-panel-hover);
+}
+
+/* Alternate row shading like BATS */
+.table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.sortIndicator {
+  display: inline-block;
+  margin-left: var(--space-xs);
+  opacity: 0.5;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background-color: var(--bg-header);
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.pageControls {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.pageBtn {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}

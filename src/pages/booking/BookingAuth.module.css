@@ -1,0 +1,81 @@
+.authContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  min-height: calc(100vh - 90px);
+}
+
+.authBox {
+  width: 100%;
+  max-width: 600px;
+  background: transparent;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.formGroup {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #0066cc;
+}
+
+.orText {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.error {
+  color: #dc2626;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.submitBtn {
+  background-color: #0066cc;
+  color: var(--text-primary);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitBtn:hover {
+  background-color: #0052a3;
+}
+
+.submitBtn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}

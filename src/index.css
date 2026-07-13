@@ -1,0 +1,102 @@
+:root {
+  /* Colors - Dark Theme Default */
+  --bg-dark: #2c3136; /* Background of the whole page */
+  --bg-panel: #333a40; /* Panels/Tables background */
+  --bg-panel-hover: #3e464d;
+  --bg-header: #212529; /* Table headers or dark top sections */
+  
+  --brand-blue: #3b9add; /* Top nav bar and buttons */
+  --brand-blue-hover: #2980b9;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a0aab2;
+  --text-muted: #6c757d;
+  
+  --border-color: #454d55;
+  
+  /* Status Colors */
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Utilities */
+  --border-radius: 4px;
+  --transition: all 0.2s ease-in-out;
+}
+
+[data-theme="light"] {
+  --bg-dark: #f0f2f5;
+  --bg-panel: #ffffff;
+  --bg-panel-hover: #f8f9fa;
+  --bg-header: #e9ecef;
+  
+  --brand-blue: #0056b3;
+  --brand-blue-hover: #004085;
+  
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  
+  --border-color: #dee2e6;
+  
+  --success: #198754;
+  --warning: #ffc107;
+  --danger: #dc3545;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--brand-blue);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--brand-blue-hover);
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+/* Base Layout Classes */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container {
+  padding: var(--space-md);
+  height: 100%;
+}

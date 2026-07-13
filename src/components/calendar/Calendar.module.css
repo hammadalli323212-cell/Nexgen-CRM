@@ -1,0 +1,232 @@
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+  background-color: var(--bg-panel);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+}
+
+.monthTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.viewToggles {
+  display: flex;
+  background-color: var(--bg-panel);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toggleBtn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.toggleBtn.active {
+  background-color: var(--brand-blue);
+  color: var(--text-primary);
+}
+
+.navControls {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.navBtn {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.navBtn:hover {
+  background-color: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+.todayBtn {
+  background-color: rgba(255,255,255,0.1);
+  border: none;
+  color: var(--text-primary);
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: var(--space-xs);
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto 1fr;
+  flex: 1;
+}
+
+.dayName {
+  padding: var(--space-sm);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+}
+
+.dayName:last-child {
+  border-right: none;
+}
+
+.daysGrid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(100px, 1fr);
+}
+
+.dayCell {
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s;
+  background-color: #3b424a; /* Specific color from screenshot */
+}
+
+.dayCell:nth-child(7n) {
+  border-right: none;
+}
+
+.dayCell.empty {
+  background-color: #2b3136; /* Darker for empty days */
+}
+
+.dayCell.today {
+  background-color: rgba(94, 163, 219, 0.2); /* Highlight current day */
+}
+
+.dayCell.selected {
+  background-color: rgba(144, 144, 104, 0.4); /* Highlight from screenshot */
+}
+
+.dayNumber {
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding: 2px 6px;
+}
+
+.dayCell.today .dayNumber {
+  background-color: var(--brand-blue);
+  color: var(--text-primary);
+  border-radius: 50%;
+}
+
+.taskItem {
+  background-color: var(--brand-blue);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  padding: 2px 4px;
+  border-radius: 2px;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.taskItem.urgent {
+  background-color: var(--danger);
+}
+
+.taskItem.completed {
+  background-color: var(--success);
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Time Grid for Week/Day Views */
+.timeGridContainer {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  background-color: #353b41;
+}
+
+.timeColumn {
+  width: 60px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+}
+
+.timeLabel {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.daysContainer {
+  display: flex;
+  flex: 1;
+}
+
+.dayColumn {
+  flex: 1;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.dayColumn:last-child {
+  border-right: none;
+}
+
+.dayColumn.today {
+  background-color: rgba(144, 144, 104, 0.2); /* Matching screenshot highlight */
+}
+
+.timeSlot {
+  height: 40px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.timeSlot.solid {
+  border-bottom: 1px solid var(--border-color);
+}
