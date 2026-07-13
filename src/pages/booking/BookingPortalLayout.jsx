@@ -6,7 +6,7 @@ import styles from './BookingPortalLayout.module.css';
 
 const BookingPortalLayout = () => {
   const { id } = useParams();
-  const [agent, setAgent] = useState({ name: 'System Auto', phone: '(832) 886-1321', email: '' });
+  const [agent, setAgent] = useState({ name: 'Henry Ortiz', phone: '(832) 886-1321', email: '' });
 
   useEffect(() => {
     const fetchAgent = async () => {
