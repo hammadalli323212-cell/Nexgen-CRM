@@ -265,20 +265,14 @@ const Leads = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor('select', {
-        header: () => (
-          <input 
-            type="checkbox" 
-            checked={leads.length > 0 && selectedLeads.size === leads.length} 
-            onChange={toggleAll} 
-            style={{ cursor: 'pointer' }}
-          />
-        ),
+        header: () => null,
         cell: info => (
           <input 
             type="checkbox" 
             checked={selectedLeads.has(info.row.original.id)} 
             onChange={() => toggleSelection(info.row.original.id)} 
-            style={{ cursor: 'pointer' }}
+            onClick={(e) => e.stopPropagation()}
+            style={{ cursor: 'pointer', transform: 'scale(1.2)' }}
           />
         ),
       }),
