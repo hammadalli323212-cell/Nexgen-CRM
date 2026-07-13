@@ -78,6 +78,20 @@ const Leads = () => {
     fetchLeads();
   }, []);
 
+  const handleWipeAllLeads = async () => {
+    if (!window.confirm('Are you absolutely sure you want to delete ALL leads? This is irreversible!')) return;
+    const toastId = toast.loading('Deleting all leads...');
+    try {
+      const { error } = await supabase.from('leads').delete().neq('lead_number', 0);
+      if (error) throw error;
+      toast.success('All leads deleted successfully!', { id: toastId });
+      fetchLeads();
+    } catch (err) {
+      console.error('Delete error:', err);
+      toast.error('Failed to delete leads', { id: toastId });
+    }
+  };
+
   const handleImport = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -329,6 +343,13 @@ const Leads = () => {
             ref={fileInputRef} 
             onChange={handleImport} 
           />
+          <button 
+            className={styles.btnSecondary} 
+            style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
+            onClick={handleWipeAllLeads}
+          >
+            Clear Old Data
+          </button>
           <button 
             className={styles.btnSecondary} 
             style={{ marginRight: '10px' }} 
