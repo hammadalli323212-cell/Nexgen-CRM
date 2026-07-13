@@ -84,12 +84,21 @@ const BookingAuth = () => {
       let isValid = false;
 
       // Check if they entered email and it matches
-      if (emailInput && cleanEmailInput === cleanCustomerEmail && cleanCustomerEmail !== '') {
-        isValid = true;
+      if (emailInput && cleanCustomerEmail !== '') {
+        if (cleanEmailInput === cleanCustomerEmail) {
+          isValid = true;
+        }
       } 
+      
       // Check if they entered phone and it matches
-      else if (phoneInput && cleanPhoneInput === cleanCustomerPhone && cleanCustomerPhone !== '') {
-        isValid = true;
+      if (phoneInput && cleanCustomerPhone !== '') {
+        // Compare the last 10 digits to ignore country codes like +1
+        const phoneInput10 = cleanPhoneInput.slice(-10);
+        const customerPhone10 = cleanCustomerPhone.slice(-10);
+        
+        if (phoneInput10.length >= 7 && phoneInput10 === customerPhone10) {
+          isValid = true;
+        }
       }
 
       if (isValid) {
