@@ -115,11 +115,13 @@ const Leads = () => {
           const email = row['CustomerEmail'] || `unknown${Date.now() + i}@example.com`;
           const phone = row['CustomerPhone'] || '';
           const originRaw = row['Origin'] || '';
-          const originCity = originRaw.split(',')[0]?.trim() || '';
-          const originState = originRaw.split(',')[1]?.trim() || '';
+          const originClean = originRaw.split('|').pop().trim();
+          const originCity = originClean.split(',')[0]?.trim() || '';
+          const originState = originClean.split(',')[1]?.trim() || '';
           const destRaw = row['Destination'] || '';
-          const destCity = destRaw.split(',')[0]?.trim() || '';
-          const destState = destRaw.split(',')[1]?.trim() || '';
+          const destClean = destRaw.split('|').pop().trim();
+          const destCity = destClean.split(',')[0]?.trim() || '';
+          const destState = destClean.split(',')[1]?.trim() || '';
           const transportType = row['TransportType'] || 'Open';
           const sourceName = row['SourceName'] || 'Import';
           
