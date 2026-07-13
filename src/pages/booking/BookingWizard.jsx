@@ -179,9 +179,16 @@ const BookingWizard = () => {
   // Derived Info for Sidebar
   const quoteNumber = leadData.order_id || `#NG-${leadData.lead_number}`;
   const tariff = Number(leadData.estimated_price) || 0;
-  const deposit = leadData.deposit_amount !== null && leadData.deposit_amount !== undefined 
-    ? Number(leadData.deposit_amount) 
-    : (Number(leadData.estimated_price || 0) - Number(leadData.carrier_pay || 0));
+  
+  let deposit = 0;
+  if (leadData.broker_fee_terms === 'Payment on Delivery') {
+    deposit = 0;
+  } else {
+    deposit = leadData.deposit_amount !== null && leadData.deposit_amount !== undefined 
+      ? Number(leadData.deposit_amount) 
+      : (Number(leadData.estimated_price || 0) - Number(leadData.carrier_pay || 0));
+  }
+  
   const nextPayment = tariff - deposit;
   const expirationDate = leadData.price_expiration_date ? new Date(leadData.price_expiration_date).toLocaleDateString() : 'Pending';
   const paymentMethod = leadData.payment_method || 'Cash On Delivery';
