@@ -109,21 +109,42 @@ const Leads = () => {
           }
 
           // Parse Data
-          const fullName = row['CustomerName'] || '';
-          const firstName = fullName.split(' ')[0] || 'Unknown';
-          const lastName = fullName.split(' ').slice(1).join(' ') || 'Unknown';
-          const email = row['CustomerEmail'] || `unknown${Date.now() + i}@example.com`;
-          const phone = row['CustomerPhone'] || '';
-          const originRaw = row['Origin'] || '';
-          const originClean = originRaw.split('|').pop().trim();
-          const originCity = originClean.split(',')[0]?.trim() || '';
-          const originState = originClean.split(',')[1]?.trim() || '';
-          const destRaw = row['Destination'] || '';
-          const destClean = destRaw.split('|').pop().trim();
-          const destCity = destClean.split(',')[0]?.trim() || '';
-          const destState = destClean.split(',')[1]?.trim() || '';
-          const transportType = row['TransportType'] || 'Open';
-          const sourceName = row['SourceName'] || 'Import';
+            const fullName = row['CustomerName'] || '';
+            let firstName = fullName.split(' ')[0] || 'Unknown';
+            let lastName = fullName.split(' ').slice(1).join(' ') || 'Unknown';
+
+            const parseLocation = (raw) => {
+              if (!raw) return { name: '', phone: '', address: '', city: '', state: '', zip: '' };
+              const parts = raw.split('|').map(p => p.trim());
+              let addressStr = parts.pop() || '';
+              let phoneStr = parts.length > 0 ? parts.pop() : '';
+              let nameStr = parts.length > 0 ? parts.pop() : '';
+              const cityStateZip = addressStr.split(',');
+              let cityStr = cityStateZip[0]?.trim() || '';
+              let stateZip = cityStateZip[1]?.trim() || '';
+              const stateZipParts = stateZip.split(' ').filter(Boolean);
+              let stateStr = stateZipParts[0] || '';
+              let zipStr = stateZipParts.slice(1).join(' ') || '';
+              return { name: nameStr, phone: phoneStr, address: addressStr, city: cityStr, state: stateStr, zip: zipStr };
+            };
+
+            const originRaw = row['Origin'] || '';
+            const destRaw = row['Destination'] || '';
+            const originData = parseLocation(originRaw);
+            const destData = parseLocation(destRaw);
+
+            const email = row['CustomerEmail'] || `unknown${Date.now() + i}@example.com`;
+            const phone = row['CustomerPhone'] || originData.phone || destData.phone || '';
+            if (originData.name) {
+              firstName = originData.name.split(' ')[0] || firstName;
+              lastName = originData.name.split(' ').slice(1).join(' ') || lastName;
+            } else if (destData.name) {
+              firstName = destData.name.split(' ')[0] || firstName;
+              lastName = destData.name.split(' ').slice(1).join(' ') || lastName;
+            }
+
+            const transportType = row['TransportType'] || 'Open';
+            const sourceName = row['SourceName'] || 'Import';
           
           let tariff = row['TotalTariff'];
           if (typeof tariff === 'string') tariff = parseFloat(tariff.replace(/[^0-9.-]+/g, ''));
@@ -155,15 +176,17 @@ const Leads = () => {
           const { data: newLead, error: leadError } = await supabase
             .from('leads')
             .insert([{
-              customer_id: customerId,
-              order_id: row['Order ID'] || null,
-              source: sourceName,
-              origin_address: originRaw,
-              origin_city: originCity,
-              origin_state: originState,
-              destination_address: destRaw,
-              destination_city: destCity,
-              destination_state: destState,
+                customer_id: customerId,
+                order_id: row['Order ID'] || null,
+                source: sourceName,
+                origin_address: originData.address,
+                origin_city: originData.city,
+                origin_state: originData.state,
+                origin_zip: originData.zip,
+                destination_address: destData.address,
+                destination_city: destData.city,
+                destination_state: destData.state,
+                destination_zip: destData.zip,
               transport_type: transportType,
               estimated_price: isNaN(tariff) ? null : tariff,
               carrier_pay: isNaN(carrierFee) ? null : carrierFee,
