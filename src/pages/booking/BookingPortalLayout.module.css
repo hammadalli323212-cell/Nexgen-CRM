@@ -79,3 +79,33 @@
 .mainContent {
   /* No padding here, let child components handle their layout */
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    height: auto;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logoSection {
+    width: 100%;
+    clip-path: none;
+    padding: 20px;
+  }
+
+  .agentSection {
+    padding: 20px;
+    align-items: center;
+  }
+
+  .agentDetails {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .divider {
+    display: none;
+  }
+}

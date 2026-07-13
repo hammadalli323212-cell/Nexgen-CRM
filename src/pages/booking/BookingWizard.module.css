@@ -332,3 +332,58 @@
     border: none !important;
   }
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .bannerContent {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .bannerRight {
+    text-align: left;
+  }
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .crumbChevron {
+    margin: 0 5px;
+  }
+
+  .mainArea {
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 40px;
+  }
+
+  .sidebar {
+    width: 100%;
+    order: -1; /* Show price summary above the form on mobile */
+  }
+
+  .navButtons {
+    flex-direction: column-reverse;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .btnNext, .btnSubmit {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .btnPrev {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+}

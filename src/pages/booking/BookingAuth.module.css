@@ -79,3 +79,10 @@
   background-color: #9ca3af;
   cursor: not-allowed;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .authContainer {
+    padding: 40px 20px;
+  }
+}
