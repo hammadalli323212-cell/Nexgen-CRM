@@ -141,8 +141,24 @@ const BookingWizard = () => {
     
     setIsSubmitting(true);
     try {
+      // 1. Sync updated Customer data
+      if (leadData?.customers?.id) {
+        const { error: customerError } = await supabase.from('customers').update({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone
+        }).eq('id', leadData.customers.id);
+        
+        if (customerError) console.error("Failed to sync customer details:", customerError);
+      }
+
+      // 2. Sync updated Lead data
       const { error } = await supabase.from('leads').update({
         status: 'Booked',
+        origin_address: formData.originAddress,
+        destination_address: formData.destAddress,
+        ship_date: formData.pickupDate || leadData.ship_date,
         electronic_signature: formData.signature,
         signed_ip: ipAddress,
         signed_date: new Date().toISOString()
