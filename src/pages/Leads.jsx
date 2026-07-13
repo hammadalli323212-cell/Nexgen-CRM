@@ -351,7 +351,7 @@ const Leads = () => {
         ),
       }),
     ],
-    []
+    [selectedLeads, leads]
   );
 
   return (
