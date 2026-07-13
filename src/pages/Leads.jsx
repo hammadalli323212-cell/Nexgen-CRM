@@ -44,7 +44,8 @@ const Leads = () => {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          const formattedLeads = data.map(lead => ({
+          const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          const formattedLeads = sortedData.map(lead => ({
             id: lead.lead_number,
             displayId: `L-${lead.lead_number}`,
             created: new Date(lead.created_at).toLocaleString(),

@@ -40,7 +40,8 @@ const Orders = () => {
         if (error) throw error;
 
         if (data && data.length > 0) {
-          const formattedOrders = data.map((order) => ({
+          const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          const formattedOrders = sortedData.map((order) => ({
             id: order.order_id || `NG${order.lead_number}`,
             leadId: order.lead_number,
             created: new Date(order.created_at).toLocaleDateString(),
