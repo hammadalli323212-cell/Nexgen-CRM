@@ -533,6 +533,13 @@ const LeadDetails = () => {
           }
         }
 
+        if (changes.length > 0 && lead.electronic_signature) {
+          payload.electronic_signature = null;
+          payload.signed_ip = null;
+          payload.signed_date = null;
+          changes.push("Cleared Customer Signature (Due to changes)");
+        }
+
         const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
         if (error) throw error;
         setLead({ ...lead, ...payload });
@@ -553,9 +560,34 @@ const LeadDetails = () => {
         if (newVehicles.length > 0) {
            const { data: inserted, error } = await supabase.from('lead_vehicles').insert(newVehicles).select();
            if (error) throw error;
-           setLead({ ...lead, lead_vehicles: inserted });
+           
+           let updatedLead = { ...lead, lead_vehicles: inserted };
+           if (lead.electronic_signature) {
+             const { error: sigError } = await supabase.from('leads').update({
+               electronic_signature: null,
+               signed_ip: null,
+               signed_date: null
+             }).eq('lead_number', id);
+             if (!sigError) {
+               changes.push("Cleared Customer Signature (Due to changes)");
+               updatedLead = { ...updatedLead, electronic_signature: null, signed_ip: null, signed_date: null };
+             }
+           }
+           setLead(updatedLead);
         } else {
-           setLead({ ...lead, lead_vehicles: [] });
+           let updatedLead = { ...lead, lead_vehicles: [] };
+           if (lead.electronic_signature) {
+             const { error: sigError } = await supabase.from('leads').update({
+               electronic_signature: null,
+               signed_ip: null,
+               signed_date: null
+             }).eq('lead_number', id);
+             if (!sigError) {
+               changes.push("Cleared Customer Signature (Due to changes)");
+               updatedLead = { ...updatedLead, electronic_signature: null, signed_ip: null, signed_date: null };
+             }
+           }
+           setLead(updatedLead);
         }
       }
 

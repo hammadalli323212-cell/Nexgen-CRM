@@ -93,7 +93,7 @@ const BookingWizard = () => {
         
       if (data) {
         setLeadData(data);
-        if (data.status === 'Booked') {
+        if (data.status === 'Booked' && data.electronic_signature) {
           setIsSuccess(true);
         }
         setFormData(prev => ({
