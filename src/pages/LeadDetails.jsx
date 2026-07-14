@@ -718,7 +718,7 @@ const LeadDetails = () => {
                        <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                      </div>
                   </div>
-                  <div className={styles.infoGroup}>
+                  <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>PICKUP CONTACT</span>
                     <input type="text" value={draftData.origin_contact_name} onChange={e => setDraftData({...draftData, origin_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
                     <input type="text" value={draftData.origin_contact_phone} onChange={e => setDraftData({...draftData, origin_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
@@ -744,7 +744,7 @@ const LeadDetails = () => {
                        <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                      </div>
                   </div>
-                  <div className={styles.infoGroup}>
+                  <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>DELIVERY CONTACT</span>
                     <input type="text" value={draftData.destination_contact_name} onChange={e => setDraftData({...draftData, destination_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
                     <input type="text" value={draftData.destination_contact_phone} onChange={e => setDraftData({...draftData, destination_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
@@ -769,7 +769,7 @@ const LeadDetails = () => {
                       {lead.origin_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.origin_address}</div>}
                     </span>
                   </div>
-                  <div className={styles.infoGroup}>
+                  <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>PICKUP CONTACT</span>
                     <span className={styles.infoValue}>
                       {lead.origin_contact_name || 'N/A'}
@@ -783,7 +783,7 @@ const LeadDetails = () => {
                       {lead.destination_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.destination_address}</div>}
                     </span>
                   </div>
-                  <div className={styles.infoGroup}>
+                  <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>DELIVERY CONTACT</span>
                     <span className={styles.infoValue}>
                       {lead.destination_contact_name || 'N/A'}
