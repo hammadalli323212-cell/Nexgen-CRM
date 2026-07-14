@@ -157,22 +157,18 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     });
 
     // 4. Terms & Conditions
-    let currentY = doc.lastAutoTable.finalY + 15;
-    
-    // Check if we need to add a page before rendering terms
-    if (currentY > pageHeight - 60) {
-        doc.addPage();
-        currentY = 20;
-    }
+    // Always push Terms to Page 2
+    doc.addPage();
+    let currentY = 20;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(11, 19, 43);
     doc.text("Terms and Conditions", 15, currentY);
     
-    currentY += 8;
+    currentY += 6;
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setTextColor(100, 100, 100);
 
     const termsText = `Acceptance
@@ -213,15 +209,15 @@ Terms & Conditions
     const splitTerms = doc.splitTextToSize(termsText, pageWidth - 30);
     
     for (let i = 0; i < splitTerms.length; i++) {
-        if (currentY > pageHeight - 30) {
+        if (currentY > pageHeight - 60) { // Keep room for signature just in case it's huge, but it shouldn't trigger with font 7
             doc.addPage();
             currentY = 20;
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
+            doc.setFontSize(7);
             doc.setTextColor(100, 100, 100);
         }
         doc.text(splitTerms[i], 15, currentY);
-        currentY += 3.5;
+        currentY += 3;
     }
     
     currentY += 10;

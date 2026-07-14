@@ -103,8 +103,8 @@ const BookingWizard = () => {
           email: data.customers?.email || '',
           phone: data.customers?.phone || '',
           pickupDate: data.ship_date || '',
-          originCity: `${data.origin_city || ''}, ${data.origin_zip || ''}`.trim().replace(/^,|,$/g, ''),
-          destCity: `${data.destination_city || ''}, ${data.destination_zip || ''}`.trim().replace(/^,|,$/g, ''),
+          originCity: `${data.origin_city || ''}${data.origin_state ? `, ${data.origin_state}` : ''} ${data.origin_zip || ''}`.trim(),
+          destCity: `${data.destination_city || ''}${data.destination_state ? `, ${data.destination_state}` : ''} ${data.destination_zip || ''}`.trim(),
         }));
       }
     };

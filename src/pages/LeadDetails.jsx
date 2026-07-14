@@ -543,11 +543,11 @@ const LeadDetails = () => {
       phone: lead.customers?.phone || '',
       pickupDate: lead.ship_date || 'TBD',
       originAddress: lead.origin_address || '',
-      originCity: `${lead.origin_city}, ${lead.origin_state} ${lead.origin_zip}`,
+      originCity: `${lead.origin_city || ''}${lead.origin_state ? `, ${lead.origin_state}` : ''} ${lead.origin_zip || ''}`.trim(),
       originContactName: lead.origin_contact_name || '',
       originContactPhone: lead.origin_contact_phone || '',
       destAddress: lead.destination_address || '',
-      destCity: `${lead.destination_city}, ${lead.destination_state} ${lead.destination_zip}`,
+      destCity: `${lead.destination_city || ''}${lead.destination_state ? `, ${lead.destination_state}` : ''} ${lead.destination_zip || ''}`.trim(),
       destContactName: lead.destination_contact_name || '',
       destContactPhone: lead.destination_contact_phone || ''
     };
