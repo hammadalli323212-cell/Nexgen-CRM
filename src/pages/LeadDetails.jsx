@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { generateOrderPDF } from '../lib/pdfGenerator';
@@ -552,20 +552,22 @@ const LeadDetails = () => {
       toast.error('Error deleting: ' + err.message);
     }
   };
+  const location = useLocation();
+  const isOrderView = location.pathname.startsWith('/orders');
 
   return (
     <div className={styles.pageContainer}>
       <button 
-        onClick={() => navigate('/leads')} 
+        onClick={() => navigate(isOrderView ? '/orders' : '/leads')} 
         style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}
       >
-        <ArrowLeft size={16} /> Back to Leads
+        <ArrowLeft size={16} /> Back to {isOrderView ? 'Orders' : 'Leads'}
       </button>
 
       <div className={styles.header}>
         <div className={styles.titleArea}>
           <h1 className={styles.leadTitle} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            Lead #L-{lead.lead_number}
+            {isOrderView ? 'Order' : 'Lead'} #{isOrderView ? (lead.order_id || lead.lead_number) : `L-${lead.lead_number}`}
             <select 
               value={lead.status} 
               onChange={handleStatusChange}

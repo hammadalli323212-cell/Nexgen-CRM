@@ -167,7 +167,7 @@ const Orders = () => {
         <DataTable
           columns={columns}
           data={orders}
-          onRowClick={(row) => navigate(`/leads/${row.original.leadId}`)}
+          onRowClick={(row) => navigate(`/orders/${row.original.leadId}`)}
         />
       </div>
     </div>

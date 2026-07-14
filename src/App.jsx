@@ -60,6 +60,7 @@ function App() {
             <Route path="leads/:id/edit" element={<LeadForm />} />
             <Route path="orders" element={<Orders />} />
             <Route path="orders/new" element={<LeadForm isOrder={true} />} />
+            <Route path="orders/:id" element={<LeadDetails />} />
             <Route path="dispatch" element={<Dispatch />} />
             <Route path="customers" element={<Customers />} />
             <Route path="customers/:id" element={<CustomerDetails />} />
