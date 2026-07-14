@@ -173,8 +173,11 @@ const LeadDetails = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to send email');
       }
-      
       toast.success(`Order form emailed to ${emailToUse} successfully!`);
+      
+      await logActivity(lead.id, user.id, 'Email Sent', 'Order Form', `Order form emailed to ${emailToUse}`);
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      if (logsData) setLogs(logsData);
     } catch (err) {
       console.error("Failed to send email:", err);
       toast.error(`Failed to send email: ${err.message}\n\nOrder form link copied to clipboard instead.`);
@@ -221,8 +224,11 @@ const LeadDetails = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to send quote email');
       }
-
       toast.success(`Quote emailed to ${emailToUse} successfully!`);
+      
+      await logActivity(lead.id, user.id, 'Email Sent', 'Quote', `Quote emailed to ${emailToUse}`);
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      if (logsData) setLogs(logsData);
     } catch (err) {
       console.error("Failed to send quote email:", err);
       toast.error(`Failed to send quote email: ${err.message}`);
