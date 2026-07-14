@@ -280,10 +280,6 @@ const Leads = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('isRead', {
-        header: '',
-        cell: info => !info.getValue() ? <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem' }}>★</span> : null,
-      }),
       columnHelper.accessor('select', {
         header: () => null,
         cell: info => (
@@ -296,9 +292,19 @@ const Leads = () => {
           />
         ),
       }),
-      columnHelper.accessor('id', {
+      columnHelper.accessor('displayId', {
         header: 'Lead #',
-        cell: info => <Link to={`/leads/${info.getValue()}`} style={{ color: 'var(--brand-blue)', textDecoration: 'none' }}>{info.row.original.displayId}</Link>,
+        cell: info => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {!info.row.original.isRead && <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem', lineHeight: 1 }}>★</span>}
+            <Link 
+              to={`/leads/${info.row.original.id}`}
+              style={{ color: 'var(--brand-blue)', textDecoration: 'none', fontWeight: 'bold' }}
+            >
+              {info.getValue()}
+            </Link>
+          </div>
+        ),
       }),
       columnHelper.accessor('created', {
         header: 'Created',

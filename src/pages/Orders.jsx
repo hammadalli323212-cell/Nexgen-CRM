@@ -79,23 +79,22 @@ const Orders = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('isRead', {
-        header: '',
-        cell: info => !info.getValue() ? <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem' }}>★</span> : null,
-      }),
       columnHelper.accessor("id", {
         header: "Order #",
         cell: (info) => (
-          <Link
-            to={`/leads/${info.row.original.leadId}`}
-            style={{
-              color: "var(--brand-blue)",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
-            {info.getValue()}
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {!info.row.original.isRead && <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem', lineHeight: 1 }}>★</span>}
+            <Link
+              to={`/leads/${info.row.original.leadId}`}
+              style={{
+                color: "var(--brand-blue)",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+            >
+              {info.getValue()}
+            </Link>
+          </div>
         ),
       }),
       columnHelper.accessor("created", {
