@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, Bell, Star, PlusCircle, LogOut, Users, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabase';
 import styles from './TopNavigationBar.module.css';
 
 const TopNavigationBar = ({ onSearchClick }) => {
