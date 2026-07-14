@@ -111,9 +111,9 @@ const UserManagement = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
             <tr>
-              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>NAME / ID</th>
-              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>EMAIL</th>
-              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>ROLE</th>
+              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER NAME</th>
+              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER EMAIL</th>
+              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER ROLE</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>JOINED</th>
             </tr>
           </thead>
@@ -127,7 +127,6 @@ const UserManagement = () => {
                 <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '15px' }}>
                     <div style={{ fontWeight: '500', color: '#fff' }}>{u.full_name || u.email?.split('@')[0] || 'Unknown'}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>{u.id}</div>
                   </td>
                   <td style={{ padding: '15px' }}>{u.email}</td>
                   <td style={{ padding: '15px' }}>
