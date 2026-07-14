@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
-    role: user?.email === 'admin@nexgenautotransport.com' ? 'admin' : role,
-    isAdmin: role === 'admin' || user?.email === 'admin@nexgenautotransport.com',
+    role: user?.email === 'info@nexgenautotransport.com' ? 'admin' : role,
+    isAdmin: role === 'admin' || user?.email === 'info@nexgenautotransport.com',
     loading,
     signOut: () => supabase.auth.signOut(),
   };

@@ -6,6 +6,8 @@ import { AuthProvider } from './lib/AuthContext';
 import Login from './pages/Login';
 import SetPassword from './pages/SetPassword';
 import Dashboard from './pages/Dashboard';
+import Reports from './pages/Reports';
+import UserManagement from './pages/UserManagement';
 import Leads from './pages/Leads';
 import Archive from './pages/Archive';
 import LeadForm from './pages/LeadForm';
@@ -19,8 +21,7 @@ import Customers from './pages/Customers';
 import CustomerDetails from './pages/CustomerDetails';
 import Carriers from './pages/Carriers';
 import MyTasks from './pages/MyTasks';
-import UserManagement from './pages/Admin/UserManagement';
-import Reports from './pages/Reports';
+
 import './index.css';
 
 import { Toaster } from 'react-hot-toast';
@@ -64,6 +65,7 @@ function App() {
             <Route path="dispatch" element={<Dispatch />} />
             <Route path="customers" element={<Customers />} />
             <Route path="customers/:id" element={<CustomerDetails />} />
+            <Route path="users" element={<UserManagement />} />
             <Route path="carriers" element={<Carriers />} />
             <Route path="reports" element={<Reports />} />
             

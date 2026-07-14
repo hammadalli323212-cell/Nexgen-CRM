@@ -88,6 +88,10 @@ const TopNavigationBar = ({ onSearchClick }) => {
     { name: 'Reports', path: '/reports', hasDropdown: true },
   ];
 
+  if (isAdmin) {
+    navItems.push({ name: 'Users', path: '/users' });
+  }
+
   return (
     <header className={styles.navbar}>
       <div className={styles.logoArea}>
