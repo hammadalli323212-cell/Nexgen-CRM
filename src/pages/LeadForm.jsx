@@ -301,16 +301,6 @@ const LeadForm = ({ isOrder = false }) => {
         if ((originalData.destination_city || '') !== locations.dropoffLocation) changes.push(`Dest City: ${originalData.destination_city || 'None'} -> ${locations.dropoffLocation}`);
         
         if (changes.length > 0) {
-          const updatePayload = {};
-          if (originalData.electronic_signature) {
-            updatePayload.electronic_signature = null;
-            updatePayload.signed_ip = null;
-            updatePayload.signed_date = null;
-            changes.push("Cleared Customer Signature (Due to changes)");
-          }
-          if (Object.keys(updatePayload).length > 0) {
-            await supabase.from('leads').update(updatePayload).eq('id', leadId);
-          }
           await logActivity(leadId, user.id, 'Entity Updated', 'Fields have been changed', changes.join(' | '));
         }
       } else if (!isEditMode && leadId) {

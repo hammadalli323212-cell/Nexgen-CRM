@@ -242,6 +242,51 @@ const LeadDetails = () => {
     }
   };
 
+  const handleSendChangeOrder = async () => {
+    const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
+    const link = `${baseUrl}/booking/${lead.lead_number}?mode=change_order`;
+    
+    const emailToUse = lead.customers?.email || lead.email || draftData?.email;
+    const nameToUse = lead.customers?.first_name || lead.first_name || draftData?.first_name || 'Customer';
+
+    if (!emailToUse) {
+      toast.error("No email address found for this lead. Please add an email address first.");
+      navigator.clipboard.writeText(link);
+      return;
+    }
+
+    setIsSendingEmail(true);
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: emailToUse,
+          customerName: nameToUse,
+          bookingLink: link,
+          isChangeOrder: true
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+      toast.success(`Change Order form emailed to ${emailToUse} successfully!`);
+      
+      await logActivity(lead.id, user.id, 'Email Sent', 'Change Order Form', `Change Order form emailed to ${emailToUse}`);
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      if (logsData) setLogs(logsData);
+    } catch (err) {
+      console.error("Failed to send email:", err);
+      toast.error(`Failed to send email: ${err.message}\n\nChange Order link copied to clipboard instead.`);
+      navigator.clipboard.writeText(link);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   const handleSendQuoteEmail = async () => {
     const emailToUse = lead.customers?.email || lead.email;
     const nameToUse = lead.customers?.first_name || lead.first_name || 'Customer';
@@ -533,13 +578,6 @@ const LeadDetails = () => {
           }
         }
 
-        if (changes.length > 0 && lead.electronic_signature) {
-          payload.electronic_signature = null;
-          payload.signed_ip = null;
-          payload.signed_date = null;
-          changes.push("Cleared Customer Signature (Due to changes)");
-        }
-
         const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
         if (error) throw error;
         setLead({ ...lead, ...payload });
@@ -560,34 +598,9 @@ const LeadDetails = () => {
         if (newVehicles.length > 0) {
            const { data: inserted, error } = await supabase.from('lead_vehicles').insert(newVehicles).select();
            if (error) throw error;
-           
-           let updatedLead = { ...lead, lead_vehicles: inserted };
-           if (lead.electronic_signature) {
-             const { error: sigError } = await supabase.from('leads').update({
-               electronic_signature: null,
-               signed_ip: null,
-               signed_date: null
-             }).eq('lead_number', id);
-             if (!sigError) {
-               changes.push("Cleared Customer Signature (Due to changes)");
-               updatedLead = { ...updatedLead, electronic_signature: null, signed_ip: null, signed_date: null };
-             }
-           }
-           setLead(updatedLead);
+           setLead({ ...lead, lead_vehicles: inserted });
         } else {
-           let updatedLead = { ...lead, lead_vehicles: [] };
-           if (lead.electronic_signature) {
-             const { error: sigError } = await supabase.from('leads').update({
-               electronic_signature: null,
-               signed_ip: null,
-               signed_date: null
-             }).eq('lead_number', id);
-             if (!sigError) {
-               changes.push("Cleared Customer Signature (Due to changes)");
-               updatedLead = { ...updatedLead, electronic_signature: null, signed_ip: null, signed_date: null };
-             }
-           }
-           setLead(updatedLead);
+           setLead({ ...lead, lead_vehicles: [] });
         }
       }
 
@@ -737,6 +750,9 @@ const LeadDetails = () => {
           <div style={{ display: 'flex', gap: '8px' }}>
             <button className={styles.btnPrimary} onClick={handleSendOrderForm} disabled={isSendingEmail}>
               {isSendingEmail ? 'Sending...' : 'Send Form'}
+            </button>
+            <button className={styles.btnSecondary} onClick={handleSendChangeOrder} disabled={isSendingEmail} style={{ borderColor: '#f59e0b', color: '#f59e0b' }}>
+              Change Order
             </button>
             <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote} style={{ background: 'linear-gradient(135deg, #0ea5e9, #2563eb)' }}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
@@ -999,29 +1015,49 @@ const LeadDetails = () => {
 
           {/* Signed Order Form Panel */}
           {lead.electronic_signature && (
-            <div className={styles.panel} style={{ borderTop: '4px solid #10b981' }}>
-              <div className={styles.panelHeader}>Signed Order Details</div>
-              <div className={styles.panelBody}>
-                 <div className={styles.infoGrid} style={{ marginBottom: '20px' }}>
-                    <div className={styles.infoBlock}>
-                       <span className={styles.infoLabel}>Signature</span>
-                       <span className={styles.infoValue} style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '2rem', color: '#60a5fa' }}>{lead.electronic_signature}</span>
-                    </div>
-                    <div className={styles.infoBlock}>
-                       <span className={styles.infoLabel}>IP Address</span>
-                       <span className={styles.infoValue}>{lead.signed_ip}</span>
-                    </div>
-                    <div className={styles.infoBlock}>
-                       <span className={styles.infoLabel}>Timestamp</span>
-                       <span className={styles.infoValue}>{new Date(lead.signed_date).toLocaleString()}</span>
-                    </div>
-                 </div>
+            <div className={styles.panel} style={{ borderTop: '3px solid #10b981' }}>
+              <div className={styles.panelHeader} style={{ fontSize: '1rem', padding: '10px 15px' }}>Signed Order Details</div>
+              <div className={styles.panelBody} style={{ padding: '15px' }}>
                  
-                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                   <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview')} style={{ flex: 1, background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>
+                 {/* Original Signature */}
+                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px' }}>
+                   <div style={{ flex: 1 }}>
+                     <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Original Signature</span>
+                     <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.5rem', color: '#60a5fa' }}>{lead.electronic_signature}</span>
+                   </div>
+                   <div style={{ flex: 1 }}>
+                     <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>IP Address</span>
+                     <span style={{ fontSize: '0.85rem' }}>{lead.signed_ip}</span>
+                   </div>
+                   <div style={{ flex: 1, textAlign: 'right' }}>
+                     <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Timestamp</span>
+                     <span style={{ fontSize: '0.85rem' }}>{new Date(lead.signed_date).toLocaleString()}</span>
+                   </div>
+                 </div>
+
+                 {/* Change Order Signatures */}
+                 {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
+                   <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #f59e0b' }}>
+                     <div style={{ flex: 1 }}>
+                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Change Order {idx + 1}</span>
+                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.5rem', color: '#60a5fa' }}>{sig.signature}</span>
+                     </div>
+                     <div style={{ flex: 1 }}>
+                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>IP Address</span>
+                       <span style={{ fontSize: '0.85rem' }}>{sig.ip}</span>
+                     </div>
+                     <div style={{ flex: 1, textAlign: 'right' }}>
+                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Timestamp</span>
+                       <span style={{ fontSize: '0.85rem' }}>{new Date(sig.date).toLocaleString()}</span>
+                     </div>
+                   </div>
+                 ))}
+                 
+                 <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                   <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview')} style={{ flex: 1, padding: '6px', fontSize: '0.85rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>
                       Preview PDF
                    </button>
-                   <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download')} style={{ flex: 1, background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>
+                   <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download')} style={{ flex: 1, padding: '6px', fontSize: '0.85rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>
                       Download PDF
                    </button>
                  </div>

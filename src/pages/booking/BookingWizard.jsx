@@ -93,7 +93,8 @@ const BookingWizard = () => {
         
       if (data) {
         setLeadData(data);
-        if (data.status === 'Booked' && data.electronic_signature) {
+        const isChangeOrder = new URLSearchParams(window.location.search).get('mode') === 'change_order';
+        if (data.status === 'Booked' && data.electronic_signature && !isChangeOrder) {
           setIsSuccess(true);
         }
         setFormData(prev => ({
@@ -154,7 +155,9 @@ const BookingWizard = () => {
       }
 
       // 2. Sync updated Lead data
-      const { error } = await supabase.from('leads').update({
+      const isChangeOrder = new URLSearchParams(window.location.search).get('mode') === 'change_order';
+      
+      const updatePayload = {
         status: 'Booked',
         origin_address: formData.originAddress,
         destination_address: formData.destAddress,
@@ -162,11 +165,26 @@ const BookingWizard = () => {
         origin_contact_phone: formData.isOriginContact ? formData.phone : formData.originContactPhone,
         destination_contact_name: formData.isDestContact ? `${formData.firstName} ${formData.lastName}`.trim() : formData.destContactName,
         destination_contact_phone: formData.isDestContact ? formData.phone : formData.destContactPhone,
-        ship_date: formData.pickupDate || leadData.ship_date,
-        electronic_signature: formData.signature,
-        signed_ip: ipAddress,
-        signed_date: new Date().toISOString()
-      }).eq('lead_number', id);
+        ship_date: formData.pickupDate || leadData.ship_date
+      };
+
+      if (isChangeOrder) {
+        const existingSignatures = Array.isArray(leadData.change_order_signatures) ? leadData.change_order_signatures : [];
+        updatePayload.change_order_signatures = [
+          ...existingSignatures,
+          {
+             signature: formData.signature,
+             ip: ipAddress,
+             date: new Date().toISOString()
+          }
+        ];
+      } else {
+        updatePayload.electronic_signature = formData.signature;
+        updatePayload.signed_ip = ipAddress;
+        updatePayload.signed_date = new Date().toISOString();
+      }
+
+      const { error } = await supabase.from('leads').update(updatePayload).eq('lead_number', id);
 
       if (error) throw error;
       

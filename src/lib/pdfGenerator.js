@@ -234,15 +234,22 @@ Terms & Conditions
     doc.setDrawColor(226, 232, 240);
     doc.rect(15, currentY, pageWidth - 30, 45, "FD");
 
+    const hasChangeOrders = Array.isArray(leadData?.change_order_signatures) && leadData.change_order_signatures.length > 0;
+    const latestSig = hasChangeOrders ? leadData.change_order_signatures[leadData.change_order_signatures.length - 1] : null;
+    
+    const displaySignature = latestSig ? latestSig.signature : (leadData?.electronic_signature || formData.signature || "Not Signed");
+    const displayIp = latestSig ? latestSig.ip : (leadData?.signed_ip || ipAddress || "N/A");
+    const displayDate = latestSig ? latestSig.date : (leadData?.signed_date || new Date().toISOString());
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(100, 116, 139);
-    doc.text("CUSTOMER SIGNATURE", 25, currentY + 12);
+    doc.text(hasChangeOrders ? "CHANGE ORDER SIGNATURE" : "CUSTOMER SIGNATURE", 25, currentY + 12);
     
     doc.setFont("times", "italic");
     doc.setFontSize(28);
     doc.setTextColor(15, 23, 42);
-    doc.text(leadData?.electronic_signature || formData.signature || "Not Signed", 25, currentY + 32);
+    doc.text(displaySignature, 25, currentY + 32);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
@@ -250,14 +257,14 @@ Terms & Conditions
     doc.text("IP ADDRESS", pageWidth - 100, currentY + 12);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(15, 23, 42);
-    doc.text(leadData?.signed_ip || ipAddress || "N/A", pageWidth - 100, currentY + 20);
+    doc.text(displayIp, pageWidth - 100, currentY + 20);
 
     doc.setFont("helvetica", "bold");
     doc.setTextColor(100, 116, 139);
     doc.text("TIMESTAMP", pageWidth - 100, currentY + 30);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(15, 23, 42);
-    const timeStamp = leadData?.signed_date ? new Date(leadData.signed_date).toLocaleString() : new Date().toLocaleString();
+    const timeStamp = displayDate ? new Date(displayDate).toLocaleString() : new Date().toLocaleString();
     doc.text(timeStamp, pageWidth - 100, currentY + 38);
 
     // 6. Footer (Every Page)

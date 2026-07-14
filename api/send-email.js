@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, bookingLink } = req.body;
+    const { customerEmail, customerName, bookingLink, isChangeOrder } = req.body;
     if (!customerEmail || !bookingLink) {
       return res.status(400).json({ error: 'Missing customerEmail or bookingLink' });
     }
@@ -32,11 +32,11 @@ export default async function handler(req, res) {
 <p style="color:#93c5fd;margin:0;font-size:12px;letter-spacing:2px">RELIABLE · AFFORDABLE · NATIONWIDE</p>
 </div>
 <div style="padding:28px">
-<h2 style="color:#1e3a5f;margin:0 0 14px;font-size:20px">Complete Your Order</h2>
+<h2 style="color:#1e3a5f;margin:0 0 14px;font-size:20px">${isChangeOrder ? 'Important: Order Updates' : 'Complete Your Order'}</h2>
 <p style="color:#4b5563;margin:0 0 8px;font-size:14px;line-height:1.6">Hi <strong>${customerName || 'Customer'}</strong>,</p>
-<p style="color:#4b5563;margin:0 0 20px;font-size:14px;line-height:1.6">Thank you for choosing NexGen Auto Transport! Please review and sign your order form by clicking below:</p>
+<p style="color:#4b5563;margin:0 0 20px;font-size:14px;line-height:1.6">${isChangeOrder ? 'There has been a change made to your order with NexGen Auto Transport. Please review the updated details and sign the Change Order form by clicking below:' : 'Thank you for choosing NexGen Auto Transport! Please review and sign your order form by clicking below:'}</p>
 <div style="text-align:center;margin:24px 0">
-<a href="${bookingLink}" style="display:inline-block;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;padding:12px 36px;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px">View Order Form</a>
+<a href="${bookingLink}" style="display:inline-block;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;padding:12px 36px;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px">${isChangeOrder ? 'Review Change Order' : 'View Order Form'}</a>
 </div>
 <p style="color:#6b7280;font-size:12px;margin:0 0 6px">If the button doesn't work, copy this link:</p>
 <p style="word-break:break-all;color:#3b82f6;font-size:12px;margin:0 0 20px">${bookingLink}</p>
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     const info = await transporter.sendMail({
       from: '"NexGen Auto Transport" <henry.ortiz@nexgenautotransport.com>',
       to: customerEmail,
-      subject: "Complete Your NexGen Auto Transport Order",
+      subject: isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order",
       html: html
     });
 
