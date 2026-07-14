@@ -42,7 +42,7 @@ const Orders = () => {
           .order("created_at", { ascending: false });
 
         if (!isAdmin && user) {
-          query = query.or(`assigned_to.eq.${user.id},user_id.eq.${user.id}`);
+          query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
         }
 
         const { data, error } = await query;
