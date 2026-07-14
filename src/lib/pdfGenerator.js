@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download') => {
+export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download', targetSignature = null) => {
   let previewWindow = null;
   if (action === 'preview') {
     previewWindow = window.open('', '_blank');
@@ -235,7 +235,19 @@ Terms & Conditions
     doc.rect(15, currentY, pageWidth - 30, 45, "FD");
 
     const hasChangeOrders = Array.isArray(leadData?.change_order_signatures) && leadData.change_order_signatures.length > 0;
-    const latestSig = hasChangeOrders ? leadData.change_order_signatures[leadData.change_order_signatures.length - 1] : null;
+    let latestSig = hasChangeOrders ? leadData.change_order_signatures[leadData.change_order_signatures.length - 1] : null;
+    
+    // If a specific signature is requested, use it instead
+    let isChangeOrderDisplay = hasChangeOrders;
+    if (targetSignature) {
+      if (targetSignature.type === 'original') {
+        latestSig = null;
+        isChangeOrderDisplay = false;
+      } else {
+        latestSig = targetSignature;
+        isChangeOrderDisplay = true;
+      }
+    }
     
     const displaySignature = latestSig ? latestSig.signature : (leadData?.electronic_signature || formData.signature || "Not Signed");
     const displayIp = latestSig ? latestSig.ip : (leadData?.signed_ip || ipAddress || "N/A");
@@ -244,7 +256,7 @@ Terms & Conditions
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(100, 116, 139);
-    doc.text(hasChangeOrders ? "CHANGE ORDER SIGNATURE" : "CUSTOMER SIGNATURE", 25, currentY + 12);
+    doc.text(isChangeOrderDisplay ? "CHANGE ORDER SIGNATURE" : "CUSTOMER SIGNATURE", 25, currentY + 12);
     
     doc.setFont("times", "italic");
     doc.setFontSize(28);
