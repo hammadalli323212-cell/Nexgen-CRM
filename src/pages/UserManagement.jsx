@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import toast from 'react-hot-toast';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Edit2, Trash2 } from 'lucide-react';
 
 const UserManagement = () => {
   const { user, isAdmin } = useAuth();
@@ -10,9 +10,12 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingUserId, setEditingUserId] = useState(null); // null means creating new user
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
-  // New user form state
-  const [newUser, setNewUser] = useState({
+  // Form state
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
@@ -42,37 +45,99 @@ const UserManagement = () => {
     }
   };
 
-  const handleCreateUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // We call our secure serverless function to bypass Supabase's auto-login
-      const res = await fetch('/api/create-user', {
+      const endpoint = editingUserId ? '/api/update-user' : '/api/create-user';
+      const bodyData = {
+        email: formData.email,
+        name: formData.name,
+        role: formData.role
+      };
+      
+      if (editingUserId) {
+        bodyData.id = editingUserId;
+        // Only send password if it's not empty when updating
+        if (formData.password) {
+          bodyData.password = formData.password;
+        }
+      } else {
+        bodyData.password = formData.password;
+      }
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
-        body: JSON.stringify({
-          email: newUser.email,
-          password: newUser.password,
-          name: newUser.name,
-          role: newUser.role
-        })
+        body: JSON.stringify(bodyData)
       });
 
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to create user');
+        throw new Error(data.error || `Failed to ${editingUserId ? 'update' : 'create'} user`);
       }
 
-      toast.success('User created successfully!');
+      toast.success(`User ${editingUserId ? 'updated' : 'created'} successfully!`);
       setIsModalOpen(false);
-      setNewUser({ name: '', email: '', password: '', role: 'user' });
+      setEditingUserId(null);
+      setFormData({ name: '', email: '', password: '', role: 'user' });
       fetchUsers(); // Refresh the list
     } catch (err) {
-      console.error('Error creating user:', err);
+      console.error('Error saving user:', err);
+      toast.error(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const openEditModal = (u) => {
+    setEditingUserId(u.id);
+    setFormData({
+      name: u.full_name || '',
+      email: u.email || '',
+      password: '', // Empty password field so they only enter if they want to change it
+      role: u.role || 'user'
+    });
+    setIsModalOpen(true);
+  };
+
+  const openCreateModal = () => {
+    setEditingUserId(null);
+    setFormData({ name: '', email: '', password: '', role: 'user' });
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = (u) => {
+    setUserToDelete(u);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/delete-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+        },
+        body: JSON.stringify({ id: userToDelete.id })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete user');
+
+      toast.success('User deleted successfully!');
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
+      fetchUsers();
+    } catch (err) {
+      console.error('Error deleting user:', err);
       toast.error(err.message);
     } finally {
       setIsSubmitting(false);
@@ -96,7 +161,7 @@ const UserManagement = () => {
           <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Manage team members and roles.</p>
         </div>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={openCreateModal}
           style={{
             display: 'flex', alignItems: 'center', gap: '8px',
             backgroundColor: 'var(--brand-blue)', color: '#fff', border: 'none',
@@ -115,6 +180,7 @@ const UserManagement = () => {
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER EMAIL</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER ROLE</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>JOINED</th>
+              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem', textAlign: 'right' }}>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
@@ -141,6 +207,14 @@ const UserManagement = () => {
                   <td style={{ padding: '15px', color: 'var(--text-secondary)' }}>
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
+                  <td style={{ padding: '15px', textAlign: 'right' }}>
+                    <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit User">
+                      <Edit2 size={18} />
+                    </button>
+                    <button onClick={() => confirmDelete(u)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete User">
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
                 </tr>
               ))
             )}
@@ -152,17 +226,17 @@ const UserManagement = () => {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ backgroundColor: 'var(--bg-panel)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, color: '#fff' }}>Create New User</h2>
+              <h2 style={{ margin: 0, color: '#fff' }}>{editingUserId ? 'Edit User' : 'Create New User'}</h2>
               <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><X size={20}/></button>
             </div>
 
-            <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Full Name</label>
                 <input 
                   type="text" 
-                  value={newUser.name}
-                  onChange={e => setNewUser({...newUser, name: e.target.value})}
+                  value={formData.name}
+                  onChange={e => setFormData({...formData, name: e.target.value})}
                   required
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 />
@@ -172,20 +246,20 @@ const UserManagement = () => {
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Email Address</label>
                 <input 
                   type="email" 
-                  value={newUser.email}
-                  onChange={e => setNewUser({...newUser, email: e.target.value})}
+                  value={formData.email}
+                  onChange={e => setFormData({...formData, email: e.target.value})}
                   required
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Password (Min 6 chars)</label>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{editingUserId ? 'New Password (Leave blank to keep)' : 'Password (Min 6 chars)'}</label>
                 <input 
                   type="password" 
-                  value={newUser.password}
-                  onChange={e => setNewUser({...newUser, password: e.target.value})}
-                  required
+                  value={formData.password}
+                  onChange={e => setFormData({...formData, password: e.target.value})}
+                  required={!editingUserId}
                   minLength="6"
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 />
@@ -194,8 +268,8 @@ const UserManagement = () => {
               <div>
                 <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Role</label>
                 <select 
-                  value={newUser.role}
-                  onChange={e => setNewUser({...newUser, role: e.target.value})}
+                  value={formData.role}
+                  onChange={e => setFormData({...formData, role: e.target.value})}
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 >
                   <option value="user">Standard User</option>
@@ -208,10 +282,30 @@ const UserManagement = () => {
                   Cancel
                 </button>
                 <button type="submit" disabled={isSubmitting} style={{ flex: 1, padding: '10px', background: 'var(--brand-blue)', border: 'none', color: '#fff', borderRadius: '6px', cursor: isSubmitting ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
-                  {isSubmitting ? 'Creating...' : 'Create User'}
+                  {isSubmitting ? 'Saving...' : (editingUserId ? 'Save Changes' : 'Create User')}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ backgroundColor: 'var(--bg-panel)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: '0 0 15px', color: '#fff' }}>Delete User</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '25px', lineHeight: '1.5' }}>
+              Are you sure you want to permanently delete <strong>{userToDelete?.full_name || userToDelete?.email}</strong>? This action cannot be undone.
+            </p>
+            
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="button" onClick={() => setIsDeleteModalOpen(false)} style={{ flex: 1, padding: '10px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px', cursor: 'pointer' }}>
+                Cancel
+              </button>
+              <button type="button" onClick={handleDeleteUser} disabled={isSubmitting} style={{ flex: 1, padding: '10px', background: '#ef4444', border: 'none', color: '#fff', borderRadius: '6px', cursor: isSubmitting ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
+                {isSubmitting ? 'Deleting...' : 'Yes, Delete'}
+              </button>
+            </div>
           </div>
         </div>
       )}

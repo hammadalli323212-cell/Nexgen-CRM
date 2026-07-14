@@ -1,0 +1,55 @@
+import { createClient } from '@supabase/supabase-js';
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return res.status(500).json({ error: 'Server configuration error: Missing Supabase Service Role Key.' });
+    }
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+
+    // 1. Delete from public.profiles table first (because of foreign key constraints!)
+    const { error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .delete()
+      .eq('id', id);
+
+    if (profileError) {
+      console.error('Error deleting profile row:', profileError);
+      return res.status(500).json({ error: 'Failed to delete profile: ' + profileError.message });
+    }
+
+    // 2. Delete the user from Supabase Auth
+    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(id);
+
+    if (authError) {
+      // If we failed to delete from auth, we might have an orphaned profile, 
+      // but usually the profile deletion succeeds so we shouldn't fail too hard on the message.
+      return res.status(400).json({ error: authError.message });
+    }
+
+    return res.status(200).json({ success: true });
+
+  } catch (error) {
+    console.error('API Error:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
