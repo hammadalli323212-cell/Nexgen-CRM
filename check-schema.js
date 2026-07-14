@@ -5,11 +5,11 @@ dotenv.config();
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
 
 async function checkSchema() {
-  const { data, error } = await supabase.from('leads').select('is_read').limit(1);
+  const { data, error } = await supabase.from('leads').select('origin_contact_name').limit(1);
   if (error) {
     console.error(error);
   } else {
-    console.log("Successfully selected is_read!", data);
+    console.log("Successfully selected origin_contact_name!", data);
   }
 }
 

@@ -116,8 +116,8 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
         columnStyles: { 0: { cellWidth: (pageWidth - 30) / 2 }, 1: { cellWidth: (pageWidth - 30) / 2 } },
         body: [
             [
-                `${formData.originAddress}\n${formData.originCity}`,
-                `${formData.destAddress}\n${formData.destCity}`
+                `${formData.originAddress}\n${formData.originCity}${formData.originContactName ? `\nContact: ${formData.originContactName}` : ''}${formData.originContactPhone ? `\nPhone: ${formData.originContactPhone}` : ''}`,
+                `${formData.destAddress}\n${formData.destCity}${formData.destContactName ? `\nContact: ${formData.destContactName}` : ''}${formData.destContactPhone ? `\nPhone: ${formData.destContactPhone}` : ''}`
             ]
         ],
     });

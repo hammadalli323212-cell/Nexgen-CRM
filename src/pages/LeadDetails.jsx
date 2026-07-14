@@ -62,7 +62,10 @@ const LeadDetails = () => {
             destination_zip,
             estimated_price, 
             ship_date,
-            source,
+            origin_contact_name,
+            origin_contact_phone,
+            destination_contact_name,
+            destination_contact_phone,
             status,
             order_id,
             is_read,
@@ -437,7 +440,12 @@ const LeadDetails = () => {
         destination_city: lead.destination_city || '',
         destination_state: lead.destination_state || '',
         destination_zip: lead.destination_zip || '',
-        ship_date: lead.ship_date || ''
+        origin_contact_name: lead.origin_contact_name || '',
+        origin_contact_phone: lead.origin_contact_phone || '',
+        destination_contact_name: lead.destination_contact_name || '',
+        destination_contact_phone: lead.destination_contact_phone || '',
+        ship_date: lead.ship_date || '',
+        order_id: lead.order_id || ''
       });
     } else if (panel === 'price') {
       setDraftData({
@@ -536,8 +544,12 @@ const LeadDetails = () => {
       pickupDate: lead.ship_date || 'TBD',
       originAddress: lead.origin_address || '',
       originCity: `${lead.origin_city}, ${lead.origin_state} ${lead.origin_zip}`,
+      originContactName: lead.origin_contact_name || '',
+      originContactPhone: lead.origin_contact_phone || '',
       destAddress: lead.destination_address || '',
-      destCity: `${lead.destination_city}, ${lead.destination_state} ${lead.destination_zip}`
+      destCity: `${lead.destination_city}, ${lead.destination_state} ${lead.destination_zip}`,
+      destContactName: lead.destination_contact_name || '',
+      destContactPhone: lead.destination_contact_phone || ''
     };
 
     const quoteNumber = lead.order_id || `NG${lead.lead_number}`;
@@ -706,6 +718,11 @@ const LeadDetails = () => {
                        <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                      </div>
                   </div>
+                  <div className={styles.infoGroup}>
+                    <span className={styles.infoLabel}>PICKUP CONTACT</span>
+                    <input type="text" value={draftData.origin_contact_name} onChange={e => setDraftData({...draftData, origin_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
+                    <input type="text" value={draftData.origin_contact_phone} onChange={e => setDraftData({...draftData, origin_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
+                  </div>
                   
                   <div style={{ display: 'flex', gap: '8px' }}>
                      <div style={{ flex: 1 }}>
@@ -727,6 +744,11 @@ const LeadDetails = () => {
                        <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                      </div>
                   </div>
+                  <div className={styles.infoGroup}>
+                    <span className={styles.infoLabel}>DELIVERY CONTACT</span>
+                    <input type="text" value={draftData.destination_contact_name} onChange={e => setDraftData({...draftData, destination_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
+                    <input type="text" value={draftData.destination_contact_phone} onChange={e => setDraftData({...draftData, destination_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
+                  </div>
                   
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Est. Ship Date</label>
@@ -743,15 +765,29 @@ const LeadDetails = () => {
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Origin</span>
                     <span className={styles.infoValue}>
-                      {lead.origin_address ? <div>{lead.origin_address}</div> : null}
                       <div>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</div>
+                      {lead.origin_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.origin_address}</div>}
+                    </span>
+                  </div>
+                  <div className={styles.infoGroup}>
+                    <span className={styles.infoLabel}>PICKUP CONTACT</span>
+                    <span className={styles.infoValue}>
+                      {lead.origin_contact_name || 'N/A'}
+                      {lead.origin_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: '#555' }}>{lead.origin_contact_phone}</span>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Destination</span>
                     <span className={styles.infoValue}>
-                      {lead.destination_address ? <div>{lead.destination_address}</div> : null}
                       <div>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</div>
+                      {lead.destination_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.destination_address}</div>}
+                    </span>
+                  </div>
+                  <div className={styles.infoGroup}>
+                    <span className={styles.infoLabel}>DELIVERY CONTACT</span>
+                    <span className={styles.infoValue}>
+                      {lead.destination_contact_name || 'N/A'}
+                      {lead.destination_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: '#555' }}>{lead.destination_contact_phone}</span>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
