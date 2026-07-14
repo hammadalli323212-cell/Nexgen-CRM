@@ -46,11 +46,11 @@ export default async function handler(req, res) {
 <tr>
 <td style="padding:0 0 12px;vertical-align:top">
 <p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">📍 Origin</p>
-<p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.origin_city}, ${leadData.origin_state} ${leadData.origin_zip||''}</p>
+<p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.origin_city || ''}${leadData.origin_state ? ', ' + leadData.origin_state : ''} ${leadData.origin_zip || ''}</p>
 </td>
 <td style="padding:0 0 12px;vertical-align:top">
 <p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">📍 Destination</p>
-<p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.destination_city}, ${leadData.destination_state} ${leadData.destination_zip||''}</p>
+<p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.destination_city || ''}${leadData.destination_state ? ', ' + leadData.destination_state : ''} ${leadData.destination_zip || ''}</p>
 </td>
 </tr>
 <tr>
