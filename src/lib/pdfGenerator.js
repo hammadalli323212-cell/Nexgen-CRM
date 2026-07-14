@@ -90,8 +90,8 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     // 3. Data Sections (Using light blue block headings)
     const autotableTheme = {
         theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 6, font: 'helvetica' },
-        headStyles: { fillColor: [240, 248, 255], textColor: [11, 19, 43], fontStyle: 'bold', fontSize: 11, cellPadding: 8 },
+        styles: { fontSize: 9, cellPadding: 3, font: 'helvetica' },
+        headStyles: { fillColor: [240, 248, 255], textColor: [11, 19, 43], fontStyle: 'bold', fontSize: 10, cellPadding: 4 },
         columnStyles: { 0: { fontStyle: 'bold', cellWidth: 70, textColor: [50, 50, 50] }, 1: { textColor: [30, 30, 30] } },
         margin: { top: 10, left: 15, right: 15 },
     };
@@ -157,7 +157,7 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     });
 
     // 4. Terms & Conditions
-    // Always push Terms to Page 2
+    // Force Terms & Conditions to start perfectly at the top of Page 2
     doc.addPage();
     let currentY = 20;
 
@@ -168,7 +168,7 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     
     currentY += 6;
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
+    doc.setFontSize(6);
     doc.setTextColor(100, 100, 100);
 
     const termsText = `Acceptance
@@ -209,21 +209,23 @@ Terms & Conditions
     const splitTerms = doc.splitTextToSize(termsText, pageWidth - 30);
     
     for (let i = 0; i < splitTerms.length; i++) {
-        if (currentY > pageHeight - 60) { // Keep room for signature just in case it's huge, but it shouldn't trigger with font 7
+        if (currentY > pageHeight - 60) { // Keep room for signature just in case it's huge, but it shouldn't trigger with font 6
             doc.addPage();
             currentY = 20;
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(7);
+            doc.setFontSize(6);
             doc.setTextColor(100, 100, 100);
         }
         doc.text(splitTerms[i], 15, currentY);
-        currentY += 3;
+        currentY += 2;
     }
     
     currentY += 10;
 
     // 5. Electronic Signature Block
-    if (currentY > pageHeight - 60) {
+    // Remove the page break logic for signature since we want it on Page 2 with Terms
+    if (currentY > pageHeight - 50) {
+        // Fallback just in case terms are exceptionally long
         doc.addPage();
         currentY = 20;
     }
