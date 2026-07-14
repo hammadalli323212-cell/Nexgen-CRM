@@ -57,8 +57,8 @@ const Orders = () => {
                     )
                     .join(", ")
                 : "Unknown",
-            origin: `${order.origin_city}, ${order.origin_state}`,
-            destination: `${order.destination_city}, ${order.destination_state}`,
+            origin: `${order.origin_city || ''}${order.origin_state ? ', ' + order.origin_state : ''}` || 'Unknown',
+            destination: `${order.destination_city || ''}${order.destination_state ? ', ' + order.destination_state : ''}` || 'Unknown',
             pickupDate: order.ship_date || "TBD",
             carrier: "Unassigned",
             tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,

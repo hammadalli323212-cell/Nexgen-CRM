@@ -63,9 +63,9 @@ const Archive = () => {
                     )
                     .join(", ")
                 : "Unknown",
-            origin: `${lead.origin_city}, ${lead.origin_state}`,
+            origin: `${lead.origin_city || ''}${lead.origin_state ? ', ' + lead.origin_state : ''}` || 'Unknown',
             originZip: lead.origin_zip || "",
-            destination: `${lead.destination_city}, ${lead.destination_state}`,
+            destination: `${lead.destination_city || ''}${lead.destination_state ? ', ' + lead.destination_state : ''}` || 'Unknown',
             destinationZip: lead.destination_zip || "",
             transportType: lead.transport_type,
             tariff: `$${lead.estimated_price || 0}`,
