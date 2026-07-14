@@ -633,7 +633,7 @@ const LeadDetails = () => {
       destContactPhone: lead.destination_contact_phone || ''
     };
 
-    const quoteNumber = lead.order_id || `NG${lead.lead_number}`;
+    const quoteNumber = `NG-${lead.order_id || lead.lead_number}`;
     const transportType = lead.lead_vehicles?.[0]?.trailer_type === 'Enclosed' ? 'Enclosed' : 'Open';
     const cargoLabel = lead.lead_vehicles && lead.lead_vehicles.length > 0 
       ? lead.lead_vehicles.map(v => `${v.vehicle_year} ${v.vehicle_make} ${v.vehicle_model}`).join(', ')
@@ -707,7 +707,7 @@ const LeadDetails = () => {
       <div className={styles.header}>
         <div className={styles.titleArea}>
           <h1 className={styles.leadTitle} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {isOrderView ? 'Order' : 'Lead'} #{isOrderView ? (lead.order_id || lead.lead_number) : `L-${lead.lead_number}`}
+            {isOrderView ? 'Order' : 'Lead'} #NG-{lead.order_id || lead.lead_number}
             <select 
               value={lead.status} 
               onChange={handleStatusChange}

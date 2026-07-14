@@ -210,7 +210,7 @@ const BookingWizard = () => {
   };
 
   // Derived Info for Sidebar
-  const quoteNumber = leadData.order_id || `#NG-${leadData.lead_number}`;
+  const quoteNumber = `NG-${leadData.order_id || leadData.lead_number}`;
   const tariff = Number(leadData.estimated_price) || 0;
   
   let deposit = 0;

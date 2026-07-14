@@ -49,7 +49,7 @@ const Archive = () => {
           const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           const formattedLeads = sortedData.map((lead) => ({
             id: lead.lead_number,
-            displayId: `L-${lead.lead_number}`,
+            displayId: `NG-${lead.lead_number}`,
             created: new Date(lead.created_at).toLocaleString(),
             customer: lead.customers
               ? `${lead.customers.first_name || ''} ${lead.customers.last_name && lead.customers.last_name !== 'Unknown' ? lead.customers.last_name : ''}`.trim()

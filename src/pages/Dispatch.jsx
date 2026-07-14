@@ -80,7 +80,10 @@ const Dispatch = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('lead_number', { header: 'Order #' }),
+      columnHelper.accessor('lead_number', { 
+        header: 'Order #',
+        cell: info => `NG-${info.getValue()}`
+      }),
       columnHelper.accessor('carriers.name', { 
         header: 'Carrier',
         cell: info => info.getValue() || <span style={{ color: 'var(--text-muted)' }}>Unassigned</span>
@@ -146,7 +149,7 @@ const Dispatch = () => {
                 <select value={formData.lead_id} onChange={e => setFormData({...formData, lead_id: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }}>
                   {availableOrders.length === 0 && <option value="">No unassigned booked orders</option>}
                   {availableOrders.map(o => (
-                    <option key={o.id} value={o.id}>Order L-{o.lead_number} ({o.origin_city} to {o.destination_city})</option>
+                    <option key={o.id} value={o.id}>Order NG-{o.lead_number} ({o.origin_city} to {o.destination_city})</option>
                   ))}
                 </select>
               </div>
