@@ -80,6 +80,7 @@ const LeadDetails = () => {
             electronic_signature,
             signed_ip,
             signed_date,
+            change_order_signatures,
             assigned_to,
             assignee:profiles!assigned_to(first_name, last_name),
             creator:profiles!created_by(first_name, last_name),

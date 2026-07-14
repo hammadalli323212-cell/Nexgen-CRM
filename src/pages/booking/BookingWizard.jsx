@@ -194,6 +194,11 @@ const BookingWizard = () => {
 
       if (error) throw error;
       
+      setLeadData(prev => ({
+        ...prev,
+        ...updatePayload
+      }));
+      
       setIsSuccess(true);
       window.scrollTo(0,0);
     } catch (err) {
