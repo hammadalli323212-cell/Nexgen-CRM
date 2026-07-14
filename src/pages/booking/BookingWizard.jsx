@@ -105,7 +105,13 @@ const BookingWizard = () => {
           phone: data.customers?.phone || '',
           pickupDate: data.ship_date || '',
           originCity: `${data.origin_city || ''}${data.origin_state ? `, ${data.origin_state}` : ''} ${data.origin_zip || ''}`.trim(),
+          originAddress: data.origin_address || '',
+          originContactName: data.origin_contact_name || '',
+          originContactPhone: data.origin_contact_phone || '',
           destCity: `${data.destination_city || ''}${data.destination_state ? `, ${data.destination_state}` : ''} ${data.destination_zip || ''}`.trim(),
+          destAddress: data.destination_address || '',
+          destContactName: data.destination_contact_name || '',
+          destContactPhone: data.destination_contact_phone || '',
         }));
       }
     };
