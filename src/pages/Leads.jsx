@@ -96,6 +96,20 @@ const Leads = () => {
     }
   };
 
+  const handleBulkMarkRead = async () => {
+    const toastId = toast.loading(`Marking ${selectedLeads.size} leads as read...`);
+    try {
+      const { error } = await supabase.from('leads').update({ is_read: true }).in('lead_number', Array.from(selectedLeads));
+      if (error) throw error;
+      toast.success('Marked as read successfully!', { id: toastId });
+      setSelectedLeads(new Set());
+      fetchLeads();
+    } catch (err) {
+      console.error('Mark read error:', err);
+      toast.error('Failed to mark leads as read', { id: toastId });
+    }
+  };
+
   const handleImport = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -376,13 +390,22 @@ const Leads = () => {
             onChange={handleImport} 
           />
           {selectedLeads.size > 0 && (
-            <button 
-              className={styles.btnSecondary} 
-              style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
-              onClick={handleBulkDelete}
-            >
-              Delete Selected ({selectedLeads.size})
-            </button>
+            <>
+              <button 
+                className={styles.btnSecondary} 
+                style={{ marginRight: '10px', backgroundColor: '#3b82f6', color: 'white', borderColor: '#3b82f6' }} 
+                onClick={handleBulkMarkRead}
+              >
+                Mark Read ({selectedLeads.size})
+              </button>
+              <button 
+                className={styles.btnSecondary} 
+                style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
+                onClick={handleBulkDelete}
+              >
+                Delete Selected ({selectedLeads.size})
+              </button>
+            </>
           )}
           <button 
             className={styles.btnSecondary} 
