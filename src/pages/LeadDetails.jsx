@@ -505,7 +505,8 @@ const LeadDetails = () => {
     const tariff = Number(lead.estimated_price) || 0;
     
     let deposit = 0;
-    if (lead.broker_fee_terms === 'Payment on Order' || lead.broker_fee_terms === 'Payment on Pick up') {
+    const terms = (lead.broker_fee_terms || '').toLowerCase().replace(/\s+/g, '');
+    if (terms === 'paymentonorder' || terms === 'paymentonpickup') {
       deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined && lead.deposit_amount !== ''
         ? Number(lead.deposit_amount) 
         : (Number(lead.estimated_price || 0) - Number(lead.carrier_pay || 0));
