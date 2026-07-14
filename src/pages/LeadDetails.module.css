@@ -154,3 +154,24 @@
   color: var(--text-muted);
   font-size: 1.2rem;
 }
+
+.inlineInput {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.inlineInput:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.inlineInput::placeholder {
+  color: var(--text-muted);
+}

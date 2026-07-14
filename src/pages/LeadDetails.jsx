@@ -700,22 +700,20 @@ const LeadDetails = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', gap: '8px' }}>
                      <div style={{ flex: 1 }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin Address</label>
-                       <input type="text" value={draftData.origin_address} onChange={e => setDraftData({...draftData, origin_address: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin</label>
+                       <textarea value={draftData.origin_address} onChange={e => setDraftData({...draftData, origin_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
                      </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                     <div style={{ flex: 1 }}>
+                     <div style={{ width: '100px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin City</label>
-                       <input type="text" value={draftData.origin_city} onChange={e => setDraftData({...draftData, origin_city: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.origin_city} onChange={e => setDraftData({...draftData, origin_city: e.target.value})} className={styles.inlineInput} />
                      </div>
                      <div style={{ width: '60px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
-                       <input type="text" value={draftData.origin_state} onChange={e => setDraftData({...draftData, origin_state: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.origin_state} onChange={e => setDraftData({...draftData, origin_state: e.target.value})} className={styles.inlineInput} />
                      </div>
                      <div style={{ width: '80px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
-                       <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} className={styles.inlineInput} />
                      </div>
                   </div>
                   <div className={styles.infoBlock}>
@@ -726,22 +724,20 @@ const LeadDetails = () => {
                   
                   <div style={{ display: 'flex', gap: '8px' }}>
                      <div style={{ flex: 1 }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destination Address</label>
-                       <input type="text" value={draftData.destination_address} onChange={e => setDraftData({...draftData, destination_address: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destination</label>
+                       <textarea value={draftData.destination_address} onChange={e => setDraftData({...draftData, destination_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
                      </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                     <div style={{ flex: 1 }}>
+                     <div style={{ width: '100px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dest City</label>
-                       <input type="text" value={draftData.destination_city} onChange={e => setDraftData({...draftData, destination_city: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.destination_city} onChange={e => setDraftData({...draftData, destination_city: e.target.value})} className={styles.inlineInput} />
                      </div>
                      <div style={{ width: '60px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
-                       <input type="text" value={draftData.destination_state} onChange={e => setDraftData({...draftData, destination_state: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.destination_state} onChange={e => setDraftData({...draftData, destination_state: e.target.value})} className={styles.inlineInput} />
                      </div>
                      <div style={{ width: '80px' }}>
                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
-                       <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                       <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} className={styles.inlineInput} />
                      </div>
                   </div>
                   <div className={styles.infoBlock}>
@@ -752,7 +748,7 @@ const LeadDetails = () => {
                   
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Est. Ship Date</label>
-                    <input type="date" value={draftData.ship_date} onChange={e => setDraftData({...draftData, ship_date: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                    <input type="date" value={draftData.ship_date} onChange={e => setDraftData({...draftData, ship_date: e.target.value})} className={styles.inlineInput} style={{ marginTop: '4px' }} />
                   </div>
 
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
@@ -1084,19 +1080,19 @@ const LeadDetails = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>First Name</label>
-                    <input type="text" value={draftData.first_name} onChange={e => setDraftData({...draftData, first_name: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                    <input type="text" value={draftData.first_name} onChange={e => setDraftData({...draftData, first_name: e.target.value})} className={styles.inlineInput} />
                   </div>
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Last Name</label>
-                    <input type="text" value={draftData.last_name} onChange={e => setDraftData({...draftData, last_name: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                    <input type="text" value={draftData.last_name} onChange={e => setDraftData({...draftData, last_name: e.target.value})} className={styles.inlineInput} />
                   </div>
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Email</label>
-                    <input type="email" value={draftData.email} onChange={e => setDraftData({...draftData, email: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                    <input type="email" value={draftData.email} onChange={e => setDraftData({...draftData, email: e.target.value})} className={styles.inlineInput} />
                   </div>
                   <div>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Phone</label>
-                    <input type="tel" value={draftData.phone} onChange={e => setDraftData({...draftData, phone: e.target.value})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                    <input type="tel" value={draftData.phone} onChange={e => setDraftData({...draftData, phone: e.target.value})} className={styles.inlineInput} />
                   </div>
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
                     <button onClick={handleCancelEdit} style={{ padding: '4px 8px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
