@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X } from 'lucide-react';
+import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { generateOrderPDF } from '../lib/pdfGenerator';
 import { useAuth } from '../lib/AuthContext';
@@ -1017,57 +1017,7 @@ const LeadDetails = () => {
             </div>
           )}
 
-          {/* Signed Order Form Panel */}
-          {lead.electronic_signature && (
-            <div className={styles.panel} style={{ borderTop: '3px solid #10b981' }}>
-              <div className={styles.panelHeader} style={{ fontSize: '1rem', padding: '10px 15px' }}>Signed Order Details</div>
-              <div className={styles.panelBody} style={{ padding: '15px' }}>
-                 
-                 {/* Original Signature */}
-                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '6px' }}>
-                     <div style={{ flex: '1.5' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Original Signature</span>
-                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.3rem', color: '#60a5fa', lineHeight: '1' }}>{lead.electronic_signature}</span>
-                     </div>
-                     <div style={{ flex: '1' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>IP Address</span>
-                       <span style={{ fontSize: '0.75rem' }}>{lead.signed_ip}</span>
-                     </div>
-                     <div style={{ flex: '1.2' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Timestamp</span>
-                       <span style={{ fontSize: '0.75rem' }}>{new Date(lead.signed_date).toLocaleString()}</span>
-                     </div>
-                     <div style={{ display: 'flex', gap: '6px' }}>
-                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
-                     </div>
-                 </div>
-
-                 {/* Change Order Signatures */}
-                 {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
-                   <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '6px', borderLeft: '3px solid #f59e0b' }}>
-                     <div style={{ flex: '1.5' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
-                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.3rem', color: '#60a5fa', lineHeight: '1' }}>{sig.signature}</span>
-                     </div>
-                     <div style={{ flex: '1' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>IP Address</span>
-                       <span style={{ fontSize: '0.75rem' }}>{sig.ip}</span>
-                     </div>
-                     <div style={{ flex: '1.2' }}>
-                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Timestamp</span>
-                       <span style={{ fontSize: '0.75rem' }}>{new Date(sig.date).toLocaleString()}</span>
-                     </div>
-                     <div style={{ display: 'flex', gap: '6px' }}>
-                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
-                     </div>
-                   </div>
-                 ))}
-                 
-              </div>
-            </div>
-          )}
+          {/* Removed Signed Order Form Panel from here */}
 
           {/* Price and Terms Panel */}
           <div className={styles.panel}>
@@ -1328,6 +1278,56 @@ const LeadDetails = () => {
               
             </div>
           </div>
+
+          {/* Signed Documents Panel */}
+          {lead.electronic_signature && (
+            <div className={styles.panel} style={{ marginBottom: '20px' }}>
+              <div className={styles.panelHeader} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <PenTool size={18} /> Signed Documents
+              </div>
+              <div className={styles.panelBody} style={{ padding: '15px' }}>
+                 
+                 {/* Original Signature */}
+                 <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #10b981' }}>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                     <div>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Original Signature</span>
+                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: '#60a5fa', lineHeight: '1' }}>{lead.electronic_signature}</span>
+                     </div>
+                     <div style={{ textAlign: 'right' }}>
+                       <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(lead.signed_date).toLocaleDateString()}</span>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {lead.signed_ip}</span>
+                     </div>
+                   </div>
+                   <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                     <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
+                     <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                   </div>
+                 </div>
+
+                 {/* Change Order Signatures */}
+                 {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
+                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #f59e0b' }}>
+                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                       <div>
+                         <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
+                         <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: '#60a5fa', lineHeight: '1' }}>{sig.signature}</span>
+                       </div>
+                       <div style={{ textAlign: 'right' }}>
+                         <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(sig.date).toLocaleDateString()}</span>
+                         <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {sig.ip}</span>
+                       </div>
+                     </div>
+                     <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
+                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                     </div>
+                   </div>
+                 ))}
+                 
+              </div>
+            </div>
+          )}
 
           {/* File Attachment Panel */}
           <div className={styles.panel}>
