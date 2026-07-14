@@ -84,7 +84,7 @@ const LeadDetails = () => {
             assignee:profiles!assigned_to(first_name, last_name),
             creator:profiles!created_by(first_name, last_name),
             customers (id, first_name, last_name, email, phone),
-            lead_vehicles (id, vehicle_year, vehicle_make, vehicle_model, vehicle_vin, condition, trailer_type)
+            lead_vehicles (id, vehicle_year, vehicle_make, vehicle_model, vehicle_type, vehicle_vin, condition, trailer_type)
           `)
           .eq('lead_number', id)
           .single();
@@ -545,6 +545,7 @@ const LeadDetails = () => {
            vehicle_year: v.vehicle_year,
            vehicle_make: v.vehicle_make,
            vehicle_model: v.vehicle_model,
+           vehicle_type: v.vehicle_type || 'Car',
            vehicle_vin: v.vehicle_vin || '',
            condition: v.condition || 'Operable',
            trailer_type: v.trailer_type || 'Open'
@@ -878,6 +879,27 @@ const LeadDetails = () => {
                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Model</label>
                           <input type="text" value={v.vehicle_model} onChange={e => { const newV = [...draftData]; newV[i].vehicle_model = e.target.value; setDraftData(newV); }} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
                         </div>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Type</label>
+                          <select 
+                            value={['Car', 'SUV', 'Pickup', 'Van', 'Motorcycle'].includes(v.vehicle_type) ? v.vehicle_type : 'Other'} 
+                            onChange={e => { const newV = [...draftData]; newV[i].vehicle_type = e.target.value === 'Other' ? '' : e.target.value; setDraftData(newV); }} 
+                            style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }}
+                          >
+                            <option value="Car">Car</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Pickup">Pickup</option>
+                            <option value="Van">Van</option>
+                            <option value="Motorcycle">Motorcycle</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        {(!['Car', 'SUV', 'Pickup', 'Van', 'Motorcycle'].includes(v.vehicle_type)) && (
+                          <div style={{ flex: 1 }}>
+                            <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Specify Type</label>
+                            <input type="text" value={v.vehicle_type === 'Other' ? '' : v.vehicle_type} onChange={e => { const newV = [...draftData]; newV[i].vehicle_type = e.target.value; setDraftData(newV); }} placeholder="e.g. Boat" style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }} />
+                          </div>
+                        )}
                       </div>
 
                       <div style={{ display: 'flex', gap: '8px' }}>
@@ -899,7 +921,7 @@ const LeadDetails = () => {
                     </div>
                   ))}
                   
-                  <button onClick={() => setDraftData([...draftData, { vehicle_year: '', vehicle_make: '', vehicle_model: '', condition: 'Operable', trailer_type: 'Open' }])} style={{ alignSelf: 'flex-start', padding: '6px 12px', background: 'none', border: '1px solid var(--brand-blue)', color: 'var(--brand-blue)', borderRadius: '4px', cursor: 'pointer' }}>+ Add Vehicle</button>
+                  <button onClick={() => setDraftData([...draftData, { vehicle_year: '', vehicle_make: '', vehicle_model: '', vehicle_type: 'Car', condition: 'Operable', trailer_type: 'Open' }])} style={{ alignSelf: 'flex-start', padding: '6px 12px', background: 'none', border: '1px solid var(--brand-blue)', color: 'var(--brand-blue)', borderRadius: '4px', cursor: 'pointer' }}>+ Add Vehicle</button>
 
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
                     <button onClick={handleCancelEdit} style={{ padding: '4px 8px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
@@ -913,7 +935,7 @@ const LeadDetails = () => {
                       <div key={v.id || i} className={styles.vehicleItem}>
                         <div className={styles.infoBlock}>
                           <span className={styles.infoLabel}>Vehicle</span>
-                          <span className={styles.infoValue}>{v.vehicle_year} {v.vehicle_make} {v.vehicle_model}</span>
+                          <span className={styles.infoValue}>{v.vehicle_year} {v.vehicle_make} {v.vehicle_model} {v.vehicle_type ? `(${v.vehicle_type})` : ''}</span>
                         </div>
                         <div className={styles.infoBlock}>
                           <span className={styles.infoLabel}>Condition</span>

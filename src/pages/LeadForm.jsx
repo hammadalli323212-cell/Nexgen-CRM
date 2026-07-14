@@ -145,6 +145,7 @@ const LeadForm = ({ isOrder = false }) => {
               year: v.vehicle_year || '',
               make: v.vehicle_make || '',
               model: v.vehicle_model || '',
+              type: v.vehicle_type || 'Car',
               vin: v.vehicle_vin || '',
               condition: v.condition || 'Operable',
               trailer: v.trailer_type || 'Open'
@@ -171,6 +172,8 @@ const LeadForm = ({ isOrder = false }) => {
       fetchLead();
     }
   }, [id, isEditMode]);
+
+  const initialVehicle = { year: '', make: '', model: '', type: 'Car', vin: '', condition: 'Operable', trailer: 'Open' };
 
   const handleAddVehicle = () => {
     setVehicles([...vehicles, { ...initialVehicle }]);
@@ -276,6 +279,7 @@ const LeadForm = ({ isOrder = false }) => {
           vehicle_year: v.year,
           vehicle_make: v.make,
           vehicle_model: v.model,
+          vehicle_type: v.type,
           vehicle_vin: v.vin,
           condition: v.condition,
           trailer_type: v.trailer
@@ -439,7 +443,7 @@ const LeadForm = ({ isOrder = false }) => {
                 </button>
               )}
               
-              <div className={styles.formRow} style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
+              <div className={styles.formRow} style={{ gridTemplateColumns: vehicles[index].type && !['Car', 'SUV', 'Pickup', 'Van', 'Motorcycle'].includes(vehicles[index].type) ? '1fr 1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr 1fr' }}>
                 <div className={styles.formGroup}>
                   <label>Year</label>
                   <input type="text" className={styles.input} value={vehicle.year} onChange={e => handleVehicleChange(index, 'year', e.target.value)} />
@@ -452,6 +456,27 @@ const LeadForm = ({ isOrder = false }) => {
                   <label>Model</label>
                   <input type="text" className={styles.input} value={vehicle.model} onChange={e => handleVehicleChange(index, 'model', e.target.value)} />
                 </div>
+                <div className={styles.formGroup}>
+                  <label>Type</label>
+                  <select 
+                    className={styles.input} 
+                    value={['Car', 'SUV', 'Pickup', 'Van', 'Motorcycle'].includes(vehicle.type) ? vehicle.type : 'Other'} 
+                    onChange={e => handleVehicleChange(index, 'type', e.target.value === 'Other' ? '' : e.target.value)}
+                  >
+                    <option value="Car">Car</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Pickup">Pickup</option>
+                    <option value="Van">Van</option>
+                    <option value="Motorcycle">Motorcycle</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {(!['Car', 'SUV', 'Pickup', 'Van', 'Motorcycle'].includes(vehicle.type)) && (
+                  <div className={styles.formGroup}>
+                    <label>Specify Type</label>
+                    <input type="text" className={styles.input} value={vehicle.type === 'Other' ? '' : vehicle.type} onChange={e => handleVehicleChange(index, 'type', e.target.value)} placeholder="e.g. Boat" />
+                  </div>
+                )}
                 <div className={styles.formGroup}>
                   <label>VIN (Optional)</label>
                   <input type="text" className={styles.input} value={vehicle.vin} onChange={e => handleVehicleChange(index, 'vin', e.target.value)} />
