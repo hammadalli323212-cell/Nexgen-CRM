@@ -387,17 +387,17 @@ const LeadForm = ({ isOrder = false }) => {
               <input type="text" className={styles.input} value={locations.pickupLocation} onChange={e => setLocations({...locations, pickupLocation: e.target.value})} />
             </div>
             <div className={styles.formGroup}>
+              <label>Dropoff Location (City, ST)</label>
+              <input type="text" className={styles.input} value={locations.dropoffLocation} onChange={e => setLocations({...locations, dropoffLocation: e.target.value})} />
+            </div>
+          </div>
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
               <label>Pickup Zip</label>
               <div style={{ position: 'relative' }}>
                 <input type="text" className={styles.input} style={{ width: '100%' }} maxLength={5} value={locations.pickupZip} onChange={e => setLocations({...locations, pickupZip: e.target.value.replace(/\D/g, '')})} />
                 {fetchingZip.pickup && <span style={{ position: 'absolute', right: '10px', top: '10px', color: 'var(--brand-blue)', fontSize: '0.8rem' }}>Fetching...</span>}
               </div>
-            </div>
-          </div>
-          <div className={styles.formRow}>
-            <div className={styles.formGroup}>
-              <label>Dropoff Location (City, ST)</label>
-              <input type="text" className={styles.input} value={locations.dropoffLocation} onChange={e => setLocations({...locations, dropoffLocation: e.target.value})} />
             </div>
             <div className={styles.formGroup}>
               <label>Dropoff Zip</label>
