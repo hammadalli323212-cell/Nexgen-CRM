@@ -68,7 +68,7 @@ const Dashboard = () => {
         if (activities) {
           const formattedActivities = activities.map(a => ({
             id: a.id,
-            title: `New ${a.status === 'Booked' ? 'Order' : 'Lead'} Created: L-${a.lead_number}`,
+            title: `New ${a.status === 'Booked' ? 'Order' : 'Lead'} Created: NG-${a.lead_number}`,
             description: `For customer ${a.customers?.first_name} ${a.customers?.last_name}`,
             time: new Date(a.created_at).toLocaleString(),
             icon: a.status === 'Booked' ? 'CheckCircle' : 'PlusCircle',

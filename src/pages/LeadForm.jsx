@@ -329,7 +329,7 @@ const LeadForm = ({ isOrder = false }) => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
-        <h1>{isEditMode ? `Edit ${isOrder ? 'Order' : 'Lead'} #L-${id}` : `Create New ${isOrder ? 'Order' : 'Lead'}`}</h1>
+        <h1>{isEditMode ? `Edit ${isOrder ? 'Order' : 'Lead'} #NG-${id}` : `Create New ${isOrder ? 'Order' : 'Lead'}`}</h1>
       </div>
 
       <div className={styles.formGrid}>

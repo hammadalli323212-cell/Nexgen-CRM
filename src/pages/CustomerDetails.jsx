@@ -58,7 +58,7 @@ const CustomerDetails = () => {
     () => [
       columnHelper.accessor('lead_number', {
         header: 'Lead #',
-        cell: info => <span style={{ color: 'var(--brand-blue)', fontWeight: '500' }}>L-{info.getValue()}</span>
+        cell: info => <span style={{ color: 'var(--brand-blue)', fontWeight: '500' }}>NG-{info.getValue()}</span>
       }),
       columnHelper.accessor('order_id', {
         header: 'Order ID',
