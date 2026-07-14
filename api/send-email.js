@@ -63,7 +63,7 @@ export default async function handler(req, res) {
 <p style="color:#6b7280;font-size:12px;margin:0 0 6px">If the button doesn't work, copy this link:</p>
 <p style="word-break:break-all;color:#3b82f6;font-size:12px;margin:0 0 20px">${bookingLink}</p>
 <p style="color:#374151;margin:0">Best regards,</p>
-<p style="color:#374151;margin:4px 0 0"><strong>Henry Ortiz</strong><br/>NexGen Auto Transport</p>
+<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport</p>
 </div>
 <div style="background:#1e3a5f;padding:20px 28px;text-align:center">
 <p style="color:#93c5fd;margin:0 0 4px;font-size:13px;font-weight:600">NexGen Auto Transport</p>

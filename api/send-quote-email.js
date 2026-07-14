@@ -120,7 +120,7 @@ ${vRows}
 </div>
 
 <p style="color:#374151;margin:0">Best regards,</p>
-<p style="color:#374151;margin:4px 0 0"><strong>Henry Ortiz</strong><br/>NexGen Auto Transport</p>
+<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport</p>
 </div>
 
 <div style="background:#1e3a5f;padding:20px 28px;text-align:center">

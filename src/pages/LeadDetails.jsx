@@ -221,7 +221,7 @@ const LeadDetails = () => {
           customerEmail: emailToUse,
           customerName: nameToUse,
           bookingLink: link,
-          senderId: user?.id
+          senderId: lead?.assigned_to || user?.id
         })
       });
 
@@ -267,7 +267,7 @@ const LeadDetails = () => {
           customerName: nameToUse,
           bookingLink: link,
           isChangeOrder: true,
-          senderId: user?.id
+          senderId: lead?.assigned_to || user?.id
         })
       });
 
@@ -318,7 +318,8 @@ const LeadDetails = () => {
             estimated_price: lead.estimated_price,
             ship_date: lead.ship_date,
             vehicles: lead.lead_vehicles || []
-          }
+          },
+          senderId: lead?.assigned_to || user?.id
         })
       });
 
