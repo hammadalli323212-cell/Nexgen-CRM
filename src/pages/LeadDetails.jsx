@@ -11,6 +11,7 @@ import styles from './LeadDetails.module.css';
 const LeadDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user, isAdmin } = useAuth();
@@ -85,6 +86,17 @@ const LeadDetails = () => {
           .single();
           
         if (error) throw error;
+
+        // Smart Route Redirection
+        const isOrderRoute = location.pathname.startsWith('/orders');
+        if (data.status === 'Booked' && !isOrderRoute) {
+          navigate(`/orders/${data.lead_number}`, { replace: true });
+          return;
+        } else if (data.status !== 'Booked' && isOrderRoute) {
+          navigate(`/leads/${data.lead_number}`, { replace: true });
+          return;
+        }
+
         setLead(data);
         
         // Fetch tasks for this lead
@@ -578,7 +590,7 @@ const LeadDetails = () => {
       toast.error('Error deleting: ' + err.message);
     }
   };
-  const location = useLocation();
+
   const isOrderView = location.pathname.startsWith('/orders');
 
   return (
