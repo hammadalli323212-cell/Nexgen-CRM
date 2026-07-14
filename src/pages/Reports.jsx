@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext';
 import styles from './Dashboard.module.css'; // Reusing dashboard grid styles
 
 const Reports = () => {
-  const { user, profile } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [stats, setStats] = useState({
     totalLeads: 0,
     totalOrders: 0,
@@ -17,9 +17,7 @@ const Reports = () => {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
-        if (!user || !profile) return;
-        
-        const isAdmin = profile.role === 'admin';
+        if (!user) return;
         
         // Base query builder helper
         const buildQuery = (table, selectStr, countOpts) => {

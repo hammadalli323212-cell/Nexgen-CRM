@@ -5,7 +5,7 @@ import { useAuth } from '../lib/AuthContext';
 import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
-  const { user, profile } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [stats, setStats] = useState({
     pickups: 0,
     deliveries: 0,
@@ -18,10 +18,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        if (!user || !profile) return;
+        if (!user) return;
         
         const todayStr = new Date().toISOString().split('T')[0];
-        const isAdmin = profile.role === 'admin';
         
         // Base query builder helper
         const buildQuery = (table, selectStr, countOpts) => {
