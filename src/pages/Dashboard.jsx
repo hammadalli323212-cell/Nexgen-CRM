@@ -12,11 +12,6 @@ const Dashboard = () => {
     pendingQuotes: 0,
     revenue: 0
   });
-  const todayStr = new Date().toISOString().split('T')[0];
-  const [dateRange, setDateRange] = useState({
-    startDate: todayStr,
-    endDate: todayStr
-  });
   const [recentActivities, setRecentActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,32 +20,31 @@ const Dashboard = () => {
       try {
         if (!user) return;
         
-        const startDateTime = `${dateRange.startDate}T00:00:00.000Z`;
-        const endDateTime = `${dateRange.endDate}T23:59:59.999Z`;
-
-        // 1. Pickups in range
-        const { count: pickupsCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
-          .gte('ship_date', dateRange.startDate)
-          .lte('ship_date', dateRange.endDate)
-          .eq('is_archived', false);
+        const todayStr = new Date().toISOString().split('T')[0];
         
-        // 2. Deliveries in range
-        const { count: deliveriesCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
-          .gte('delivery_date', dateRange.startDate)
-          .lte('delivery_date', dateRange.endDate)
-          .eq('is_archived', false);
+        // Base query builder helper
+        const buildQuery = (table, selectStr, countOpts) => {
+          let query = supabase.from(table).select(selectStr, countOpts);
+          if (!isAdmin) {
+             // If not admin, only show leads assigned to them or created by them
+             query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
+          }
+          return query;
+        };
         
-        // 3. Leads Created in range (Replaced Pending Quotes)
-        const { count: pendingCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
-          .gte('created_at', startDateTime)
-          .lte('created_at', endDateTime)
-          .eq('is_archived', false);
+        // 1. Today's Pickups
+        const { count: pickupsCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('ship_date', todayStr).eq('is_archived', false);
         
-        // 4. Revenue in range (Broker fees of leads created in range)
-        const { data: revenueLeads } = await buildQuery('leads', 'estimated_price, carrier_pay')
-          .gte('created_at', startDateTime)
-          .lte('created_at', endDateTime)
-          .eq('is_archived', false);
+        // 2. Today's Deliveries
+        const { count: deliveriesCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('delivery_date', todayStr).eq('is_archived', false);
+        
+        // 3. Pending Quotes (Status 'New')
+        const { count: pendingCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('status', 'New').eq('is_archived', false);
+        
+        // 4. Revenue Today (Broker fees of leads created today)
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const { data: revenueLeads } = await buildQuery('leads', 'estimated_price, carrier_pay').gte('created_at', todayStart.toISOString()).eq('is_archived', false);
         
         let revenue = 0;
         if (revenueLeads) {
@@ -90,42 +84,30 @@ const Dashboard = () => {
     };
     
     fetchDashboardData();
-  }, [user, isAdmin, dateRange]);
+  }, [user, isAdmin]);
 
   return (
     <div className={styles.dashboard}>
-      <div className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
-        <div>
-          <h1>Dashboard</h1>
-          <p>Welcome back. Here is your operational overview.</p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--panel-bg)', padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-             <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>From Date</label>
-             <input type="date" value={dateRange.startDate} onChange={e => setDateRange({...dateRange, startDate: e.target.value})} style={{ padding: '6px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-             <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>To Date</label>
-             <input type="date" value={dateRange.endDate} onChange={e => setDateRange({...dateRange, endDate: e.target.value})} style={{ padding: '6px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }} />
-          </div>
-        </div>
+      <div className={styles.header}>
+        <h1>Dashboard</h1>
+        <p>Welcome back. Here is your operational overview for today.</p>
       </div>
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Pickups</span>
+          <span className={styles.statTitle}>Today's Pickups</span>
           <span className={styles.statValue}>{loading ? '-' : stats.pickups}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Deliveries</span>
+          <span className={styles.statTitle}>Today's Deliveries</span>
           <span className={styles.statValue}>{loading ? '-' : stats.deliveries}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>New Leads</span>
+          <span className={styles.statTitle}>Pending Leads</span>
           <span className={styles.statValue}>{loading ? '-' : stats.pendingQuotes}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Revenue</span>
+          <span className={styles.statTitle}>Revenue Today</span>
           <span className={styles.statValue} style={{ color: 'var(--success)' }}>
             {loading ? '-' : `$${stats.revenue.toFixed(2)}`}
           </span>
