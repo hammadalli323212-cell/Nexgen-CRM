@@ -4,7 +4,7 @@
   background-color: var(--brand-blue);
   height: 50px;
   padding: 0 var(--space-md);
-  color: var(--text-primary);
+  color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
@@ -32,7 +32,7 @@
 }
 
 .navItem {
-  color: var(--text-primary);
+  color: #ffffff;
   text-decoration: none;
   padding: var(--space-xs) var(--space-sm);
   border-radius: 4px;
@@ -69,7 +69,7 @@
 }
 
 .dropdownItem {
-  color: var(--text-primary);
+  color: #ffffff;
   padding: 12px 16px;
   text-decoration: none;
   display: flex;
@@ -98,7 +98,7 @@
 .iconButton {
   background: none;
   border: none;
-  color: var(--text-primary);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;

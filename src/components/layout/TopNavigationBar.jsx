@@ -154,7 +154,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <span>{user?.user_metadata?.full_name || user?.email || 'User'}</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{role?.toUpperCase() || 'USER'}</span>
+            <span style={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.7)' }}>{role?.toUpperCase() || 'USER'}</span>
           </div>
 
           {profileDropdownOpen && (
