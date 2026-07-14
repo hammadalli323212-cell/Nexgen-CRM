@@ -12,7 +12,7 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -83,8 +83,10 @@ const Orders = () => {
       }
     };
 
-    fetchOrders();
-  }, []);
+    if (!authLoading) {
+      fetchOrders();
+    }
+  }, [user, isAdmin, authLoading]);
 
   const columns = useMemo(
     () => [

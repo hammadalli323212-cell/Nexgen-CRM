@@ -17,7 +17,7 @@ const Leads = () => {
   const [selectedLeads, setSelectedLeads] = useState(new Set());
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
 
   const fetchLeads = async () => {
     try {
@@ -84,8 +84,10 @@ const Leads = () => {
   };
 
   useEffect(() => {
-    fetchLeads();
-  }, []);
+    if (!authLoading) {
+      fetchLeads();
+    }
+  }, [user, isAdmin, authLoading]);
 
   const handleBulkDelete = async () => {
     if (!window.confirm(`Are you sure you want to delete ${selectedLeads.size} leads? This cannot be undone.`)) return;
