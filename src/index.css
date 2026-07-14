@@ -9,8 +9,8 @@
   --brand-blue-hover: #2980b9;
   
   --text-primary: #ffffff;
-  --text-secondary: #a0aab2;
-  --text-muted: #6c757d;
+  --text-secondary: #cbd5e1; /* Much brighter for readability */
+  --text-muted: #9ca3af; /* Brighter muted color */
   
   --border-color: #454d55;
   

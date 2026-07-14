@@ -796,28 +796,28 @@ const LeadDetails = () => {
                     <span className={styles.infoLabel}>Origin</span>
                     <span className={styles.infoValue}>
                       <div>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</div>
-                      {lead.origin_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.origin_address}</div>}
+                      {lead.origin_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.origin_address}</div>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>PICKUP CONTACT</span>
                     <span className={styles.infoValue}>
                       {lead.origin_contact_name || 'N/A'}
-                      {lead.origin_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: '#555' }}>{lead.origin_contact_phone}</span>}
+                      {lead.origin_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.origin_contact_phone}</span>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Destination</span>
                     <span className={styles.infoValue}>
                       <div>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</div>
-                      {lead.destination_address && <div style={{ fontSize: '0.85rem', color: '#555', marginTop: '4px' }}>{lead.destination_address}</div>}
+                      {lead.destination_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.destination_address}</div>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>DELIVERY CONTACT</span>
                     <span className={styles.infoValue}>
                       {lead.destination_contact_name || 'N/A'}
-                      {lead.destination_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: '#555' }}>{lead.destination_contact_phone}</span>}
+                      {lead.destination_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.destination_contact_phone}</span>}
                     </span>
                   </div>
                   <div className={styles.infoBlock}>
