@@ -443,7 +443,17 @@ const LeadDetails = () => {
 
   const handleInlineSave = async (panel) => {
     try {
+      let changes = [];
+      
       if (panel === 'customer') {
+        const current = lead.customers || {};
+        for (const key of Object.keys(draftData)) {
+          const oldVal = current[key] || '';
+          const newVal = draftData[key] || '';
+          if (oldVal !== newVal) {
+            changes.push(`${key.replace(/_/g, ' ')}: ${oldVal || 'empty'} -> ${newVal || 'empty'}`);
+          }
+        }
         if (lead.customers?.id) {
            const { error } = await supabase.from('customers').update(draftData).eq('id', lead.customers.id);
            if (error) throw error;
@@ -455,11 +465,20 @@ const LeadDetails = () => {
         if (payload.estimated_price !== undefined) payload.estimated_price = parseFloat(payload.estimated_price) || null;
         if (payload.carrier_pay !== undefined) payload.carrier_pay = parseFloat(payload.carrier_pay) || null;
 
+        for (const key of Object.keys(payload)) {
+          const oldVal = lead[key] === null || lead[key] === undefined ? '' : lead[key];
+          const newVal = payload[key] === null || payload[key] === undefined ? '' : payload[key];
+          if (String(oldVal) !== String(newVal)) {
+            changes.push(`${key.replace(/_/g, ' ')}: ${oldVal || 'empty'} -> ${newVal || 'empty'}`);
+          }
+        }
+
         const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
         if (error) throw error;
         setLead({ ...lead, ...payload });
       }
       else if (panel === 'vehicles') {
+        changes.push('Vehicles list updated');
         await supabase.from('lead_vehicles').delete().eq('lead_id', lead.id);
         const newVehicles = draftData.map(v => ({
            lead_id: lead.id,
@@ -479,7 +498,8 @@ const LeadDetails = () => {
         }
       }
 
-      await logActivity(lead.id, user.id, 'Entity Updated', `${panel.charAt(0).toUpperCase() + panel.slice(1)} Panel Edited`, 'Details updated inline');
+      const detailsText = changes.length > 0 ? changes.join(' | ') : 'No changes made';
+      await logActivity(lead.id, user.id, 'Entity Updated', `${panel.charAt(0).toUpperCase() + panel.slice(1)} Panel Edited`, detailsText);
       const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
       
