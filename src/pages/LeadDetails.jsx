@@ -1024,47 +1024,43 @@ const LeadDetails = () => {
               <div className={styles.panelBody} style={{ padding: '15px' }}>
                  
                  {/* Original Signature */}
-                 <div style={{ display: 'flex', flexDirection: 'column', padding: '12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px' }}>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                     <div style={{ flex: 1 }}>
-                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Original Signature</span>
-                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.5rem', color: '#60a5fa' }}>{lead.electronic_signature}</span>
+                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '6px' }}>
+                     <div style={{ flex: '1.5' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Original Signature</span>
+                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.3rem', color: '#60a5fa', lineHeight: '1' }}>{lead.electronic_signature}</span>
                      </div>
-                     <div style={{ flex: 1 }}>
-                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>IP Address</span>
-                       <span style={{ fontSize: '0.85rem' }}>{lead.signed_ip}</span>
+                     <div style={{ flex: '1' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>IP Address</span>
+                       <span style={{ fontSize: '0.75rem' }}>{lead.signed_ip}</span>
                      </div>
-                     <div style={{ flex: 1, textAlign: 'right' }}>
-                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Timestamp</span>
-                       <span style={{ fontSize: '0.85rem' }}>{new Date(lead.signed_date).toLocaleString()}</span>
+                     <div style={{ flex: '1.2' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Timestamp</span>
+                       <span style={{ fontSize: '0.75rem' }}>{new Date(lead.signed_date).toLocaleString()}</span>
                      </div>
-                   </div>
-                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px' }}>
-                     <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                     <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
-                   </div>
+                     <div style={{ display: 'flex', gap: '6px' }}>
+                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
+                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                     </div>
                  </div>
 
                  {/* Change Order Signatures */}
                  {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
-                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #f59e0b' }}>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                       <div style={{ flex: 1 }}>
-                         <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Change Order {idx + 1}</span>
-                         <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.5rem', color: '#60a5fa' }}>{sig.signature}</span>
-                       </div>
-                       <div style={{ flex: 1 }}>
-                         <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>IP Address</span>
-                         <span style={{ fontSize: '0.85rem' }}>{sig.ip}</span>
-                       </div>
-                       <div style={{ flex: 1, textAlign: 'right' }}>
-                         <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase' }}>Timestamp</span>
-                         <span style={{ fontSize: '0.85rem' }}>{new Date(sig.date).toLocaleString()}</span>
-                       </div>
+                   <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '6px', borderLeft: '3px solid #f59e0b' }}>
+                     <div style={{ flex: '1.5' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
+                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.3rem', color: '#60a5fa', lineHeight: '1' }}>{sig.signature}</span>
                      </div>
-                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px' }}>
-                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ padding: '4px 10px', fontSize: '0.75rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                     <div style={{ flex: '1' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>IP Address</span>
+                       <span style={{ fontSize: '0.75rem' }}>{sig.ip}</span>
+                     </div>
+                     <div style={{ flex: '1.2' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Timestamp</span>
+                       <span style={{ fontSize: '0.75rem' }}>{new Date(sig.date).toLocaleString()}</span>
+                     </div>
+                     <div style={{ display: 'flex', gap: '6px' }}>
+                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
+                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ padding: '4px 8px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
                      </div>
                    </div>
                  ))}
