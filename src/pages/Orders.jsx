@@ -29,6 +29,7 @@ const Orders = () => {
           estimated_price, 
           ship_date,
           status,
+          is_read,
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `,
@@ -63,6 +64,7 @@ const Orders = () => {
             carrier: "Unassigned",
             tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,
             status: order.status,
+            isRead: order.is_read
           }));
 
           setOrders(formattedOrders);
@@ -142,6 +144,10 @@ const Orders = () => {
             {info.getValue()}
           </span>
         ),
+      }),
+      columnHelper.accessor('isRead', {
+        header: '',
+        cell: info => !info.getValue() ? <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem' }}>★</span> : null,
       }),
     ],
     [],

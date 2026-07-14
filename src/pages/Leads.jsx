@@ -37,6 +37,7 @@ const Leads = () => {
           source,
           transport_type, 
           status,
+          is_read,
           assignee:profiles!assigned_to(first_name, last_name),
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
@@ -65,7 +66,8 @@ const Leads = () => {
             shipDate: lead.ship_date || '',
             assignedTo: lead.assignee ? `${lead.assignee.first_name} ${lead.assignee.last_name}` : 'Unassigned',
             source: lead.source || 'Manual',
-            status: lead.status
+            status: lead.status,
+            isRead: lead.is_read
           }));
           
           setLeads(formattedLeads);
@@ -349,6 +351,10 @@ const Leads = () => {
             {info.getValue()}
           </span>
         ),
+      }),
+      columnHelper.accessor('isRead', {
+        header: '',
+        cell: info => !info.getValue() ? <span style={{ color: 'var(--brand-blue)', fontSize: '1.2rem' }}>★</span> : null,
       }),
     ],
     [selectedLeads, leads]

@@ -65,6 +65,7 @@ const LeadDetails = () => {
             source,
             status,
             order_id,
+            is_read,
             notes,
             carrier_pay,
             carrier_pay_terms,
@@ -86,6 +87,11 @@ const LeadDetails = () => {
           .single();
           
         if (error) throw error;
+
+        if (data.is_read === false) {
+          await supabase.from('leads').update({ is_read: true }).eq('id', data.id);
+          data.is_read = true;
+        }
 
         // Smart Route Redirection
         const isOrderRoute = location.pathname.startsWith('/orders');

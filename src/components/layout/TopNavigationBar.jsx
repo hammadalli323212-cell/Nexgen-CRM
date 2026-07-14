@@ -2,13 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, Bell, Star, PlusCircle, LogOut, Users, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 import styles from './TopNavigationBar.module.css';
 
 const TopNavigationBar = ({ onSearchClick }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [unreadLeads, setUnreadLeads] = useState(0);
+  const [unreadOrders, setUnreadOrders] = useState(0);
   const { user, role, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUnreadCounts = async () => {
+      const { count: leadsCount } = await supabase
+        .from('leads')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_read', false)
+        .neq('status', 'Booked')
+        .eq('is_archived', false);
+      
+      const { count: ordersCount } = await supabase
+        .from('leads')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_read', false)
+        .eq('status', 'Booked')
+        .eq('is_archived', false);
+        
+      setUnreadLeads(leadsCount || 0);
+      setUnreadOrders(ordersCount || 0);
+    };
+    
+    fetchUnreadCounts();
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'leads' },
+        (payload) => fetchUnreadCounts()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -67,7 +105,9 @@ const TopNavigationBar = ({ onSearchClick }) => {
               }
             >
               {item.name}
-              {item.hasDropdown && <ChevronDown size={14} />}
+              {item.name === 'Leads' && unreadLeads > 0 && <span style={{ color: 'var(--danger)', fontWeight: 'bold', marginLeft: '6px' }}>{unreadLeads}</span>}
+              {item.name === 'Orders' && unreadOrders > 0 && <span style={{ color: 'var(--danger)', fontWeight: 'bold', marginLeft: '6px' }}>{unreadOrders}</span>}
+              {item.hasDropdown && <ChevronDown size={14} style={{ marginLeft: '4px' }} />}
             </NavLink>
             
             {item.hasDropdown && activeDropdown === item.name && item.dropdownItems && (
