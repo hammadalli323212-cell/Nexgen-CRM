@@ -66,6 +66,12 @@ export default async function handler(req, res) {
 </table>
 </div>
 
+${bookingLink ? `
+<div style="text-align:center;margin:0 0 32px">
+<a href="${bookingLink}" style="display:inline-block;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;padding:14px 40px;text-decoration:none;border-radius:8px;font-weight:700;font-size:16px;box-shadow:0 4px 6px -1px rgba(37,99,235,0.2)">Book Now Securely</a>
+</div>
+` : ''}
+
 <h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">🚗 Vehicle Details</h3>
 <table style="width:100%;border-collapse:collapse;margin:0 0 24px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
 <thead>
@@ -87,12 +93,6 @@ ${vRows}
 <li style="margin:0 0 8px;font-size:14px;color:#4b5563">⭐ <strong>Top Rated</strong> - 5-star customer service</li>
 </ul>
 
-${bookingLink ? `
-<div style="text-align:center;margin:32px 0">
-<a href="${bookingLink}" style="display:inline-block;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;padding:14px 40px;text-decoration:none;border-radius:8px;font-weight:700;font-size:16px;box-shadow:0 4px 6px -1px rgba(37,99,235,0.2)">Book Now Securely</a>
-</div>
-` : ''}
-
 <div style="background:#f8fafc;padding:16px;border-radius:8px;margin:0 0 24px;text-align:center">
 <p style="margin:0 0 4px;font-size:14px;color:#4b5563;font-weight:600">Questions? We're here to help.</p>
 <p style="margin:0;font-size:18px;color:#1e3a5f;font-weight:700">📞 (832) 886-1321</p>
@@ -104,9 +104,10 @@ ${bookingLink ? `
 
 <div style="background:#1e3a5f;padding:20px 28px;text-align:center">
 <p style="color:#93c5fd;margin:0 0 4px;font-size:13px;font-weight:600">NexGen Auto Transport</p>
-<p style="color:rgba(255,255,255,0.5);margin:0;font-size:11px">Professional Vehicle Shipping Solutions</p>
+<p style="margin:0;font-size:12px;color:#94a3b8;text-align:center">© ${new Date().getFullYear()} NexGen Auto Transport. All rights reserved.</p>
 </div>
 </div>
+<div style="display:none;color:#fff;font-size:1px;">Ref: ${Date.now()}-${Math.random().toString(36).substring(7)}</div>
     `);
 
     const transporter = nodemailer.createTransport({
