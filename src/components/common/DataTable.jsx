@@ -25,7 +25,7 @@ const DataTable = ({ data, columns, onRowClick }) => {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 100,
       },
     },
   });
