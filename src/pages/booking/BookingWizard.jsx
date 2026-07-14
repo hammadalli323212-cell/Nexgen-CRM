@@ -81,7 +81,7 @@ const BookingWizard = () => {
       const isAuth = sessionStorage.getItem(`booking_auth_${id}`);
       
       if (!isAuth && !session) {
-        navigate(`/booking/${id}`);
+        navigate(`/booking/${id}${window.location.search}`);
         return;
       }
 

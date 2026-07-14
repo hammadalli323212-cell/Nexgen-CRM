@@ -105,7 +105,7 @@ const BookingAuth = () => {
       if (isValid) {
         // Validation success. We can store a simple flag in sessionStorage to allow access to the wizard
         sessionStorage.setItem(`booking_auth_${id}`, 'true');
-        navigate(`/booking/${id}/wizard`);
+        navigate(`/booking/${id}/wizard${window.location.search}`);
       } else {
         setError('The information provided does not match our records for this order.');
       }
