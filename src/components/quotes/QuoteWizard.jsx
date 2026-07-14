@@ -6,7 +6,46 @@ const steps = ['Customer', 'Pickup', 'Delivery', 'Vehicle', 'Pricing', 'Review']
 
 const QuoteWizard = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    originCity: '', originState: '', originZip: '',
+    destCity: '', destState: '', destZip: ''
+  });
+
+  // Auto-fetch Origin Zip
+  React.useEffect(() => {
+    if (formData.originZip?.length === 5) {
+      fetch(`https://api.zippopotam.us/us/${formData.originZip}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.places && data.places.length > 0) {
+            setFormData(prev => ({
+              ...prev,
+              originCity: data.places[0]["place name"],
+              originState: data.places[0]["state abbreviation"]
+            }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [formData.originZip]);
+
+  // Auto-fetch Destination Zip
+  React.useEffect(() => {
+    if (formData.destZip?.length === 5) {
+      fetch(`https://api.zippopotam.us/us/${formData.destZip}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.places && data.places.length > 0) {
+            setFormData(prev => ({
+              ...prev,
+              destCity: data.places[0]["place name"],
+              destState: data.places[0]["state abbreviation"]
+            }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [formData.destZip]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -69,16 +108,16 @@ const QuoteWizard = ({ onClose }) => {
           {currentStep === 1 && (
             <div>
               <div className={styles.formGroup}>
+                <label>Origin Zip</label>
+                <input className={styles.input} type="text" placeholder="90001" value={formData.originZip} onChange={e => setFormData({...formData, originZip: e.target.value})} />
+              </div>
+              <div className={styles.formGroup}>
                 <label>Origin City</label>
-                <input className={styles.input} type="text" placeholder="Los Angeles" />
+                <input className={styles.input} type="text" placeholder="Los Angeles" value={formData.originCity} onChange={e => setFormData({...formData, originCity: e.target.value})} />
               </div>
               <div className={styles.formGroup}>
                 <label>Origin State</label>
-                <input className={styles.input} type="text" placeholder="CA" />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Origin Zip</label>
-                <input className={styles.input} type="text" placeholder="90001" />
+                <input className={styles.input} type="text" placeholder="CA" value={formData.originState} onChange={e => setFormData({...formData, originState: e.target.value})} />
               </div>
             </div>
           )}
@@ -86,16 +125,16 @@ const QuoteWizard = ({ onClose }) => {
           {currentStep === 2 && (
             <div>
               <div className={styles.formGroup}>
+                <label>Destination Zip</label>
+                <input className={styles.input} type="text" placeholder="10001" value={formData.destZip} onChange={e => setFormData({...formData, destZip: e.target.value})} />
+              </div>
+              <div className={styles.formGroup}>
                 <label>Destination City</label>
-                <input className={styles.input} type="text" placeholder="New York" />
+                <input className={styles.input} type="text" placeholder="New York" value={formData.destCity} onChange={e => setFormData({...formData, destCity: e.target.value})} />
               </div>
               <div className={styles.formGroup}>
                 <label>Destination State</label>
-                <input className={styles.input} type="text" placeholder="NY" />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Destination Zip</label>
-                <input className={styles.input} type="text" placeholder="10001" />
+                <input className={styles.input} type="text" placeholder="NY" value={formData.destState} onChange={e => setFormData({...formData, destState: e.target.value})} />
               </div>
             </div>
           )}

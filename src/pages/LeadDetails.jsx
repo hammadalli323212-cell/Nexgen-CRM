@@ -154,6 +154,40 @@ const LeadDetails = () => {
     }
   }, [id, isAdmin]);
 
+  // Auto-fetch Origin Zip
+  useEffect(() => {
+    if (editingPanel === 'logistics' && draftData?.origin_zip?.length === 5) {
+      fetch(`https://api.zippopotam.us/us/${draftData.origin_zip}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.places && data.places.length > 0) {
+            setDraftData(prev => {
+              if (prev.origin_city === data.places[0]["place name"] && prev.origin_state === data.places[0]["state abbreviation"]) return prev;
+              return { ...prev, origin_city: data.places[0]["place name"], origin_state: data.places[0]["state abbreviation"] };
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [draftData?.origin_zip, editingPanel]);
+
+  // Auto-fetch Destination Zip
+  useEffect(() => {
+    if (editingPanel === 'logistics' && draftData?.destination_zip?.length === 5) {
+      fetch(`https://api.zippopotam.us/us/${draftData.destination_zip}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.places && data.places.length > 0) {
+            setDraftData(prev => {
+              if (prev.destination_city === data.places[0]["place name"] && prev.destination_state === data.places[0]["state abbreviation"]) return prev;
+              return { ...prev, destination_city: data.places[0]["place name"], destination_state: data.places[0]["state abbreviation"] };
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [draftData?.destination_zip, editingPanel]);
+
   if (loading) {
     return <div className={styles.loading}>Loading lead details...</div>;
   }
