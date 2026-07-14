@@ -3,18 +3,21 @@ import DataTable from "../components/common/DataTable";
 import { supabase } from "../lib/supabase";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../lib/AuthContext";
 import styles from "./Leads.module.css"; // Reusing the layout styles
 
 const columnHelper = createColumnHelper();
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from("leads")
           .select(
             `
@@ -37,6 +40,12 @@ const Orders = () => {
           .eq("status", "Booked")
           .eq("is_archived", false)
           .order("created_at", { ascending: false });
+
+        if (!isAdmin && user) {
+          query = query.or(`assigned_to.eq.${user.id},user_id.eq.${user.id}`);
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 

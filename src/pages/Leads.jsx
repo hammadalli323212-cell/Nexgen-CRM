@@ -17,11 +17,11 @@ const Leads = () => {
   const [selectedLeads, setSelectedLeads] = useState(new Set());
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const fetchLeads = async () => {
     try {
-      const { data, error } = await supabase.from('leads').select(`
+      let query = supabase.from('leads').select(`
           id, 
           lead_number, 
           created_at, 
@@ -42,6 +42,12 @@ const Leads = () => {
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `).neq('status', 'Booked').eq('is_archived', false).order('created_at', { ascending: false });
+        
+        if (!isAdmin && user) {
+          query = query.or(`assigned_to.eq.${user.id},user_id.eq.${user.id}`);
+        }
+
+        const { data, error } = await query;
         
         if (error) throw error;
         
