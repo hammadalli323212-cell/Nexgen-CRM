@@ -100,3 +100,9 @@ button {
   padding: var(--space-md);
   height: 100%;
 }
+
+/* Ensure all form dropdowns respect dark and light mode dynamically */
+select, select option {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
