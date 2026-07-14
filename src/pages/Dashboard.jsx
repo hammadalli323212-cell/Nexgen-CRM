@@ -84,7 +84,7 @@ const Dashboard = () => {
     };
     
     fetchDashboardData();
-  }, [user, profile]);
+  }, [user, isAdmin]);
 
   return (
     <div className={styles.dashboard}>

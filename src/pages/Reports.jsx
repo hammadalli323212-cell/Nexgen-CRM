@@ -77,7 +77,7 @@ const Reports = () => {
     };
 
     fetchReportData();
-  }, [user, profile]);
+  }, [user, isAdmin]);
 
   return (
     <div className={styles.dashboard}>
