@@ -148,7 +148,7 @@ const LeadDetails = () => {
 
     if (isAdmin) {
       const fetchTeam = async () => {
-        const { data } = await supabase.from('profiles').select('id, first_name, last_name').eq('role', 'user');
+        const { data } = await supabase.from('profiles').select('id, full_name, email');
         if (data) setTeamMembers(data);
       };
       fetchTeam();
@@ -351,12 +351,12 @@ const LeadDetails = () => {
       setLead({ 
         ...lead, 
         assigned_to: newAssigneeId,
-        assignee: newAssignee ? { first_name: newAssignee.first_name, last_name: newAssignee.last_name } : null
+        assignee: newAssignee ? { full_name: newAssignee.full_name, email: newAssignee.email } : null
       });
 
       // Log activity
-      const getFullName = (profile) => profile && (profile.first_name || profile.last_name) 
-        ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() 
+      const getFullName = (profile) => profile && (profile.full_name || profile.email) 
+        ? profile.full_name || profile.email
         : 'Unknown User';
         
       const assigneeName = newAssignee ? getFullName(newAssignee) : 'Unassigned';
@@ -753,7 +753,7 @@ const LeadDetails = () => {
               >
                 <option value="">Unassigned</option>
                 {teamMembers.map(member => (
-                  <option key={member.id} value={member.id}>{member.first_name} {member.last_name}</option>
+                  <option key={member.id} value={member.id}>{member.full_name || member.email}</option>
                 ))}
               </select>
             </div>
