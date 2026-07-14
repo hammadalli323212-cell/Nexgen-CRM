@@ -15,16 +15,21 @@ const TopNavigationBar = ({ onSearchClick }) => {
 
   useEffect(() => {
     const fetchUnreadCounts = async () => {
-      const { count: leadsCount } = await supabase
-        .from('leads')
-        .select('*', { count: 'exact', head: true })
+      // Base query builder helper
+      const buildQuery = (table, selectStr, countOpts) => {
+        let query = supabase.from(table).select(selectStr, countOpts);
+        if (!isAdmin) {
+           query = query.or(`assigned_to.eq.${user?.id},created_by.eq.${user?.id}`);
+        }
+        return query;
+      };
+
+      const { count: leadsCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
         .eq('is_read', false)
         .neq('status', 'Booked')
         .eq('is_archived', false);
       
-      const { count: ordersCount } = await supabase
-        .from('leads')
-        .select('*', { count: 'exact', head: true })
+      const { count: ordersCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
         .eq('is_read', false)
         .eq('status', 'Booked')
         .eq('is_archived', false);

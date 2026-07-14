@@ -171,7 +171,8 @@ const BookingWizard = () => {
         origin_contact_phone: formData.isOriginContact ? formData.phone : formData.originContactPhone,
         destination_contact_name: formData.isDestContact ? `${formData.firstName} ${formData.lastName}`.trim() : formData.destContactName,
         destination_contact_phone: formData.isDestContact ? formData.phone : formData.destContactPhone,
-        ship_date: formData.pickupDate || leadData.ship_date
+        ship_date: formData.pickupDate || leadData.ship_date,
+        is_read: false
       };
 
       if (isChangeOrder) {

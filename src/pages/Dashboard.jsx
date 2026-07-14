@@ -103,7 +103,7 @@ const Dashboard = () => {
           <span className={styles.statValue}>{loading ? '-' : stats.deliveries}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Pending Quotes</span>
+          <span className={styles.statTitle}>Pending Leads</span>
           <span className={styles.statValue}>{loading ? '-' : stats.pendingQuotes}</span>
         </div>
         <div className={styles.statCard}>
