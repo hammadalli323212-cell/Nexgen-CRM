@@ -50,7 +50,7 @@ const Leads = () => {
             id: lead.lead_number,
             displayId: `L-${lead.lead_number}`,
             created: new Date(lead.created_at).toLocaleString(),
-            customer: lead.customers ? `${lead.customers.first_name} ${lead.customers.last_name}` : 'Unknown',
+            customer: lead.customers ? `${lead.customers.first_name || ''} ${lead.customers.last_name && lead.customers.last_name !== 'Unknown' ? lead.customers.last_name : ''}`.trim() : 'Unknown',
             vehicles: lead.lead_vehicles && lead.lead_vehicles.length > 0
               ? lead.lead_vehicles.map(v => `${v.vehicle_year} ${v.vehicle_make} ${v.vehicle_model}`).join(', ')
               : 'Unknown',
@@ -126,8 +126,8 @@ const Leads = () => {
 
           // Parse Data
             const fullName = row['CustomerName'] || '';
-            let firstName = fullName.split(' ')[0] || 'Unknown';
-            let lastName = fullName.split(' ').slice(1).join(' ') || 'Unknown';
+            let firstName = fullName.split(' ')[0] || '';
+            let lastName = fullName.split(' ').slice(1).join(' ') || '';
 
             const parseLocation = (raw) => {
               if (!raw) return { name: '', phone: '', address: '', city: '', state: '', zip: '' };

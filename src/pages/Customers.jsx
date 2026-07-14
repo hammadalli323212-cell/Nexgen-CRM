@@ -42,7 +42,7 @@ const Customers = () => {
 
           return {
             id: c.id,
-            name: `${c.first_name || ''} ${c.last_name || ''}`.trim() || 'Unknown',
+            name: `${c.first_name || ''} ${c.last_name && c.last_name !== 'Unknown' ? c.last_name : ''}`.trim() || 'Unknown',
             phone: c.phone || 'N/A',
             email: c.email || 'N/A',
             orders: totalOrders,

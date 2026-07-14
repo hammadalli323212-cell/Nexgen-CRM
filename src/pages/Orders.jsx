@@ -46,7 +46,7 @@ const Orders = () => {
             leadId: order.lead_number,
             created: new Date(order.created_at).toLocaleDateString(),
             customer: order.customers
-              ? `${order.customers.first_name} ${order.customers.last_name}`
+              ? `${order.customers.first_name || ''} ${order.customers.last_name && order.customers.last_name !== 'Unknown' ? order.customers.last_name : ''}`.trim()
               : "Unknown",
             vehicles:
               order.lead_vehicles && order.lead_vehicles.length > 0

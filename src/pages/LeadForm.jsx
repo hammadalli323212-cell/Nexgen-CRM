@@ -25,7 +25,7 @@ const LeadForm = ({ isOrder = false }) => {
   // Form State
   const [internalLeadId, setInternalLeadId] = useState(null); // The UUID in the db
   const [originalData, setOriginalData] = useState(null); // For diffing logs
-  const [customer, setCustomer] = useState({ id: null, name: '', phone: '', email: '', leadSource: '', orderId: '' });
+  const [customer, setCustomer] = useState({ id: null, first_name: '', last_name: '', phone: '', email: '', leadSource: '', orderId: '' });
   const [locations, setLocations] = useState({ 
     pickupAddress: '', pickupLocation: '', pickupZip: '', 
     dropoffAddress: '', dropoffLocation: '', dropoffZip: '',
@@ -121,7 +121,8 @@ const LeadForm = ({ isOrder = false }) => {
           
           setCustomer({
             id: data.customers.id,
-            name: `${data.customers.first_name || ''} ${data.customers.last_name || ''}`.trim(),
+            first_name: data.customers.first_name || '',
+            last_name: data.customers.last_name || '',
             phone: data.customers.phone || '',
             email: data.customers.email || '',
             leadSource: data.source || '',
@@ -191,8 +192,8 @@ const LeadForm = ({ isOrder = false }) => {
     try {
       setIsSaving(true);
       
-      const firstName = customer.name.split(' ')[0] || 'Unknown';
-      const lastName = customer.name.split(' ').slice(1).join(' ') || 'Unknown';
+      const firstName = customer.first_name || '';
+      const lastName = customer.last_name || '';
       
       let customerId = customer.id;
 
@@ -335,8 +336,12 @@ const LeadForm = ({ isOrder = false }) => {
           <div className={styles.sectionHeader}>Customer Details</div>
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label>Customer Name</label>
-              <input type="text" className={styles.input} value={customer.name} onChange={e => setCustomer({...customer, name: e.target.value})} />
+              <label>First Name</label>
+              <input type="text" className={styles.input} value={customer.first_name} onChange={e => setCustomer({...customer, first_name: e.target.value})} />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Last Name</label>
+              <input type="text" className={styles.input} value={customer.last_name} onChange={e => setCustomer({...customer, last_name: e.target.value})} />
             </div>
             <div className={styles.formGroup}>
               <label>Phone Number</label>

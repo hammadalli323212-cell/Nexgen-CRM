@@ -52,7 +52,7 @@ const Archive = () => {
             displayId: `L-${lead.lead_number}`,
             created: new Date(lead.created_at).toLocaleString(),
             customer: lead.customers
-              ? `${lead.customers.first_name} ${lead.customers.last_name}`
+              ? `${lead.customers.first_name || ''} ${lead.customers.last_name && lead.customers.last_name !== 'Unknown' ? lead.customers.last_name : ''}`.trim()
               : "Unknown",
             vehicles:
               lead.lead_vehicles && lead.lead_vehicles.length > 0

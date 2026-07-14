@@ -1033,7 +1033,7 @@ const LeadDetails = () => {
                 <div className={styles.infoGrid} style={{ gridTemplateColumns: '1fr' }}>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Name</span>
-                    <span className={styles.infoValue}>{lead.customers?.first_name} {lead.customers?.last_name}</span>
+                    <span className={styles.infoValue}>{lead.customers?.first_name} {lead.customers?.last_name && lead.customers.last_name !== 'Unknown' ? lead.customers.last_name : ''}</span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Email</span>

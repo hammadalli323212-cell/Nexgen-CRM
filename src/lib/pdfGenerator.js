@@ -101,7 +101,7 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
         startY: startY,
         head: [['Customer Details', '']],
         body: [
-            ['Full Name:', `${formData.firstName} ${formData.lastName}`],
+            ['Full Name:', `${formData.firstName || ''} ${formData.lastName && formData.lastName !== 'Unknown' ? formData.lastName : ''}`.trim()],
             ['Email:', formData.email],
             ['Phone:', formData.phone],
             ['Estimated Ship Date:', formData.pickupDate]
