@@ -220,7 +220,8 @@ const LeadDetails = () => {
         body: JSON.stringify({
           customerEmail: emailToUse,
           customerName: nameToUse,
-          bookingLink: link
+          bookingLink: link,
+          senderId: user?.id
         })
       });
 
@@ -265,7 +266,8 @@ const LeadDetails = () => {
           customerEmail: emailToUse,
           customerName: nameToUse,
           bookingLink: link,
-          isChangeOrder: true
+          isChangeOrder: true,
+          senderId: user?.id
         })
       });
 

@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { createClient } from '@supabase/supabase-js';
 
 const minify = (html) => html.replace(/\n\s*/g, '').replace(/>\s+</g, '><').trim();
 
@@ -12,9 +13,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, leadData, bookingLink } = req.body;
+    const { customerEmail, customerName, leadData, bookingLink, senderId } = req.body;
     if (!customerEmail) {
       return res.status(400).json({ error: 'Missing customerEmail' });
+    }
+
+    // 1. Fetch the sender's SMTP credentials
+    let smtpUser = 'henry.ortiz@nexgenautotransport.com';
+    let smtpPass = process.env.SMTP_PASSWORD;
+    let fromName = 'NexGen Auto Transport';
+
+    if (senderId) {
+      const supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+      const { data: profile } = await supabaseAdmin
+        .from('profiles')
+        .select('email, full_name, smtp_password')
+        .eq('id', senderId)
+        .single();
+      
+      if (profile && profile.email && profile.smtp_password) {
+        smtpUser = profile.email;
+        smtpPass = profile.smtp_password;
+        fromName = profile.full_name || 'NexGen Auto Transport';
+      }
     }
 
     const hostHeader = req.headers.host || '';
@@ -115,13 +136,13 @@ ${vRows}
       port: 465,
       secure: true,
       auth: {
-        user: 'henry.ortiz@nexgenautotransport.com',
-        pass: process.env.SMTP_PASSWORD
+        user: smtpUser,
+        pass: smtpPass
       }
     });
 
     const info = await transporter.sendMail({
-      from: '"NexGen Auto Transport" <henry.ortiz@nexgenautotransport.com>',
+      from: `"${fromName}" <${smtpUser}>`,
       to: customerEmail,
       subject: "Your NexGen Auto Transport Quote",
       html: html

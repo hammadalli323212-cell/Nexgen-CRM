@@ -19,7 +19,8 @@ const UserManagement = () => {
     name: '',
     email: '',
     password: '',
-    role: 'user'
+    role: 'user',
+    smtp_password: ''
   });
 
   useEffect(() => {
@@ -53,7 +54,8 @@ const UserManagement = () => {
       const bodyData = {
         email: formData.email,
         name: formData.name,
-        role: formData.role
+        role: formData.role,
+        smtp_password: formData.smtp_password
       };
       
       if (editingUserId) {
@@ -84,7 +86,7 @@ const UserManagement = () => {
       toast.success(`User ${editingUserId ? 'updated' : 'created'} successfully!`);
       setIsModalOpen(false);
       setEditingUserId(null);
-      setFormData({ name: '', email: '', password: '', role: 'user' });
+      setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '' });
       fetchUsers(); // Refresh the list
     } catch (err) {
       console.error('Error saving user:', err);
@@ -100,14 +102,15 @@ const UserManagement = () => {
       name: u.full_name || '',
       email: u.email || '',
       password: '', // Empty password field so they only enter if they want to change it
-      role: u.role || 'user'
+      role: u.role || 'user',
+      smtp_password: u.smtp_password || ''
     });
     setIsModalOpen(true);
   };
 
   const openCreateModal = () => {
     setEditingUserId(null);
-    setFormData({ name: '', email: '', password: '', role: 'user' });
+    setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '' });
     setIsModalOpen(true);
   };
 
@@ -263,6 +266,18 @@ const UserManagement = () => {
                   minLength="6"
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Hostinger Email Password</label>
+                <input 
+                  type="password" 
+                  value={formData.smtp_password}
+                  onChange={e => setFormData({...formData, smtp_password: e.target.value})}
+                  placeholder="Only enter if they will send emails"
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                />
+                <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'var(--text-muted)' }}>Required for this user to send quotes/orders from their own email.</p>
               </div>
 
               <div>

@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { id, email, password, name, role } = req.body;
+    const { id, email, password, name, role, smtp_password } = req.body;
 
     if (!id) {
       return res.status(400).json({ error: 'User ID is required' });
@@ -43,6 +43,7 @@ export default async function handler(req, res) {
     if (email) profileData.email = email;
     if (name) profileData.full_name = name;
     if (role) profileData.role = role;
+    if (smtp_password !== undefined) profileData.smtp_password = smtp_password;
 
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
