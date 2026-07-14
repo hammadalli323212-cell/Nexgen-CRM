@@ -183,8 +183,9 @@ const BookingWizard = () => {
   let deposit = 0;
   const terms = (leadData.broker_fee_terms || '').toLowerCase().replace(/\s+/g, '');
   if (terms === 'paymentonorder' || terms === 'paymentonpickup') {
-    deposit = leadData.deposit_amount !== null && leadData.deposit_amount !== undefined && leadData.deposit_amount !== ''
-      ? Number(leadData.deposit_amount) 
+    const override = Number(leadData.deposit_amount);
+    deposit = override > 0 
+      ? override 
       : (Number(leadData.estimated_price || 0) - Number(leadData.carrier_pay || 0));
   } else {
     deposit = 0;

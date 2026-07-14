@@ -507,8 +507,9 @@ const LeadDetails = () => {
     let deposit = 0;
     const terms = (lead.broker_fee_terms || '').toLowerCase().replace(/\s+/g, '');
     if (terms === 'paymentonorder' || terms === 'paymentonpickup') {
-      deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined && lead.deposit_amount !== ''
-        ? Number(lead.deposit_amount) 
+      const override = Number(lead.deposit_amount);
+      deposit = override > 0 
+        ? override 
         : (Number(lead.estimated_price || 0) - Number(lead.carrier_pay || 0));
     } else {
       deposit = 0;
