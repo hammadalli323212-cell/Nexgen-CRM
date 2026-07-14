@@ -505,12 +505,12 @@ const LeadDetails = () => {
     const tariff = Number(lead.estimated_price) || 0;
     
     let deposit = 0;
-    if (lead.broker_fee_terms === 'Payment on Delivery') {
-      deposit = 0;
-    } else {
-      deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
+    if (lead.broker_fee_terms === 'Payment on Order' || lead.broker_fee_terms === 'Payment on Pick up') {
+      deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined && lead.deposit_amount !== ''
         ? Number(lead.deposit_amount) 
         : (Number(lead.estimated_price || 0) - Number(lead.carrier_pay || 0));
+    } else {
+      deposit = 0;
     }
     
     const nextPayment = tariff - deposit;
