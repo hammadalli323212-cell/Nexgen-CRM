@@ -731,102 +731,119 @@ const LeadDetails = () => {
             </div>
             <div className={styles.panelBody}>
               {editingPanel === 'logistics' ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                     <div style={{ flex: 1 }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin</label>
-                       <textarea value={draftData.origin_address} onChange={e => setDraftData({...draftData, origin_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
-                     </div>
-                     <div style={{ width: '100px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin City</label>
-                       <input type="text" value={draftData.origin_city} onChange={e => setDraftData({...draftData, origin_city: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                     <div style={{ width: '60px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
-                       <input type="text" value={draftData.origin_state} onChange={e => setDraftData({...draftData, origin_state: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                     <div style={{ width: '80px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
-                       <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>PICKUP CONTACT</span>
-                    <input type="text" value={draftData.origin_contact_name} onChange={e => setDraftData({...draftData, origin_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
-                    <input type="text" value={draftData.origin_contact_phone} onChange={e => setDraftData({...draftData, origin_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
-                  </div>
-                  
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                     <div style={{ flex: 1 }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destination</label>
-                       <textarea value={draftData.destination_address} onChange={e => setDraftData({...draftData, destination_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
-                     </div>
-                     <div style={{ width: '100px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dest City</label>
-                       <input type="text" value={draftData.destination_city} onChange={e => setDraftData({...draftData, destination_city: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                     <div style={{ width: '60px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
-                       <input type="text" value={draftData.destination_state} onChange={e => setDraftData({...draftData, destination_state: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                     <div style={{ width: '80px' }}>
-                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
-                       <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} className={styles.inlineInput} />
-                     </div>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>DELIVERY CONTACT</span>
-                    <input type="text" value={draftData.destination_contact_name} onChange={e => setDraftData({...draftData, destination_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
-                    <input type="text" value={draftData.destination_contact_phone} onChange={e => setDraftData({...draftData, destination_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
-                  </div>
-                  
-                  <div>
-                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Est. Ship Date</label>
-                    <input type="date" value={draftData.ship_date} onChange={e => setDraftData({...draftData, ship_date: e.target.value})} className={styles.inlineInput} style={{ marginTop: '4px' }} />
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    {/* LEFT COLUMN: ORIGIN */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div>
+                         <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Origin</label>
+                         <textarea value={draftData.origin_address} onChange={e => setDraftData({...draftData, origin_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                         <div style={{ flex: 1 }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>City</label>
+                           <input type="text" value={draftData.origin_city} onChange={e => setDraftData({...draftData, origin_city: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                         <div style={{ width: '60px' }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
+                           <input type="text" value={draftData.origin_state} onChange={e => setDraftData({...draftData, origin_state: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                         <div style={{ width: '80px' }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
+                           <input type="text" value={draftData.origin_zip} onChange={e => setDraftData({...draftData, origin_zip: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                      </div>
+                      
+                      <div className={styles.infoBlock}>
+                        <span className={styles.infoLabel}>PICKUP CONTACT</span>
+                        <input type="text" value={draftData.origin_contact_name} onChange={e => setDraftData({...draftData, origin_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
+                        <input type="tel" value={draftData.origin_contact_phone} onChange={e => setDraftData({...draftData, origin_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
+                      </div>
+                      
+                      <div className={styles.infoBlock}>
+                        <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Est. Ship Date</label>
+                        <input type="date" value={draftData.ship_date} onChange={e => setDraftData({...draftData, ship_date: e.target.value})} className={styles.inlineInput} style={{ marginTop: '4px' }} />
+                      </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: DESTINATION */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div>
+                         <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destination</label>
+                         <textarea value={draftData.destination_address} onChange={e => setDraftData({...draftData, destination_address: e.target.value})} className={styles.inlineInput} style={{ minHeight: '60px', marginTop: '4px' }} placeholder="Address line..."></textarea>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                         <div style={{ flex: 1 }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>City</label>
+                           <input type="text" value={draftData.destination_city} onChange={e => setDraftData({...draftData, destination_city: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                         <div style={{ width: '60px' }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>State</label>
+                           <input type="text" value={draftData.destination_state} onChange={e => setDraftData({...draftData, destination_state: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                         <div style={{ width: '80px' }}>
+                           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Zip</label>
+                           <input type="text" value={draftData.destination_zip} onChange={e => setDraftData({...draftData, destination_zip: e.target.value})} className={styles.inlineInput} />
+                         </div>
+                      </div>
+
+                      <div className={styles.infoBlock}>
+                        <span className={styles.infoLabel}>DELIVERY CONTACT</span>
+                        <input type="text" value={draftData.destination_contact_name} onChange={e => setDraftData({...draftData, destination_contact_name: e.target.value})} className={styles.inlineInput} placeholder="Contact Name" />
+                        <input type="tel" value={draftData.destination_contact_phone} onChange={e => setDraftData({...draftData, destination_contact_phone: e.target.value})} className={styles.inlineInput} placeholder="Contact Phone" style={{marginTop: '4px'}} />
+                      </div>
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
-                    <button onClick={handleCancelEdit} style={{ padding: '4px 8px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-                    <button onClick={() => handleInlineSave('logistics')} style={{ padding: '4px 8px', background: '#10b981', border: 'none', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14}/> Save</button>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '16px' }}>
+                    <button onClick={handleCancelEdit} style={{ padding: '6px 12px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
+                    <button onClick={() => handleInlineSave('logistics')} style={{ padding: '6px 16px', background: '#10b981', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '500' }}><Check size={16}/> Save</button>
                   </div>
-                </div>
+                </>
               ) : (
                 <div className={styles.infoGrid}>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>Origin</span>
-                    <span className={styles.infoValue}>
-                      <div>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</div>
-                      {lead.origin_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.origin_address}</div>}
-                    </span>
+                  {/* LEFT COLUMN: ORIGIN */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>Origin</span>
+                      <span className={styles.infoValue}>
+                        <div>{lead.origin_city}, {lead.origin_state} {lead.origin_zip}</div>
+                        {lead.origin_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.origin_address}</div>}
+                      </span>
+                    </div>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>PICKUP CONTACT</span>
+                      <span className={styles.infoValue}>
+                        {lead.origin_contact_name || 'N/A'}
+                        {lead.origin_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.origin_contact_phone}</span>}
+                      </span>
+                    </div>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>Estimated Ship Date</span>
+                      <span className={styles.infoValue}>{lead.ship_date || 'TBD'}</span>
+                    </div>
                   </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>PICKUP CONTACT</span>
-                    <span className={styles.infoValue}>
-                      {lead.origin_contact_name || 'N/A'}
-                      {lead.origin_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.origin_contact_phone}</span>}
-                    </span>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>Destination</span>
-                    <span className={styles.infoValue}>
-                      <div>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</div>
-                      {lead.destination_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.destination_address}</div>}
-                    </span>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>DELIVERY CONTACT</span>
-                    <span className={styles.infoValue}>
-                      {lead.destination_contact_name || 'N/A'}
-                      {lead.destination_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.destination_contact_phone}</span>}
-                    </span>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>Estimated Ship Date</span>
-                    <span className={styles.infoValue}>{lead.ship_date || 'TBD'}</span>
-                  </div>
-                  <div className={styles.infoBlock}>
-                    <span className={styles.infoLabel}>Order ID (Reference)</span>
-                    <span className={styles.infoValue}>{lead.order_id || 'N/A'}</span>
+
+                  {/* RIGHT COLUMN: DESTINATION */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>Destination</span>
+                      <span className={styles.infoValue}>
+                        <div>{lead.destination_city}, {lead.destination_state} {lead.destination_zip}</div>
+                        {lead.destination_address && <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{lead.destination_address}</div>}
+                      </span>
+                    </div>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>DELIVERY CONTACT</span>
+                      <span className={styles.infoValue}>
+                        {lead.destination_contact_name || 'N/A'}
+                        {lead.destination_contact_phone && <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{lead.destination_contact_phone}</span>}
+                      </span>
+                    </div>
+                    <div className={styles.infoBlock}>
+                      <span className={styles.infoLabel}>Order ID (Reference)</span>
+                      <span className={styles.infoValue}>{lead.order_id || 'N/A'}</span>
+                    </div>
                   </div>
                 </div>
               )}
