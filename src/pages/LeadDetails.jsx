@@ -687,7 +687,13 @@ const LeadDetails = () => {
     try {
       const { error } = await supabase.from('leads').delete().eq('lead_number', id);
       if (error) throw error;
-      navigate(lead.is_archived ? '/archive' : '/leads');
+      if (lead.is_archived) {
+        navigate('/archive');
+      } else if (location.pathname.startsWith('/orders')) {
+        navigate('/orders');
+      } else {
+        navigate('/leads');
+      }
     } catch (err) {
       toast.error('Error deleting: ' + err.message);
     }
