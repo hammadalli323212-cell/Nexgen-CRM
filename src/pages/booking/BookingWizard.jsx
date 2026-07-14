@@ -68,7 +68,7 @@ const BookingWizard = () => {
   useEffect(() => {
     if (isSuccess && new URLSearchParams(window.location.search).get('download') === 'true') {
       setTimeout(() => {
-        generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress);
+        generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'download');
       }, 800);
     }
   }, [isSuccess]);

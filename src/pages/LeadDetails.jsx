@@ -503,14 +503,26 @@ const LeadDetails = () => {
       : 'Vehicle Details Not Provided';
 
     const tariff = Number(lead.estimated_price) || 0;
-    const deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
-      ? Number(lead.deposit_amount) 
-      : 150;
+    
+    let deposit = 0;
+    if (lead.broker_fee_terms === 'Payment on Delivery') {
+      deposit = 0;
+    } else {
+      deposit = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
+        ? Number(lead.deposit_amount) 
+        : (Number(lead.estimated_price || 0) - Number(lead.carrier_pay || 0));
+    }
+    
     const nextPayment = tariff - deposit;
-    const paymentMethod = lead.payment_method || 'Cash On Delivery';
+    
+    const firstPaymentDue = lead.broker_fee_terms || 'Payment on Order';
+    const firstPaymentMethod = lead.payment_method || 'Credit Card';
+    const finalPaymentDue = lead.carrier_pay_terms || 'Payment on Delivery';
+    const finalPaymentMethod = lead.carrier_payment_method || 'Cash / Certified Funds';
+    
     const ipAddress = lead.signed_ip || '';
 
-    generateOrderPDF(lead, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, paymentMethod, ipAddress, action);
+    generateOrderPDF(lead, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action);
   };
 
   const handleArchiveToggle = async () => {
