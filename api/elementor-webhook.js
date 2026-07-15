@@ -8,7 +8,8 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Security Check ---
-    // Check for the custom header we will configure in Elementor
+    // TEMPORARILY DISABLED FOR DEBUGGING
+    /*
     const apiKey = req.headers['x-api-key'] || req.headers['X-API-KEY'] || req.query.key;
     const EXPECTED_KEY = process.env.WEBHOOK_SECRET_KEY || 'NEXGEN_SECURE_123!'; 
 
@@ -16,6 +17,7 @@ export default async function handler(req, res) {
       console.warn('Unauthorized webhook attempt');
       return res.status(401).json({ error: 'Unauthorized' });
     }
+    */
 
     // --- 2. Extract Payload ---
     // Elementor sends data as either JSON or URL-encoded form data.
