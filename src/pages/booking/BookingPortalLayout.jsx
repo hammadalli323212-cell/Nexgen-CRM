@@ -10,18 +10,20 @@ const BookingPortalLayout = () => {
 
   useEffect(() => {
     const fetchAgent = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('leads')
-        .select('profiles (first_name, last_name, phone, email)')
+        .select('assignee:profiles!assigned_to(first_name, last_name, email)')
         .eq('lead_number', id)
         .single();
         
-      if (data && data.profiles) {
+      if (data && data.assignee) {
         setAgent({
-          name: `${data.profiles.first_name} ${data.profiles.last_name}`,
-          phone: data.profiles.phone || '(832) 886-1321',
-          email: data.profiles.email || ''
+          name: `${data.assignee.first_name || ''} ${data.assignee.last_name || ''}`.trim() || 'NexGen Auto Transport',
+          phone: '(832) 886-1321', // Use company phone since user phone isn't tracked in profiles
+          email: data.assignee.email || ''
         });
+      } else {
+        console.error('Agent fetch error:', error);
       }
     };
     fetchAgent();
