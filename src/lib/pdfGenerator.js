@@ -42,11 +42,11 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     doc.setFillColor(59, 130, 246);
     doc.rect(0, 0, pageWidth, 3, "F");
 
-    // Try to load logo.png, if it exists in public folder
-    const logoDataUrl = await getBase64ImageFromUrl('/logo.png');
+    // Try to load logo-dark.jpg, if it exists in public folder
+    const logoDataUrl = await getBase64ImageFromUrl('/logo-dark.jpg');
     
     if (logoDataUrl && !logoDataUrl.includes('text/html')) {
-        doc.addImage(logoDataUrl, 'PNG', 15, 8, 45, 24);
+        doc.addImage(logoDataUrl, 'JPEG', 15, 8, 45, 20);
     } else {
         // Fallback Text Branding
         doc.setFont("helvetica", "bold");
