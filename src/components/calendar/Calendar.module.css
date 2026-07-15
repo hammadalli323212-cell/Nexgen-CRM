@@ -120,7 +120,7 @@
   display: flex;
   flex-direction: column;
   transition: background-color 0.2s;
-  background-color: #3b424a; /* Specific color from screenshot */
+  background-color: var(--bg-panel);
 }
 
 .dayCell:nth-child(7n) {
@@ -128,7 +128,7 @@
 }
 
 .dayCell.empty {
-  background-color: #2b3136; /* Darker for empty days */
+  background-color: var(--bg-dark);
 }
 
 .dayCell.today {
@@ -154,7 +154,7 @@
 
 .taskItem {
   background-color: var(--brand-blue);
-  color: var(--text-primary);
+  color: #ffffff;
   font-size: 0.75rem;
   padding: 2px 4px;
   border-radius: 2px;
@@ -180,7 +180,7 @@
   display: flex;
   flex: 1;
   overflow-y: auto;
-  background-color: #353b41;
+  background-color: var(--bg-panel);
 }
 
 .timeColumn {
@@ -223,7 +223,7 @@
 
 .timeSlot {
   height: 40px;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  border-bottom: 1px dashed var(--border-color);
   position: relative;
 }
 
