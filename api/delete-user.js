@@ -26,6 +26,11 @@ export default async function handler(req, res) {
       }
     });
 
+    // 0. Unassign from all records to prevent foreign key constraint violations
+    await supabaseAdmin.from('leads').update({ assigned_to: null }).eq('assigned_to', id);
+    await supabaseAdmin.from('leads').update({ created_by: null }).eq('created_by', id);
+    await supabaseAdmin.from('tasks').update({ assigned_to: null }).eq('assigned_to', id);
+
     // 1. Delete from public.profiles table first (because of foreign key constraints!)
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
