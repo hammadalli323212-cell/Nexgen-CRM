@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPreview, customerEmail }) {
   const [cc, setCc] = useState('');
   const [bcc, setBcc] = useState('');
+  const [subject, setSubject] = useState('');
   const [isSending, setIsSending] = useState(false);
   const iframeRef = useRef(null);
 
@@ -10,8 +11,9 @@ export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPrevie
     if (isOpen) {
       setCc('');
       setBcc('');
+      setSubject(emailPreview?.subject || '');
     }
-  }, [isOpen]);
+  }, [isOpen, emailPreview]);
 
   useEffect(() => {
     if (iframeRef.current && emailPreview?.previewHtml) {
@@ -26,7 +28,7 @@ export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPrevie
 
   const handleSend = async () => {
     setIsSending(true);
-    await onSend({ cc: cc.trim(), bcc: bcc.trim() });
+    await onSend({ cc: cc.trim(), bcc: bcc.trim(), customSubject: subject.trim() });
     setIsSending(false);
   };
 
@@ -75,7 +77,13 @@ export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPrevie
 
           <div style={styles.fieldGroup}>
             <span style={styles.label}>Subject:</span>
-            <div style={styles.valueBox}>{emailPreview.subject}</div>
+            <input 
+              style={styles.input} 
+              type="text" 
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              disabled={isSending}
+            />
           </div>
 
           <div style={styles.previewContainer}>

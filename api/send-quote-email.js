@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, leadData, bookingLink, senderId, previewOnly, cc, bcc } = req.body;
+    const { customerEmail, customerName, leadData, bookingLink, senderId, previewOnly, cc, bcc, customSubject } = req.body;
     if (!customerEmail) {
       return res.status(400).json({ error: 'Missing customerEmail' });
     }
@@ -146,7 +146,7 @@ ${vRows}
       }
     });
 
-    const subjectLine = "Your NexGen Auto Transport Quote";
+    const subjectLine = customSubject || "Your NexGen Auto Transport Quote";
 
     if (previewOnly) {
       return res.status(200).json({ 

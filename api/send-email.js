@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, bookingLink, isChangeOrder, senderId, previewOnly, cc, bcc } = req.body;
+    const { customerEmail, customerName, bookingLink, isChangeOrder, senderId, previewOnly, cc, bcc, customSubject } = req.body;
 
     if (!customerEmail || !bookingLink) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
     // it will still work if the domain is verified on Resend.
     const senderEmail = profileHasPassword ? smtpUser : (smtpUser !== 'resend' ? smtpUser : 'info@nexgenautotransport.com');
 
-    const subjectLine = isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order";
+    const subjectLine = customSubject || (isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order");
 
     if (previewOnly) {
       return res.status(200).json({ 

@@ -229,7 +229,7 @@ const LeadDetails = () => {
     }
   };
 
-  const confirmSendEmail = async ({ cc, bcc }) => {
+  const confirmSendEmail = async ({ cc, bcc, customSubject }) => {
     const loadingSetter = activeEmailEndpoint.includes('quote') ? setIsSendingQuote : setIsSendingEmail;
     loadingSetter(true);
     setIsEmailModalOpen(false); // Close modal while sending
@@ -237,7 +237,7 @@ const LeadDetails = () => {
       const response = await fetch(activeEmailEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...activeEmailPayload, cc, bcc })
+        body: JSON.stringify({ ...activeEmailPayload, cc, bcc, customSubject })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to send email');
