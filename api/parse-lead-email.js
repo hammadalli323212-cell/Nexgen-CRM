@@ -19,6 +19,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing email content in payload' });
     }
 
+    // Clean up HTML before parsing (Make.com sometimes sends HTML as text)
+    emailBody = emailBody.replace(/<br\s*\/?>/gi, '\n');
+    emailBody = emailBody.replace(/<\/?[^>]+(>|$)/g, ''); // Strip all other HTML tags
+
     // --- 1. Regex Extraction ---
     // Handle possible variations in newlines/spaces
     const extract = (pattern) => {
