@@ -44,11 +44,16 @@ export const AuthProvider = ({ children }) => {
         
       if (error) {
         console.error('Error fetching profile:', error);
+        const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+        if (savedRole) setRole(savedRole);
       } else if (data) {
         setRole(data.role);
+        localStorage.setItem(`nexgen_role_${userId}`, data.role);
       }
     } catch (err) {
       console.error('Unexpected error fetching profile:', err);
+      const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+      if (savedRole) setRole(savedRole);
     } finally {
       setLoading(false);
     }
