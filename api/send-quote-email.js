@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     const baseUrl = rawBaseUrl.replace(/\/$/, '');
     
     // Instead of CID, reference the static public image deployed by Vercel
-    const logoUrl = `${baseUrl}/logo-dark.png`;
+    const logoUrl = `${baseUrl}/logo-dark.jpg`;
 
     const vehicles = leadData.vehicles || [];
     const vRows = vehicles.map(v =>
