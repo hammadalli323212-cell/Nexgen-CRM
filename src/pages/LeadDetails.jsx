@@ -14,7 +14,7 @@ const LeadDetails = () => {
   const location = useLocation();
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user, isAdmin, phone } = useAuth();
+  const { user, isAdmin, phone, isSuperAdmin } = useAuth();
   const [teamMembers, setTeamMembers] = useState([]);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
@@ -773,7 +773,9 @@ const LeadDetails = () => {
             <button className={styles.btnSecondary} onClick={handleArchiveToggle} style={{ borderColor: lead.is_archived ? '#10b981' : '#f59e0b', color: lead.is_archived ? '#10b981' : '#f59e0b' }}>
               {lead.is_archived ? 'Restore' : 'Archive'}
             </button>
-            <button className={styles.btnSecondary} onClick={handleDelete} style={{ borderColor: '#ef4444', color: '#ef4444' }}>Delete</button>
+            {isSuperAdmin && (
+              <button className={styles.btnSecondary} onClick={handleDelete} style={{ borderColor: '#ef4444', color: '#ef4444' }}>Delete</button>
+            )}
           </div>
         </div>
       </div>

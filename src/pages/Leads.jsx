@@ -17,7 +17,7 @@ const Leads = () => {
   const [selectedLeads, setSelectedLeads] = useState(new Set());
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { user, isAdmin, isSuperAdmin, loading: authLoading } = useAuth();
 
   const fetchLeads = async () => {
     try {
@@ -412,13 +412,15 @@ const Leads = () => {
               >
                 Mark Read ({selectedLeads.size})
               </button>
-              <button 
-                className={styles.btnSecondary} 
-                style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
-                onClick={handleBulkDelete}
-              >
-                Delete Selected ({selectedLeads.size})
-              </button>
+              {isSuperAdmin && (
+                <button 
+                  className={styles.btnSecondary} 
+                  style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 
+                  onClick={handleBulkDelete}
+                >
+                  Delete Selected ({selectedLeads.size})
+                </button>
+              )}
             </>
           )}
           <button 
