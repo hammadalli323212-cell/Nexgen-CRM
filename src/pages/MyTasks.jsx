@@ -21,7 +21,7 @@ const MyTasks = () => {
     try {
       let query = supabase
         .from('tasks')
-        .select('*, leads(lead_number, customers(first_name, last_name))')
+        .select('*, leads(lead_number, customers(first_name, last_name)), profiles(full_name)')
         .order('due_date', { ascending: true });
         
       if (!isAdmin && !isSuperAdmin) {
@@ -45,9 +45,14 @@ const MyTasks = () => {
           }
         }
         
+        let titlePrefix = '';
+        if ((isAdmin || isSuperAdmin) && t.profiles?.full_name) {
+          titlePrefix = `[${t.profiles.full_name}] `;
+        }
+        
         return {
           id: t.id,
-          title: `${t.title}${titleSuffix}`,
+          title: `${titlePrefix}${t.title}${titleSuffix}`,
           date: t.due_date,
           completed: t.status === 'Completed',
           urgent: false // Could be added to schema later
