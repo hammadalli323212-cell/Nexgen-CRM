@@ -33,7 +33,7 @@ const BookingPortalLayout = () => {
       <header className={styles.header}>
         <div className={styles.logoSection}>
           <div className={styles.logo}>
-            <img src="/logo-dark.png" alt="NexGen Auto Transport" style={{ height: '60px', width: 'auto' }} />
+            <img src="/logo-dark.png" alt="NexGen Auto Transport" style={{ height: '55px', maxWidth: '350px', objectFit: 'contain' }} />
           </div>
         </div>
 

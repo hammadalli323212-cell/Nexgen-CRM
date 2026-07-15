@@ -14,12 +14,12 @@
 
 .logoSection {
   background-color: var(--text-primary);
-  padding: 0 40px;
+  padding: 0 40px 0 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
-  width: 300px;
+  justify-content: flex-start;
+  clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+  width: 450px;
 }
 
 .logo {
