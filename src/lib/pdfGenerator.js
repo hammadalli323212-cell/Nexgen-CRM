@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download', targetSignature = null) => {
+export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download', targetSignature = null, agentPhone = '(832) 886-1321') => {
   let previewWindow = null;
   if (action === 'preview') {
     previewWindow = window.open('', '_blank');
@@ -65,7 +65,7 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     doc.setTextColor(220, 220, 220);
     doc.text("MC: 1482694 | DOT: 3969190", pageWidth - 15, 15, { align: "right" });
     doc.setFont("helvetica", "normal");
-    doc.text("+(832) 886-1321", pageWidth - 15, 22, { align: "right" });
+    doc.text(`+${agentPhone}`, pageWidth - 15, 22, { align: "right" });
     doc.text("contact@nexgenautotransport.com", pageWidth - 15, 29, { align: "right" });
 
     // 2. Title & Reference
@@ -289,7 +289,7 @@ Terms & Conditions
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(255, 255, 255);
-        doc.text("NexGen Auto Transport | contact@nexgenautotransport.com | +(832) 886-1321", pageWidth / 2, pageHeight - 8, { align: "center" });
+        doc.text(`NexGen Auto Transport | contact@nexgenautotransport.com | +${agentPhone}`, pageWidth / 2, pageHeight - 8, { align: "center" });
         doc.text(`Page ${i} of ${pageCount}`, pageWidth - 15, pageHeight - 8, { align: "right" });
     }
 

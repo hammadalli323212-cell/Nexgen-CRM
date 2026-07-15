@@ -21,18 +21,20 @@ export default async function handler(req, res) {
     // 1. Fetch the sender's profile for From name/email
     let fromName = 'NexGen Auto Transport';
     let senderEmail = 'info@nexgenautotransport.com';
+    let senderPhone = '(832) 886-1321';
 
     if (senderId) {
       const supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
       const { data: profile } = await supabaseAdmin
         .from('profiles')
-        .select('email, full_name')
+        .select('email, full_name, phone')
         .eq('id', senderId)
         .single();
       
       if (profile && profile.email) {
         senderEmail = profile.email;
         fromName = profile.full_name || 'NexGen Auto Transport';
+        if (profile.phone) senderPhone = profile.phone;
       }
     }
 
@@ -119,11 +121,11 @@ ${vRows}
 
 <div style="background:#f8fafc;padding:16px;border-radius:8px;margin:0 0 24px;text-align:center">
 <p style="margin:0 0 4px;font-size:14px;color:#4b5563;font-weight:600">Questions? We're here to help.</p>
-<p style="margin:0;font-size:18px;color:#1e3a5f;font-weight:700">📞 (832) 886-1321</p>
+<p style="margin:0;font-size:18px;color:#1e3a5f;font-weight:700">📞 ${senderPhone}</p>
 </div>
 
 <p style="color:#374151;margin:0">Best regards,</p>
-<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport</p>
+<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport<br/>${senderPhone}</p>
 </div>
 
 <div style="background:#1e3a5f;padding:20px 28px;text-align:center">

@@ -20,7 +20,8 @@ const UserManagement = () => {
     email: '',
     password: '',
     role: 'user',
-    smtp_password: ''
+    smtp_password: '',
+    phone: ''
   });
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const UserManagement = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, full_name, email, role, created_at, smtp_password, phone')
         .order('created_at', { ascending: false });
       
       if (error) throw error;
@@ -55,7 +56,8 @@ const UserManagement = () => {
         email: formData.email,
         name: formData.name,
         role: formData.role,
-        smtp_password: formData.smtp_password
+        smtp_password: formData.smtp_password,
+        phone: formData.phone
       };
       
       if (editingUserId) {
@@ -86,7 +88,7 @@ const UserManagement = () => {
       toast.success(`User ${editingUserId ? 'updated' : 'created'} successfully!`);
       setIsModalOpen(false);
       setEditingUserId(null);
-      setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '' });
+      setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '', phone: '' });
       fetchUsers(); // Refresh the list
     } catch (err) {
       console.error('Error saving user:', err);
@@ -103,14 +105,15 @@ const UserManagement = () => {
       email: u.email || '',
       password: '', // Empty password field so they only enter if they want to change it
       role: u.role || 'user',
-      smtp_password: u.smtp_password || ''
+      smtp_password: u.smtp_password || '',
+      phone: u.phone || ''
     });
     setIsModalOpen(true);
   };
 
   const openCreateModal = () => {
     setEditingUserId(null);
-    setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '' });
+    setFormData({ name: '', email: '', password: '', role: 'user', smtp_password: '', phone: '' });
     setIsModalOpen(true);
   };
 
@@ -181,6 +184,7 @@ const UserManagement = () => {
             <tr>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER NAME</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER EMAIL</th>
+              <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>PHONE</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>USER ROLE</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>JOINED</th>
               <th style={{ padding: '15px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.2)', color: 'var(--text-secondary)', fontSize: '0.85rem', textAlign: 'right' }}>ACTIONS</th>
@@ -188,9 +192,9 @@ const UserManagement = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="4" style={{ padding: '20px', textAlign: 'center' }}>Loading users...</td></tr>
+              <tr><td colSpan="6" style={{ padding: '20px', textAlign: 'center' }}>Loading users...</td></tr>
             ) : usersList.length === 0 ? (
-              <tr><td colSpan="4" style={{ padding: '20px', textAlign: 'center' }}>No users found.</td></tr>
+              <tr><td colSpan="6" style={{ padding: '20px', textAlign: 'center' }}>No users found.</td></tr>
             ) : (
               usersList.map(u => (
                 <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
@@ -198,6 +202,7 @@ const UserManagement = () => {
                     <div style={{ fontWeight: '500', color: '#fff' }}>{u.full_name || u.email?.split('@')[0] || 'Unknown'}</div>
                   </td>
                   <td style={{ padding: '15px' }}>{u.email}</td>
+                  <td style={{ padding: '15px' }}>{u.phone || '-'}</td>
                   <td style={{ padding: '15px' }}>
                     <span style={{ 
                       padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold',
@@ -264,6 +269,17 @@ const UserManagement = () => {
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                   required
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Phone Number (Optional)</label>
+                <input 
+                  type="tel" 
+                  value={formData.phone}
+                  onChange={e => setFormData({...formData, phone: e.target.value})}
+                  placeholder="(832) 886-1321"
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
                 />
               </div>

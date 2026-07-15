@@ -14,7 +14,7 @@ const LeadDetails = () => {
   const location = useLocation();
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, phone } = useAuth();
   const [teamMembers, setTeamMembers] = useState([]);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
@@ -199,7 +199,7 @@ const LeadDetails = () => {
 
   const handleSendOrderForm = async () => {
     const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
-    const link = `${baseUrl}/booking/${lead.lead_number}`;
+    const link = `${baseUrl}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`;
     
     // Find the best email and name to use
     const emailToUse = lead.customers?.email || lead.email || draftData.email;
@@ -246,7 +246,7 @@ const LeadDetails = () => {
 
   const handleSendChangeOrder = async () => {
     const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
-    const link = `${baseUrl}/booking/${lead.lead_number}?mode=change_order`;
+    const link = `${baseUrl}/booking/${lead.lead_number}?mode=change_order&agent=${lead?.assigned_to || user?.id}`;
     
     const emailToUse = lead.customers?.email || lead.email || draftData?.email;
     const nameToUse = lead.customers?.first_name || lead.first_name || draftData?.first_name || 'Customer';
@@ -307,7 +307,7 @@ const LeadDetails = () => {
         body: JSON.stringify({
           customerEmail: emailToUse,
           customerName: nameToUse,
-          bookingLink: `${(import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '')}/booking/${lead.lead_number}`,
+          bookingLink: `${(import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '')}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`,
           leadData: {
             origin_city: lead.origin_city,
             origin_state: lead.origin_state,
@@ -666,7 +666,7 @@ const LeadDetails = () => {
     generateOrderPDF(
        lead, formData, quoteNumber, transportType, cargoLabel, tariff, deposit,
        nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, 
-       ipAddress, action, targetSignature
+       ipAddress, action, targetSignature, phone
     );
   };
 

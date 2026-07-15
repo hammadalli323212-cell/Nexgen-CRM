@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     if (agent_id) {
       const { data } = await supabaseAdmin
         .from('profiles')
-        .select('first_name, last_name, full_name, email')
+        .select('first_name, last_name, full_name, email, phone')
         .eq('id', agent_id)
         .single();
       profileData = data;
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       name: computedName,
-      phone: '(832) 886-1321',
+      phone: profileData.phone || '(832) 886-1321',
       email: profileData.email || 'info@nexgenautotransport.com'
     });
 

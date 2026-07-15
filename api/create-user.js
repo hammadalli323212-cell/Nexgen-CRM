@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, password, name, role, smtp_password } = req.body;
+    const { email, password, name, role, smtp_password, phone } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
@@ -51,7 +51,8 @@ export default async function handler(req, res) {
           email: email,
           full_name: name,
           role: role || 'user',
-          smtp_password: smtp_password || null
+          smtp_password: smtp_password || null,
+          phone: phone || null
         }
       ]);
 

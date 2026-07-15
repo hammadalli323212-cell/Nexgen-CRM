@@ -23,6 +23,7 @@ export default async function handler(req, res) {
     let smtpUser = 'henry.ortiz@nexgenautotransport.com';
     let smtpPass = process.env.SMTP_PASSWORD;
     let fromName = 'NexGen Auto Transport';
+    let senderPhone = '(832) 886-1321';
 
     let profileHasPassword = false;
 
@@ -30,13 +31,14 @@ export default async function handler(req, res) {
       const supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
       const { data: profile } = await supabaseAdmin
         .from('profiles')
-        .select('email, full_name, smtp_password')
+        .select('email, full_name, smtp_password, phone')
         .eq('id', senderId)
         .single();
       
       if (profile && profile.email) {
         smtpUser = profile.email;
         fromName = profile.full_name || 'NexGen Auto Transport';
+        if (profile.phone) senderPhone = profile.phone;
         if (profile.smtp_password) {
           smtpPass = profile.smtp_password;
           profileHasPassword = true;
@@ -76,7 +78,7 @@ export default async function handler(req, res) {
 <p style="color:#6b7280;font-size:12px;margin:0 0 6px">If the button doesn't work, copy this link:</p>
 <p style="word-break:break-all;color:#3b82f6;font-size:12px;margin:0 0 20px">${bookingLink}</p>
 <p style="color:#374151;margin:0">Best regards,</p>
-<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport</p>
+<p style="color:#374151;margin:4px 0 0"><strong>${fromName}</strong><br/>NexGen Auto Transport<br/>${senderPhone}</p>
 </div>
 <div style="background:#1e3a5f;padding:20px 28px;text-align:center">
 <p style="color:#93c5fd;margin:0 0 4px;font-size:13px;font-weight:600">NexGen Auto Transport</p>
