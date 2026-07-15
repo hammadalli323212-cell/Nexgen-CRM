@@ -26,6 +26,20 @@ export default async function handler(req, res) {
       }
     });
 
+    // Verify who is making the request
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
+    const token = authHeader.split(' ')[1];
+    
+    const { data: { user: requestingUser }, error: verifyError } = await supabaseAdmin.auth.getUser(token);
+    if (verifyError || !requestingUser) return res.status(401).json({ error: 'Unauthorized' });
+
+    // Fetch the target user's profile to check if it's the Super Admin
+    const { data: targetUser } = await supabaseAdmin.from('profiles').select('email').eq('id', id).single();
+    if (targetUser && targetUser.email === 'info@nexgenautotransport.com') {
+      return res.status(403).json({ error: 'The Super Admin account cannot be deleted by anyone.' });
+    }
+
     // 0. Unassign from all records to prevent foreign key constraint violations
     await supabaseAdmin.from('leads').update({ assigned_to: null }).eq('assigned_to', id);
     await supabaseAdmin.from('leads').update({ created_by: null }).eq('created_by', id);

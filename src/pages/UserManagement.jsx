@@ -211,12 +211,24 @@ const UserManagement = () => {
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
                   <td style={{ padding: '15px', textAlign: 'right' }}>
-                    <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit User">
-                      <Edit2 size={18} />
-                    </button>
-                    <button onClick={() => confirmDelete(u)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete User">
-                      <Trash2 size={18} />
-                    </button>
+                    {u.email === 'info@nexgenautotransport.com' ? (
+                      user?.email === 'info@nexgenautotransport.com' ? (
+                        <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit Your Account">
+                          <Edit2 size={18} />
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', paddingRight: '10px' }}>Super Admin</span>
+                      )
+                    ) : (
+                      <>
+                        <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit User">
+                          <Edit2 size={18} />
+                        </button>
+                        <button onClick={() => confirmDelete(u)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete User">
+                          <Trash2 size={18} />
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))
