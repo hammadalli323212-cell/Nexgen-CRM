@@ -38,8 +38,7 @@ const LeadDetails = () => {
   const [draftData, setDraftData] = useState(null);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [isSendingQuote, setIsSendingQuote] = useState(false);
-  const [isAssigning, setIsAssigning] = useState(false);
-  const [isStatusUpdating, setIsStatusUpdating] = useState(false);
+
 
   // Email Preview State
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
