@@ -52,6 +52,7 @@ const LeadDetails = () => {
             lead_number, 
             is_archived,
             created_at, 
+            source,
             origin_address,
             origin_city, 
             origin_state, 
@@ -738,9 +739,22 @@ const LeadDetails = () => {
               ))}
             </select>
           </h1>
-          <span className={styles.subTitle}>
-            Created on {new Date(lead.created_at).toLocaleString()} • Source: {lead.source || 'Manual'}
-          </span>
+          <div className={styles.subTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>Created on {new Date(lead.created_at).toLocaleString()}</span>
+            <span style={{ 
+              backgroundColor: 'rgba(59, 130, 246, 0.15)', 
+              color: '#60a5fa', 
+              padding: '2px 8px', 
+              borderRadius: '4px', 
+              fontSize: '0.8rem',
+              fontWeight: '600',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              display: 'inline-flex',
+              alignItems: 'center'
+            }}>
+              Source: {lead.source || 'Manual'}
+            </span>
+          </div>
         </div>
         <div className={styles.actions}>
           {isAdmin && (
