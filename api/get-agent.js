@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     if (agent_id) {
       const { data } = await supabaseAdmin
         .from('profiles')
-        .select('first_name, last_name, email')
+        .select('first_name, last_name, full_name, email')
         .eq('id', agent_id)
         .single();
       profileData = data;
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     if (!profileData) {
       const { data } = await supabaseAdmin
         .from('leads')
-        .select('assignee:profiles!assigned_to(first_name, last_name, email)')
+        .select('assignee:profiles!assigned_to(first_name, last_name, full_name, email)')
         .eq('lead_number', lead_number)
         .single();
       profileData = data?.assignee;
@@ -45,8 +45,11 @@ export default async function handler(req, res) {
       });
     }
 
+    const fallbackName = profileData.full_name || 'NexGen Auto Transport';
+    const computedName = `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim() || fallbackName;
+
     return res.status(200).json({
-      name: `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim() || 'NexGen Auto Transport',
+      name: computedName,
       phone: '(832) 886-1321',
       email: profileData.email || 'info@nexgenautotransport.com'
     });
