@@ -6,9 +6,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { emailBody } = req.body;
+    let emailBody = '';
+    
+    // Make.com sends it as raw text/plain, so req.body is literally the string
+    if (typeof req.body === 'string') {
+      emailBody = req.body;
+    } else if (req.body && req.body.emailBody) {
+      emailBody = req.body.emailBody;
+    }
+
     if (!emailBody) {
-      return res.status(400).json({ error: 'Missing emailBody in payload' });
+      return res.status(400).json({ error: 'Missing email content in payload' });
     }
 
     // --- 1. Regex Extraction ---
