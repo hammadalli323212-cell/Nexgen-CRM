@@ -51,8 +51,10 @@ export default async function handler(req, res) {
     const shipDateRaw = getField(['date', 'Ship Date', 'shipDate']);
     const notesStr = getField(['comments', 'Comment From Shipper', 'notes']);
 
-    if (!emailStr || !nameStr) {
-      return res.status(400).json({ error: 'Missing required fields: Name and Email' });
+    // DEBUG: Always create a lead if we hit this endpoint, even if fields are missing, 
+    // so we can see the exact payload Elementor sent!
+    if (!emailStr) {
+      console.warn("Missing email, but continuing to log payload...");
     }
 
     // Split name
@@ -99,9 +101,9 @@ export default async function handler(req, res) {
       const { data: newCustomer, error: customerError } = await supabaseAdmin
         .from('customers')
         .insert([{
-          first_name: firstName,
-          last_name: lastName,
-          email: emailStr,
+          first_name: firstName || 'Webhook',
+          last_name: lastName || 'Debug',
+          email: emailStr || `debug-${Date.now()}@nexgen.com`,
           phone: phoneStr
         }])
         .select()
@@ -121,7 +123,7 @@ export default async function handler(req, res) {
       destination_city: destCity,
       ship_date: shipDateRaw || null,
       status: 'New',
-      notes: notesStr.trim(),
+      notes: notesStr.trim() + '\n\n--- DEBUG RAW PAYLOAD ---\n' + JSON.stringify(data, null, 2),
     };
 
     const { data: leadData, error: leadError } = await supabaseAdmin
