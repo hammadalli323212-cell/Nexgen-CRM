@@ -32,11 +32,8 @@ const BookingPortalLayout = () => {
     <div className={styles.layoutContainer}>
       <header className={styles.header}>
         <div className={styles.logoSection}>
-          {/* Faux Logo for now */}
           <div className={styles.logo}>
-            <span style={{ color: '#0066cc', fontStyle: 'italic', fontSize: '2rem', fontWeight: 'bold' }}>N</span>
-            <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>exGen</span>
-            <div style={{ fontSize: '0.6rem', letterSpacing: '2px', color: '#666' }}>AUTO TRANSPORT</div>
+            <img src="/logo-dark.png" alt="NexGen Auto Transport" style={{ height: '60px', width: 'auto' }} />
           </div>
         </div>
 
