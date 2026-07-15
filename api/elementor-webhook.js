@@ -22,14 +22,15 @@ export default async function handler(req, res) {
     // --- 2. Extract Payload ---
     // Elementor sends data as either JSON or URL-encoded form data.
     // If it's URL-encoded, Elementor sometimes nests it in 'fields'.
-    let data = req.body;
+    let data = req.body || {};
     
     if (data && data.fields) {
-       data = data.fields; // Extract from Elementor's nested 'fields' object if present
+       data = data.fields; 
     }
 
     // Helper to find a field regardless of exact casing
     const getField = (keysArray) => {
+       if (!data || typeof data !== 'object') return '';
        for (const key of keysArray) {
          if (data[key] !== undefined) return data[key];
          // Check lowercase versions just in case
@@ -156,6 +157,21 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Webhook Error:', error);
+    
+    // Attempt to log the error to the database so we can see it!
+    try {
+      const supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+        auth: { autoRefreshToken: false, persistSession: false }
+      });
+      await supabaseAdmin.from('leads').insert([{
+        source: 'Website Form',
+        status: 'New',
+        notes: 'CRITICAL WEBHOOK ERROR:\n' + error.message + '\n\nPayload:\n' + JSON.stringify(req.body)
+      }]);
+    } catch (dbError) {
+      // Ignore
+    }
+
     return res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 }
