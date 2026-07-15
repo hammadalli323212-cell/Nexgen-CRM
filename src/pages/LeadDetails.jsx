@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { generateOrderPDF } from '../lib/pdfGenerator';
 import { useAuth } from '../lib/AuthContext';
 import { logActivity } from '../lib/activityLogger';
+import EmailPreviewModal from '../components/modals/EmailPreviewModal';
 import styles from './LeadDetails.module.css';
 
 const LeadDetails = () => {
@@ -37,6 +38,14 @@ const LeadDetails = () => {
   const [draftData, setDraftData] = useState(null);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [isSendingQuote, setIsSendingQuote] = useState(false);
+  const [isAssigning, setIsAssigning] = useState(false);
+  const [isStatusUpdating, setIsStatusUpdating] = useState(false);
+
+  // Email Preview State
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [emailPreviewData, setEmailPreviewData] = useState(null);
+  const [activeEmailPayload, setActiveEmailPayload] = useState(null);
+  const [activeEmailEndpoint, setActiveEmailEndpoint] = useState(null);
 
   const STATUS_OPTIONS = [
     'New', 'Quoted', 'Follow Up', 'Booked', 'Dispatched', 'In Transit', 'Delivered', 'Cancelled'
@@ -198,57 +207,62 @@ const LeadDetails = () => {
     return <div className={styles.loading}>Lead not found.</div>;
   }
 
-  const handleSendOrderForm = async () => {
-    const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
-    const link = `${baseUrl}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`;
-    
-    // Find the best email and name to use
-    const emailToUse = lead.customers?.email || lead.email || draftData.email;
-    const nameToUse = lead.customers?.first_name || lead.first_name || draftData.first_name || 'Customer';
-
-    if (!emailToUse) {
-      toast.error("No email address found for this lead. Please add an email address first.");
-      // fallback to clipboard
-      navigator.clipboard.writeText(link);
-      return;
-    }
-
-    setIsSendingEmail(true);
+  const handlePreviewEmail = async (endpoint, payload, loadingSetter) => {
+    loadingSetter(true);
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerEmail: emailToUse,
-          customerName: nameToUse,
-          bookingLink: link,
-          senderId: lead?.assigned_to || user?.id
-        })
+        body: JSON.stringify({ ...payload, previewOnly: true })
       });
-
       const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to generate email preview');
       
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send email');
-      }
-      toast.success(`Order form emailed to ${emailToUse} successfully!`);
+      setActiveEmailEndpoint(endpoint);
+      setActiveEmailPayload(payload);
+      setEmailPreviewData(data);
+      setIsEmailModalOpen(true);
+    } catch (err) {
+      console.error("Preview failed:", err);
+      toast.error(`Failed to generate preview: ${err.message}`);
+    } finally {
+      loadingSetter(false);
+    }
+  };
+
+  const confirmSendEmail = async ({ cc, bcc }) => {
+    const loadingSetter = activeEmailEndpoint.includes('quote') ? setIsSendingQuote : setIsSendingEmail;
+    loadingSetter(true);
+    setIsEmailModalOpen(false); // Close modal while sending
+    try {
+      const response = await fetch(activeEmailEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...activeEmailPayload, cc, bcc })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to send email');
       
-      await logActivity(lead.id, user.id, 'Email Sent', 'Order Form', `Order form emailed to ${emailToUse}`);
+      const emailType = activeEmailEndpoint.includes('quote') ? 'Quote' : (activeEmailPayload.isChangeOrder ? 'Change Order Form' : 'Order Form');
+      toast.success(`${emailType} emailed to ${activeEmailPayload.customerEmail} successfully!`);
+      
+      await logActivity(lead.id, user.id, 'Email Sent', emailType, `${emailType} emailed to ${activeEmailPayload.customerEmail}${cc ? ` (CC: ${cc})` : ''}`);
       const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
     } catch (err) {
       console.error("Failed to send email:", err);
-      toast.error(`Failed to send email: ${err.message}\n\nOrder form link copied to clipboard instead.`);
-      navigator.clipboard.writeText(link);
+      toast.error(`Failed to send email: ${err.message}`);
     } finally {
-      setIsSendingEmail(false);
+      loadingSetter(false);
+      setActiveEmailEndpoint(null);
+      setActiveEmailPayload(null);
+      setEmailPreviewData(null);
     }
   };
 
-  const handleSendChangeOrder = async () => {
+  const handleSendOrderForm = async () => {
     const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
-    const link = `${baseUrl}/booking/${lead.lead_number}?mode=change_order&agent=${lead?.assigned_to || user?.id}`;
-    
+    const link = `${baseUrl}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`;
     const emailToUse = lead.customers?.email || lead.email || draftData?.email;
     const nameToUse = lead.customers?.first_name || lead.first_name || draftData?.first_name || 'Customer';
 
@@ -258,37 +272,33 @@ const LeadDetails = () => {
       return;
     }
 
-    setIsSendingEmail(true);
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerEmail: emailToUse,
-          customerName: nameToUse,
-          bookingLink: link,
-          isChangeOrder: true,
-          senderId: lead?.assigned_to || user?.id
-        })
-      });
+    handlePreviewEmail('/api/send-email', {
+      customerEmail: emailToUse,
+      customerName: nameToUse,
+      bookingLink: link,
+      senderId: lead?.assigned_to || user?.id
+    }, setIsSendingEmail);
+  };
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send email');
-      }
-      toast.success(`Change Order form emailed to ${emailToUse} successfully!`);
-      
-      await logActivity(lead.id, user.id, 'Email Sent', 'Change Order Form', `Change Order form emailed to ${emailToUse}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
-      if (logsData) setLogs(logsData);
-    } catch (err) {
-      console.error("Failed to send email:", err);
-      toast.error(`Failed to send email: ${err.message}\n\nChange Order link copied to clipboard instead.`);
+  const handleSendChangeOrder = async () => {
+    const baseUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '');
+    const link = `${baseUrl}/booking/${lead.lead_number}?mode=change_order&agent=${lead?.assigned_to || user?.id}`;
+    const emailToUse = lead.customers?.email || lead.email || draftData?.email;
+    const nameToUse = lead.customers?.first_name || lead.first_name || draftData?.first_name || 'Customer';
+
+    if (!emailToUse) {
+      toast.error("No email address found for this lead. Please add an email address first.");
       navigator.clipboard.writeText(link);
-    } finally {
-      setIsSendingEmail(false);
+      return;
     }
+
+    handlePreviewEmail('/api/send-email', {
+      customerEmail: emailToUse,
+      customerName: nameToUse,
+      bookingLink: link,
+      isChangeOrder: true,
+      senderId: lead?.assigned_to || user?.id
+    }, setIsSendingEmail);
   };
 
   const handleSendQuoteEmail = async () => {
@@ -300,46 +310,23 @@ const LeadDetails = () => {
       return;
     }
 
-    setIsSendingQuote(true);
-    try {
-      const response = await fetch('/api/send-quote-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerEmail: emailToUse,
-          customerName: nameToUse,
-          bookingLink: `${(import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '')}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`,
-          leadData: {
-            origin_city: lead.origin_city,
-            origin_state: lead.origin_state,
-            origin_zip: lead.origin_zip,
-            destination_city: lead.destination_city,
-            destination_state: lead.destination_state,
-            destination_zip: lead.destination_zip,
-            estimated_price: lead.estimated_price,
-            ship_date: lead.ship_date,
-            vehicles: lead.lead_vehicles || []
-          },
-          senderId: lead?.assigned_to || user?.id
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send quote email');
-      }
-      toast.success(`Quote emailed to ${emailToUse} successfully!`);
-      
-      await logActivity(lead.id, user.id, 'Email Sent', 'Quote', `Quote emailed to ${emailToUse}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
-      if (logsData) setLogs(logsData);
-    } catch (err) {
-      console.error("Failed to send quote email:", err);
-      toast.error(`Failed to send quote email: ${err.message}`);
-    } finally {
-      setIsSendingQuote(false);
-    }
+    handlePreviewEmail('/api/send-quote-email', {
+      customerEmail: emailToUse,
+      customerName: nameToUse,
+      bookingLink: `${(import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, '')}/booking/${lead.lead_number}?agent=${lead?.assigned_to || user?.id}`,
+      leadData: {
+        origin_city: lead.origin_city,
+        origin_state: lead.origin_state,
+        origin_zip: lead.origin_zip,
+        destination_city: lead.destination_city,
+        destination_state: lead.destination_state,
+        destination_zip: lead.destination_zip,
+        estimated_price: lead.estimated_price,
+        ship_date: lead.ship_date,
+        vehicles: lead.lead_vehicles || []
+      },
+      senderId: lead?.assigned_to || user?.id
+    }, setIsSendingQuote);
   };
 
   const handleAssign = async (e) => {
@@ -1488,6 +1475,13 @@ const LeadDetails = () => {
         )}
       </div>
 
+      <EmailPreviewModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        onSend={confirmSendEmail}
+        emailPreview={emailPreviewData}
+        customerEmail={activeEmailPayload?.customerEmail}
+      />
     </div>
   );
 };

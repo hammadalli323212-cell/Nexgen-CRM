@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, bookingLink, isChangeOrder, senderId } = req.body;
+    const { customerEmail, customerName, bookingLink, isChangeOrder, senderId, previewOnly, cc, bcc } = req.body;
 
     if (!customerEmail || !bookingLink) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -102,12 +102,27 @@ export default async function handler(req, res) {
     // it will still work if the domain is verified on Resend.
     const senderEmail = profileHasPassword ? smtpUser : (smtpUser !== 'resend' ? smtpUser : 'info@nexgenautotransport.com');
 
-    const info = await transporter.sendMail({
+    const subjectLine = isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order";
+
+    if (previewOnly) {
+      return res.status(200).json({ 
+        previewHtml: html, 
+        subject: subjectLine,
+        from: `"${fromName}" <${senderEmail}>`
+      });
+    }
+
+    const mailOptions = {
       from: `"${fromName}" <${senderEmail}>`,
       to: customerEmail,
-      subject: isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order",
+      subject: subjectLine,
       html: html
-    });
+    };
+
+    if (cc) mailOptions.cc = cc;
+    if (bcc) mailOptions.bcc = bcc;
+
+    const info = await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true, messageId: info.messageId });
   } catch (error) {

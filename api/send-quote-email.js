@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, leadData, bookingLink, senderId } = req.body;
+    const { customerEmail, customerName, leadData, bookingLink, senderId, previewOnly, cc, bcc } = req.body;
     if (!customerEmail) {
       return res.status(400).json({ error: 'Missing customerEmail' });
     }
@@ -146,13 +146,28 @@ ${vRows}
       }
     });
 
-    const info = await transporter.sendMail({
+    const subjectLine = "Your NexGen Auto Transport Quote";
+
+    if (previewOnly) {
+      return res.status(200).json({ 
+        previewHtml: html, 
+        subject: subjectLine,
+        from: `"${fromName}" <${senderEmail}>`
+      });
+    }
+
+    const mailOptions = {
       from: `"${fromName}" <${senderEmail}>`,
       replyTo: senderEmail,
       to: customerEmail,
-      subject: "Your NexGen Auto Transport Quote",
+      subject: subjectLine,
       html: html
-    });
+    };
+
+    if (cc) mailOptions.cc = cc;
+    if (bcc) mailOptions.bcc = bcc;
+
+    const info = await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true, messageId: info.messageId });
   } catch (error) {
