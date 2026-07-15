@@ -21,7 +21,7 @@ const MyTasks = () => {
     try {
       let query = supabase
         .from('tasks')
-        .select('*, leads(lead_number, customers(first_name, last_name)), profiles(full_name)')
+        .select('*, leads(lead_number, customers(first_name, last_name))')
         .order('due_date', { ascending: true });
         
       if (!isAdmin && !isSuperAdmin) {
@@ -30,6 +30,14 @@ const MyTasks = () => {
         
       const { data, error } = await query;
       if (error) throw error;
+      
+      let profilesMap = {};
+      if (isAdmin || isSuperAdmin) {
+        const { data: profilesData } = await supabase.from('profiles').select('id, full_name');
+        if (profilesData) {
+          profilesMap = profilesData.reduce((acc, p) => ({ ...acc, [p.id]: p.full_name }), {});
+        }
+      }
       
       const mappedTasks = data.map(t => {
         let titleSuffix = '';
@@ -46,8 +54,8 @@ const MyTasks = () => {
         }
         
         let titlePrefix = '';
-        if ((isAdmin || isSuperAdmin) && t.profiles?.full_name) {
-          titlePrefix = `[${t.profiles.full_name}] `;
+        if ((isAdmin || isSuperAdmin) && t.user_id && profilesMap[t.user_id]) {
+          titlePrefix = `[${profilesMap[t.user_id]}] `;
         }
         
         return {
