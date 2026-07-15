@@ -735,7 +735,7 @@ const LeadDetails = () => {
               }}
             >
               {STATUS_OPTIONS.map(status => (
-                <option key={status} value={status} style={{ color: 'black' }}>{status}</option>
+                <option key={status} value={status} style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>{status}</option>
               ))}
             </select>
           </h1>
