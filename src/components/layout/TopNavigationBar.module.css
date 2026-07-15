@@ -15,9 +15,9 @@
   display: flex;
   align-items: center;
   margin-right: var(--space-xl);
-  font-weight: bold;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
+  background-color: #ffffff;
+  height: 100%;
+  padding: 0 15px;
 }
 
 .logoArea svg {

@@ -95,8 +95,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logoArea}>
-        <div style={{ width: 24, height: 24, backgroundColor: 'var(--text-primary)', maskImage: 'url("/vite.svg")', WebkitMaskImage: 'url("/vite.svg")' }} />
-        NEXGEN
+        <img src="/logo-dark.jpg" alt="NexGen CRM" style={{ height: '35px', objectFit: 'contain' }} />
       </div>
       
       <nav className={styles.navLinks}>
