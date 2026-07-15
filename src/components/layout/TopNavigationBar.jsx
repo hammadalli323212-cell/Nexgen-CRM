@@ -95,7 +95,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logoArea}>
-        <img src="/logo-transparent.png" alt="NexGen CRM" style={{ height: '42px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        <img src="/logo-transparent.png" alt="NexGen CRM" style={{ height: '42px', objectFit: 'contain' }} />
       </div>
       
       <nav className={styles.navLinks}>
