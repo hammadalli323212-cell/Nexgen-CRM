@@ -33,9 +33,9 @@ const MyTasks = () => {
       
       let profilesMap = {};
       if (isAdmin || isSuperAdmin) {
-        const { data: profilesData } = await supabase.from('profiles').select('id, full_name');
+        const { data: profilesData } = await supabase.from('profiles').select('id, full_name, email');
         if (profilesData) {
-          profilesMap = profilesData.reduce((acc, p) => ({ ...acc, [p.id]: p.full_name }), {});
+          profilesMap = profilesData.reduce((acc, p) => ({ ...acc, [p.id]: p.full_name || (p.email ? p.email.split('@')[0] : 'Unknown') }), {});
         }
       }
       
@@ -54,8 +54,9 @@ const MyTasks = () => {
         }
         
         let titlePrefix = '';
-        if ((isAdmin || isSuperAdmin) && t.user_id && profilesMap[t.user_id]) {
-          titlePrefix = `[${profilesMap[t.user_id]}] `;
+        if ((isAdmin || isSuperAdmin) && t.user_id) {
+          const agentName = profilesMap[t.user_id] || 'Unknown Agent';
+          titlePrefix = `[${agentName}] `;
         }
         
         return {

@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     const baseUrl = rawBaseUrl.replace(/\/$/, '');
     
     // Instead of CID, reference the static public image deployed by Vercel
-    const logoUrl = `${baseUrl}/logo-dark.png`;
+    const logoUrl = `${baseUrl}/logo-email.png`;
 
     const html = minify(`
 <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:640px;margin:0 auto;background:#fff">
