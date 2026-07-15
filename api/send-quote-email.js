@@ -18,40 +18,28 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing customerEmail' });
     }
 
-    // 1. Fetch the sender's SMTP credentials
-    let smtpUser = 'henry.ortiz@nexgenautotransport.com';
-    let smtpPass = process.env.SMTP_PASSWORD;
+    // 1. Fetch the sender's profile for From name/email
     let fromName = 'NexGen Auto Transport';
     let senderEmail = 'info@nexgenautotransport.com';
-
-    let profileHasPassword = false;
 
     if (senderId) {
       const supabaseAdmin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
       const { data: profile } = await supabaseAdmin
         .from('profiles')
-        .select('email, full_name, smtp_password')
+        .select('email, full_name')
         .eq('id', senderId)
         .single();
       
       if (profile && profile.email) {
         senderEmail = profile.email;
         fromName = profile.full_name || 'NexGen Auto Transport';
-        if (profile.smtp_password) {
-          smtpUser = profile.email;
-          smtpPass = profile.smtp_password;
-          profileHasPassword = true;
-        }
       }
     }
 
-    // Fallback to Resend if they don't have a personal SMTP password saved
-    let smtpHost = 'smtp.hostinger.com';
-    if (!profileHasPassword) {
-      smtpHost = 'smtp.resend.com';
-      smtpUser = 'resend';
-      smtpPass = process.env.RESEND_API_KEY;
-    }
+    // ALWAYS use Resend for all system emails
+    let smtpHost = 'smtp.resend.com';
+    let smtpUser = 'resend';
+    let smtpPass = process.env.RESEND_API_KEY;
 
     const hostHeader = req.headers.host || '';
     const protocol = hostHeader.includes('localhost') ? 'http' : 'https';
