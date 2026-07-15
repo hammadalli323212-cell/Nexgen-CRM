@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast';
 import React, { useState } from 'react';
+import { useAuth } from '../../lib/AuthContext';
 import {
   flexRender,
   getCoreRowModel,
@@ -12,6 +13,7 @@ import styles from './DataTable.module.css';
 
 const DataTable = ({ data, columns, onRowClick }) => {
   const [sorting, setSorting] = useState([]);
+  const { isAdmin } = useAuth();
 
   const table = useReactTable({
     data,
@@ -85,10 +87,12 @@ const DataTable = ({ data, columns, onRowClick }) => {
           {table.getPageCount()} | Total rows: {table.getPrePaginationRowModel().rows.length}
         </div>
         
-        <div className={styles.exportActions} style={{ display: 'flex', gap: '8px' }}>
-          <button className={styles.pageBtn} onClick={() => toast.error('Exporting to CSV...')}>Export CSV</button>
-          <button className={styles.pageBtn} onClick={() => toast.error('Exporting to Excel...')}>Export Excel</button>
-        </div>
+        {isAdmin && (
+          <div className={styles.exportActions} style={{ display: 'flex', gap: '8px' }}>
+            <button className={styles.pageBtn} onClick={() => toast.error('Exporting to CSV...')}>Export CSV</button>
+            <button className={styles.pageBtn} onClick={() => toast.error('Exporting to Excel...')}>Export Excel</button>
+          </div>
+        )}
 
         <div className={styles.pageControls}>
           <button

@@ -396,13 +396,6 @@ const Leads = () => {
           <p>Manage and track your incoming leads.</p>
         </div>
         <div className={styles.actions}>
-          <input 
-            type="file" 
-            accept=".xlsx, .xls" 
-            style={{ display: 'none' }} 
-            ref={fileInputRef} 
-            onChange={handleImport} 
-          />
           {selectedLeads.size > 0 && (
             <>
               <button 
@@ -423,13 +416,24 @@ const Leads = () => {
               )}
             </>
           )}
-          <button 
-            className={styles.btnSecondary} 
-            style={{ marginRight: '10px' }} 
-            onClick={() => fileInputRef.current?.click()}
-          >
-            Import Excel
-          </button>
+          {isAdmin && (
+            <>
+              <input 
+                type="file" 
+                accept=".xlsx, .xls" 
+                style={{ display: 'none' }} 
+                ref={fileInputRef} 
+                onChange={handleImport} 
+              />
+              <button 
+                className={styles.btnSecondary} 
+                style={{ marginRight: '10px' }} 
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Import Excel
+              </button>
+            </>
+          )}
           <button className={styles.btnPrimary} onClick={() => navigate('/leads/new')}>+ New Lead</button>
         </div>
       </div>
