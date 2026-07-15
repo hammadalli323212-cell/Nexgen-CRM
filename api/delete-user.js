@@ -44,6 +44,7 @@ export default async function handler(req, res) {
     await supabaseAdmin.from('leads').update({ assigned_to: null }).eq('assigned_to', id);
     await supabaseAdmin.from('leads').update({ created_by: null }).eq('created_by', id);
     await supabaseAdmin.from('tasks').update({ assigned_to: null }).eq('assigned_to', id);
+    await supabaseAdmin.from('activity_logs').update({ user_id: null }).eq('user_id', id);
 
     // 1. Delete from public.profiles table first (because of foreign key constraints!)
     const { error: profileError } = await supabaseAdmin
