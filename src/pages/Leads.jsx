@@ -405,7 +405,7 @@ const Leads = () => {
               >
                 Mark Read ({selectedLeads.size})
               </button>
-              {isSuperAdmin && (
+              {isAdmin && (
                 <button 
                   className={styles.btnSecondary} 
                   style={{ marginRight: '10px', backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444' }} 

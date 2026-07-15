@@ -787,7 +787,7 @@ const LeadDetails = () => {
             <button className={styles.btnSecondary} onClick={handleArchiveToggle} style={{ borderColor: lead.is_archived ? '#10b981' : '#f59e0b', color: lead.is_archived ? '#10b981' : '#f59e0b' }}>
               {lead.is_archived ? 'Restore' : 'Archive'}
             </button>
-            {isSuperAdmin && (
+            {isAdmin && (
               <button className={styles.btnSecondary} onClick={handleDelete} style={{ borderColor: '#ef4444', color: '#ef4444' }}>Delete</button>
             )}
           </div>
