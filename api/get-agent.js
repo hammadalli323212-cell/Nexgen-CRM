@@ -39,13 +39,13 @@ export default async function handler(req, res) {
 
     if (!profileData) {
       return res.status(200).json({
-        name: 'Hammad A',
+        name: 'NexGen Auto Transport',
         phone: '(832) 886-1321',
         email: 'info@nexgenautotransport.com'
       });
     }
 
-    const fallbackName = profileData.full_name || 'Hammad A';
+    const fallbackName = profileData.full_name || 'NexGen Auto Transport';
     const computedName = `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim() || fallbackName;
 
     return res.status(200).json({

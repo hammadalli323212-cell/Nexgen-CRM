@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     }
 
     // 1. Fetch the sender's profile for From name/email
-    let fromName = 'Hammad A';
+    let fromName = 'NexGen Auto Transport';
     let senderEmail = 'info@nexgenautotransport.com';
 
     if (senderId) {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       
       if (profile && profile.email) {
         senderEmail = profile.email;
-        fromName = profile.full_name || 'Hammad A';
+        fromName = profile.full_name || 'NexGen Auto Transport';
       }
     }
 

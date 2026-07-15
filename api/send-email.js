@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     // 1. Fetch the sender's SMTP credentials
     let smtpUser = 'henry.ortiz@nexgenautotransport.com';
     let smtpPass = process.env.SMTP_PASSWORD;
-    let fromName = 'Hammad A';
+    let fromName = 'NexGen Auto Transport';
 
     let profileHasPassword = false;
 
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
       
       if (profile && profile.email) {
         smtpUser = profile.email;
-        fromName = profile.full_name || 'Hammad A';
+        fromName = profile.full_name || 'NexGen Auto Transport';
         if (profile.smtp_password) {
           smtpPass = profile.smtp_password;
           profileHasPassword = true;
