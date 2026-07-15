@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { lead_number } = req.query;
+  const { lead_number, agent_id } = req.query;
 
   if (!lead_number) {
     return res.status(400).json({ error: 'Missing lead_number' });
@@ -17,13 +17,27 @@ export default async function handler(req, res) {
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    const { data, error } = await supabaseAdmin
-      .from('leads')
-      .select('assignee:profiles!assigned_to(first_name, last_name, email)')
-      .eq('lead_number', lead_number)
-      .single();
+    let profileData = null;
 
-    if (error || !data || !data.assignee) {
+    if (agent_id) {
+      const { data } = await supabaseAdmin
+        .from('profiles')
+        .select('first_name, last_name, email')
+        .eq('id', agent_id)
+        .single();
+      profileData = data;
+    }
+
+    if (!profileData) {
+      const { data } = await supabaseAdmin
+        .from('leads')
+        .select('assignee:profiles!assigned_to(first_name, last_name, email)')
+        .eq('lead_number', lead_number)
+        .single();
+      profileData = data?.assignee;
+    }
+
+    if (!profileData) {
       return res.status(200).json({
         name: 'NexGen Auto Transport',
         phone: '(832) 886-1321',
@@ -32,9 +46,9 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({
-      name: `${data.assignee.first_name || ''} ${data.assignee.last_name || ''}`.trim() || 'NexGen Auto Transport',
+      name: `${profileData.first_name || ''} ${profileData.last_name || ''}`.trim() || 'NexGen Auto Transport',
       phone: '(832) 886-1321',
-      email: data.assignee.email || 'info@nexgenautotransport.com'
+      email: profileData.email || 'info@nexgenautotransport.com'
     });
 
   } catch (err) {
