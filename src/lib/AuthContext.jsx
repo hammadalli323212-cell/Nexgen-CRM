@@ -6,17 +6,28 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [phone, setPhone] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check active sessions and sets the user
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Auth session error:', error);
+        supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+      
       if (session?.user) {
         setUser(session.user);
         fetchProfile(session.user.id);
       } else {
         setLoading(false);
       }
+    }).catch(err => {
+      console.error('Unexpected getSession error:', err);
+      setLoading(false);
     });
 
     // Listen for changes on auth state (sign in, sign out, etc.)
@@ -38,16 +49,22 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, phone')
         .eq('id', userId)
         .single();
         
       if (error) {
         console.error('Error fetching profile:', error);
+        // If it's an auth/RLS error (like expired token), don't just fall back to local storage
+        if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
+          supabase.auth.signOut();
+          return;
+        }
         const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
         if (savedRole) setRole(savedRole);
       } else if (data) {
         setRole(data.role);
+        if (data.phone) setPhone(data.phone);
         localStorage.setItem(`nexgen_role_${userId}`, data.role);
       }
     } catch (err) {
@@ -63,6 +80,7 @@ export const AuthProvider = ({ children }) => {
     user,
     role: user?.email === 'info@nexgenautotransport.com' ? 'admin' : role,
     isAdmin: role === 'admin' || user?.email === 'info@nexgenautotransport.com',
+    phone: phone || '(832) 886-1321',
     loading,
     signOut: () => supabase.auth.signOut(),
   };
