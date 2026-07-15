@@ -22,6 +22,7 @@ export default async function handler(req, res) {
     let smtpUser = 'henry.ortiz@nexgenautotransport.com';
     let smtpPass = process.env.SMTP_PASSWORD;
     let fromName = 'NexGen Auto Transport';
+    let senderEmail = 'info@nexgenautotransport.com';
 
     let profileHasPassword = false;
 
@@ -34,9 +35,10 @@ export default async function handler(req, res) {
         .single();
       
       if (profile && profile.email) {
-        smtpUser = profile.email;
+        senderEmail = profile.email;
         fromName = profile.full_name || 'NexGen Auto Transport';
         if (profile.smtp_password) {
+          smtpUser = profile.email;
           smtpPass = profile.smtp_password;
           profileHasPassword = true;
         }
@@ -154,10 +156,9 @@ ${vRows}
       }
     });
 
-    const senderEmail = profileHasPassword ? smtpUser : (smtpUser !== 'resend' ? smtpUser : 'info@nexgenautotransport.com');
-
     const info = await transporter.sendMail({
       from: `"${fromName}" <${senderEmail}>`,
+      replyTo: senderEmail,
       to: customerEmail,
       subject: "Your NexGen Auto Transport Quote",
       html: html
