@@ -58,7 +58,7 @@
 .btnPrimary {
   background-color: var(--brand-blue);
   border: none;
-  color: var(--text-primary);
+  color: #fff;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
@@ -90,7 +90,7 @@
 }
 
 .panelHeader {
-  background-color: rgba(255,255,255,0.02);
+  background-color: var(--bg-header);
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
   font-weight: 500;

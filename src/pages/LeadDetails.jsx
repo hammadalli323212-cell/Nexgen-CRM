@@ -713,7 +713,7 @@ const LeadDetails = () => {
                  padding: '4px 8px',
                  borderRadius: '12px',
                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                 color: '#3b82f6',
+                 color: 'var(--brand-blue)',
                  border: '1px solid rgba(59, 130, 246, 0.3)',
                  outline: 'none',
                  cursor: 'pointer',
@@ -729,7 +729,7 @@ const LeadDetails = () => {
             <span>Created on {new Date(lead.created_at).toLocaleString()}</span>
             <span style={{ 
               backgroundColor: 'rgba(59, 130, 246, 0.15)', 
-              color: '#60a5fa', 
+              color: 'var(--brand-blue)', 
               padding: '2px 8px', 
               borderRadius: '4px', 
               fontSize: '0.8rem',
@@ -1226,7 +1226,7 @@ const LeadDetails = () => {
 
           {/* Tasks Panel */}
           <div className={styles.panel}>
-            <div className={styles.panelHeader} style={{ backgroundColor: '#4b91f1', color: 'var(--text-primary)' }}>Tasks</div>
+            <div className={styles.panelHeader} style={{ backgroundColor: 'var(--brand-blue)', color: '#fff' }}>Tasks</div>
             <div className={styles.panelBody} style={{ padding: '16px' }}>
               
               <form onSubmit={handleAddTask} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
@@ -1303,7 +1303,7 @@ const LeadDetails = () => {
                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
                      <div>
                        <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Original Signature</span>
-                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: '#60a5fa', lineHeight: '1' }}>{lead.electronic_signature}</span>
+                       <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: 'var(--brand-blue)', lineHeight: '1' }}>{lead.electronic_signature}</span>
                      </div>
                      <div style={{ textAlign: 'right' }}>
                        <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(lead.signed_date).toLocaleDateString()}</span>
@@ -1312,7 +1312,7 @@ const LeadDetails = () => {
                    </div>
                    <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
                      <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                     <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                     <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                    </div>
                  </div>
 
@@ -1322,7 +1322,7 @@ const LeadDetails = () => {
                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
                        <div>
                          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
-                         <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: '#60a5fa', lineHeight: '1' }}>{sig.signature}</span>
+                         <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: 'var(--brand-blue)', lineHeight: '1' }}>{sig.signature}</span>
                        </div>
                        <div style={{ textAlign: 'right' }}>
                          <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(sig.date).toLocaleDateString()}</span>
@@ -1331,7 +1331,7 @@ const LeadDetails = () => {
                      </div>
                      <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
                        <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: 'var(--text-primary)', borderColor: '#10b981' }}>Download</button>
+                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                      </div>
                    </div>
                  ))}
@@ -1342,7 +1342,7 @@ const LeadDetails = () => {
 
           {/* File Attachment Panel */}
           <div className={styles.panel}>
-            <div className={styles.panelHeader} style={{ backgroundColor: '#4b91f1', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className={styles.panelHeader} style={{ backgroundColor: 'var(--brand-blue)', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Paperclip size={18} /> File Attachment
             </div>
             <div className={styles.panelBody} style={{ padding: '16px' }}>
@@ -1365,8 +1365,8 @@ const LeadDetails = () => {
                         alignItems: 'center', 
                         gap: '6px', 
                         padding: '6px 12px', 
-                        backgroundColor: '#4b91f1', 
-                        color: 'var(--text-primary)', 
+                        backgroundColor: 'var(--brand-blue)', 
+                        color: '#fff', 
                         borderRadius: '4px', 
                         cursor: isUploading ? 'not-allowed' : 'pointer',
                         fontSize: '0.9rem',
@@ -1402,7 +1402,7 @@ const LeadDetails = () => {
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-secondary)' }}>{new Date(doc.created_at).toLocaleDateString()}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right' }}>
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', alignItems: 'center' }}>
-                              <a href={doc.file_url} target="_blank" rel="noreferrer" style={{ color: '#4b91f1', textDecoration: 'none', fontWeight: '500' }}>View</a>
+                              <a href={doc.file_url} target="_blank" rel="noreferrer" style={{ color: 'var(--brand-blue)', textDecoration: 'none', fontWeight: '500' }}>View</a>
                               <button onClick={() => handleDeleteDocument(doc.id, doc.file_url, doc.file_name)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                                 <Trash2 size={16} />
                               </button>

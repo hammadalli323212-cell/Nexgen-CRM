@@ -163,7 +163,7 @@ const UserManagement = () => {
     <div style={{ padding: '20px', color: 'var(--text-primary)', maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#fff' }}>User Management</h1>
+          <h1 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--text-primary)' }}>User Management</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Manage team members and roles.</p>
         </div>
         <button 
@@ -199,7 +199,7 @@ const UserManagement = () => {
               usersList.map(u => (
                 <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '15px' }}>
-                    <div style={{ fontWeight: '500', color: '#fff' }}>{u.full_name || u.email?.split('@')[0] || 'Unknown'}</div>
+                    <div style={{ fontWeight: '500', color: 'var(--text-primary)' }}>{u.full_name || u.email?.split('@')[0] || 'Unknown'}</div>
                   </td>
                   <td style={{ padding: '15px' }}>{u.email}</td>
                   <td style={{ padding: '15px' }}>{u.phone || '-'}</td>
@@ -246,7 +246,7 @@ const UserManagement = () => {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ backgroundColor: 'var(--bg-panel)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, color: '#fff' }}>{editingUserId ? 'Edit User' : 'Create New User'}</h2>
+              <h2 style={{ margin: 0, color: 'var(--text-primary)' }}>{editingUserId ? 'Edit User' : 'Create New User'}</h2>
               <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><X size={20}/></button>
             </div>
 
@@ -258,7 +258,7 @@ const UserManagement = () => {
                   value={formData.name}
                   onChange={e => setFormData({...formData, name: e.target.value})}
                   required
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
               </div>
               
@@ -269,7 +269,7 @@ const UserManagement = () => {
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                   required
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
               </div>
 
@@ -280,7 +280,7 @@ const UserManagement = () => {
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
                   placeholder="(832) 886-1321"
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
               </div>
 
@@ -292,7 +292,7 @@ const UserManagement = () => {
                   onChange={e => setFormData({...formData, password: e.target.value})}
                   required={!editingUserId}
                   minLength="6"
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
               </div>
 
@@ -303,7 +303,7 @@ const UserManagement = () => {
                   value={formData.smtp_password}
                   onChange={e => setFormData({...formData, smtp_password: e.target.value})}
                   placeholder="Only enter if they will send emails"
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
                 <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'var(--text-muted)' }}>Required for this user to send quotes/orders from their own email.</p>
               </div>
@@ -313,7 +313,7 @@ const UserManagement = () => {
                 <select 
                   value={formData.role}
                   onChange={e => setFormData({...formData, role: e.target.value})}
-                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: '#fff', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 >
                   <option value="user">Standard User</option>
                   <option value="admin">Administrator</option>
@@ -336,7 +336,7 @@ const UserManagement = () => {
       {isDeleteModalOpen && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ backgroundColor: 'var(--bg-panel)', padding: '24px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid var(--border-color)' }}>
-            <h2 style={{ margin: '0 0 15px', color: '#fff' }}>Delete User</h2>
+            <h2 style={{ margin: '0 0 15px', color: 'var(--text-primary)' }}>Delete User</h2>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '25px', lineHeight: '1.5' }}>
               Are you sure you want to permanently delete <strong>{userToDelete?.full_name || userToDelete?.email}</strong>? This action cannot be undone.
             </p>

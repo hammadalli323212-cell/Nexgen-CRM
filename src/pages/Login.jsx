@@ -44,7 +44,7 @@ const Login = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-dark)' }}>
-      <div style={{ backgroundColor: 'var(--panel-bg)', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
+      <div style={{ backgroundColor: 'var(--bg-panel)', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
         <h1 style={{ color: 'var(--text-primary)', marginBottom: '24px', textAlign: 'center' }}>NEXGEN CRM</h1>
         
         {error && (
@@ -79,7 +79,7 @@ const Login = () => {
           <button 
             type="submit" 
             disabled={isSubmitting}
-            style={{ width: '100%', padding: '12px', backgroundColor: 'var(--brand-blue)', color: 'var(--text-primary)', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '500', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
+            style={{ width: '100%', padding: '12px', backgroundColor: 'var(--brand-blue)', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '500', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>

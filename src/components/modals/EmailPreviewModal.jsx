@@ -121,7 +121,7 @@ const styles = {
     backdropFilter: 'blur(4px)'
   },
   modal: {
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--bg-panel)',
     borderRadius: '12px',
     width: '90%',
     maxWidth: '800px',
@@ -129,27 +129,27 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-    border: '1px solid #334155',
+    border: '1px solid var(--border-color)',
     overflow: 'hidden'
   },
   header: {
     padding: '20px 24px',
-    borderBottom: '1px solid #334155',
+    borderBottom: '1px solid var(--border-color)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0f172a'
+    backgroundColor: 'var(--bg-dark)'
   },
   title: {
     margin: 0,
-    color: '#f8fafc',
+    color: 'var(--text-primary)',
     fontSize: '1.25rem',
     fontWeight: 600
   },
   closeBtn: {
     background: 'none',
     border: 'none',
-    color: '#94a3b8',
+    color: 'var(--text-secondary)',
     fontSize: '1.75rem',
     cursor: 'pointer',
     padding: '0 8px',
@@ -169,7 +169,7 @@ const styles = {
   },
   label: {
     width: '70px',
-    color: '#94a3b8',
+    color: 'var(--text-secondary)',
     fontSize: '0.9rem',
     fontWeight: 600,
     textAlign: 'right'
@@ -177,19 +177,19 @@ const styles = {
   valueBox: {
     flex: 1,
     padding: '8px 12px',
-    backgroundColor: '#0f172a',
-    border: '1px solid #334155',
+    backgroundColor: 'var(--bg-dark)',
+    border: '1px solid var(--border-color)',
     borderRadius: '6px',
-    color: '#e2e8f0',
+    color: 'var(--text-primary)',
     fontSize: '0.95rem'
   },
   input: {
     flex: 1,
     padding: '8px 12px',
-    backgroundColor: '#0f172a',
-    border: '1px solid #475569',
+    backgroundColor: 'var(--bg-dark)',
+    border: '1px solid var(--border-color)',
     borderRadius: '6px',
-    color: '#fff',
+    color: 'var(--text-primary)',
     fontSize: '0.95rem',
     outline: 'none'
   },
@@ -201,14 +201,14 @@ const styles = {
     flex: 1
   },
   previewLabel: {
-    color: '#94a3b8',
+    color: 'var(--text-secondary)',
     fontSize: '0.9rem',
     fontWeight: 600,
   },
   iframeWrapper: {
     backgroundColor: '#fff',
     borderRadius: '8px',
-    border: '1px solid #cbd5e1',
+    border: '1px solid var(--border-color)',
     overflow: 'hidden',
     height: '400px'
   },
@@ -220,17 +220,17 @@ const styles = {
   },
   footer: {
     padding: '16px 24px',
-    borderTop: '1px solid #334155',
+    borderTop: '1px solid var(--border-color)',
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '12px',
-    backgroundColor: '#0f172a'
+    backgroundColor: 'var(--bg-dark)'
   },
   cancelBtn: {
     padding: '10px 20px',
     backgroundColor: 'transparent',
-    border: '1px solid #475569',
-    color: '#cbd5e1',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-secondary)',
     borderRadius: '6px',
     cursor: 'pointer',
     fontWeight: 600,
@@ -238,7 +238,7 @@ const styles = {
   },
   sendBtn: {
     padding: '10px 24px',
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'var(--brand-blue)',
     border: 'none',
     color: '#fff',
     borderRadius: '6px',
