@@ -7,7 +7,7 @@ import styles from './MyTasks.module.css';
 import modalStyles from '../components/common/CommandPalette.module.css';
 
 const MyTasks = () => {
-  const { user } = useAuth();
+  const { user, isAdmin, isSuperAdmin } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,21 +19,40 @@ const MyTasks = () => {
 
   const fetchTasks = async () => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('tasks')
-        .select('*')
-        .eq('user_id', user?.id)
+        .select('*, leads(lead_number, customers(first_name, last_name))')
         .order('due_date', { ascending: true });
         
+      if (!isAdmin && !isSuperAdmin) {
+        query = query.eq('user_id', user?.id);
+      }
+        
+      const { data, error } = await query;
       if (error) throw error;
       
-      const mappedTasks = data.map(t => ({
-        id: t.id,
-        title: t.title,
-        date: t.due_date,
-        completed: t.status === 'Completed',
-        urgent: false // Could be added to schema later
-      }));
+      const mappedTasks = data.map(t => {
+        let titleSuffix = '';
+        if (t.leads) {
+          titleSuffix += ` - NG-${t.leads.lead_number || 'N/A'}`;
+          if (t.leads.customers) {
+            const fName = t.leads.customers.first_name || '';
+            const lName = t.leads.customers.last_name || '';
+            const fullName = `${fName} ${lName}`.trim();
+            if (fullName && fullName !== 'Unknown') {
+              titleSuffix += ` - ${fullName}`;
+            }
+          }
+        }
+        
+        return {
+          id: t.id,
+          title: `${t.title}${titleSuffix}`,
+          date: t.due_date,
+          completed: t.status === 'Completed',
+          urgent: false // Could be added to schema later
+        };
+      });
       setTasks(mappedTasks);
     } catch (err) {
       console.error('Error fetching tasks:', err);
