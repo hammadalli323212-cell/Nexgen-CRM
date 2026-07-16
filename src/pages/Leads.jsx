@@ -256,7 +256,7 @@ const Leads = () => {
               estimated_price: isNaN(tariff) ? null : tariff,
               carrier_pay: isNaN(carrierFee) ? null : carrierFee,
               deposit_amount: (!isNaN(tariff) && !isNaN(carrierFee)) ? tariff - carrierFee : null,
-              status: 'New',
+              status: (!isNaN(tariff) && tariff > 0) ? 'Quoted' : 'New',
               assigned_to: user?.id,
               created_by: user?.id
             }])

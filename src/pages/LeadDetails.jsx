@@ -631,7 +631,13 @@ const LeadDetails = () => {
           }
         }
 
-        const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
+        const payloadClean = { ...payload };
+        delete payloadClean.customers;
+        delete payloadClean.assignee;
+        delete payloadClean.creator;
+        delete payloadClean.lead_vehicles;
+
+        const { error } = await supabase.from('leads').update(payloadClean).eq('lead_number', id);
         if (error) throw error;
         setLead({ ...lead, ...payload });
       }
