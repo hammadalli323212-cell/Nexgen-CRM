@@ -46,13 +46,10 @@ export default async function handler(req, res) {
       }
     }
 
-    // Fallback to Resend if they don't have a personal SMTP password saved
-    let smtpHost = 'smtp.hostinger.com';
-    if (!profileHasPassword) {
-      smtpHost = 'smtp.resend.com';
-      smtpUser = 'resend';
-      smtpPass = process.env.RESEND_API_KEY;
-    }
+    // ALWAYS use Resend for all system emails
+    let smtpHost = 'smtp.resend.com';
+    smtpUser = 'resend';
+    smtpPass = process.env.RESEND_API_KEY;
 
     const hostHeader = req.headers.host || '';
     const protocol = hostHeader.includes('localhost') ? 'http' : 'https';
@@ -98,9 +95,7 @@ export default async function handler(req, res) {
     });
 
     // When using Resend, the 'from' email MUST exactly match the user's verified domain email.
-    // If we're using Resend and they haven't verified their personal email domain (unlikely since it's the same domain),
-    // it will still work if the domain is verified on Resend.
-    const senderEmail = profileHasPassword ? smtpUser : (smtpUser !== 'resend' ? smtpUser : 'info@nexgenautotransport.com');
+    const senderEmail = 'info@nexgenautotransport.com';
 
     const subjectLine = customSubject || (isChangeOrder ? "Updated Change Order - NexGen Auto Transport" : "Complete Your NexGen Auto Transport Order");
 
