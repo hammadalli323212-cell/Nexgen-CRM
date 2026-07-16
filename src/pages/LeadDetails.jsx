@@ -567,6 +567,8 @@ const LeadDetails = () => {
       });
     } else if (panel === 'vehicles') {
       setDraftData([...(lead.lead_vehicles || [])]);
+    } else if (panel === 'notes') {
+      setDraftData({ notes: lead.notes || '' });
     }
   };
 
@@ -1103,7 +1105,7 @@ const LeadDetails = () => {
               {editingPanel === 'notes' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <textarea 
-                    value={draftData.notes || ''} 
+                    value={draftData?.notes || ''} 
                     onChange={e => setDraftData({...draftData, notes: e.target.value})}
                     style={{ width: '100%', minHeight: '100px', padding: '8px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', resize: 'vertical' }}
                     placeholder="Add notes..."
