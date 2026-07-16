@@ -561,6 +561,10 @@ const LeadDetails = () => {
         if (payload.estimated_price !== undefined) payload.estimated_price = parseFloat(payload.estimated_price) || null;
         if (payload.carrier_pay !== undefined) payload.carrier_pay = parseFloat(payload.carrier_pay) || null;
 
+        if (panel === 'price' && payload.estimated_price > 0 && lead.status === 'New') {
+          payload.status = 'Quoted';
+        }
+
         for (const key of Object.keys(payload)) {
           const oldVal = lead[key] === null || lead[key] === undefined ? '' : lead[key];
           const newVal = payload[key] === null || payload[key] === undefined ? '' : payload[key];

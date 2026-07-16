@@ -250,6 +250,11 @@ const LeadForm = ({ isOrder = false }) => {
       let leadId = internalLeadId;
 
       if (isEditMode && leadId) {
+        // Auto-update status to Quoted if price was added
+        if (originalData?.status === 'New' && leadPayload.estimated_price > 0) {
+          leadPayload.status = 'Quoted';
+        }
+        
         // Update Lead
         const { error: updateError } = await supabase.from('leads').update(leadPayload).eq('id', leadId);
         if (updateError) throw updateError;
@@ -259,7 +264,7 @@ const LeadForm = ({ isOrder = false }) => {
         if (deleteError) throw deleteError;
       } else {
         // Insert Lead
-        leadPayload.status = isOrder ? 'Booked' : 'New';
+        leadPayload.status = isOrder ? 'Booked' : (leadPayload.estimated_price > 0 ? 'Quoted' : 'New');
         leadPayload.assigned_to = user?.id;
         leadPayload.created_by = user?.id;
         const { data: leadData, error: leadError } = await supabase

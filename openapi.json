@@ -1,0 +1,3953 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "title": "standard public schema",
+    "version": "14.5"
+  },
+  "host": "dsoubdjlpqgevqpywfor.supabase.co:443",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json",
+    "application/vnd.pgrst.object+json;nulls=stripped",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "produces": [
+    "application/json",
+    "application/vnd.pgrst.object+json;nulls=stripped",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "produces": [
+          "application/openapi+json",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "summary": "OpenAPI description (this document)",
+        "tags": [
+          "Introspection"
+        ]
+      }
+    },
+    "/change_logs": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.operation"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.details"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/change_logs"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "change_logs"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.change_logs"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "change_logs"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.operation"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.details"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "change_logs"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.operation"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.details"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.change_logs.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.change_logs"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "change_logs"
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.orders.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.order_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.quote_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.pickup_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.total_tariff"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.broker_fee"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.dispatcher_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/orders"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.orders"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.orders.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.order_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.quote_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.pickup_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.total_tariff"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.broker_fee"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.dispatcher_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.orders.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.order_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.quote_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.pickup_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.total_tariff"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.broker_fee"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.dispatcher_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.orders.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.orders"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/customers": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.customers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/customers"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "customers"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.customers"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "customers"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.customers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "customers"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.customers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.customers.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.customers"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "customers"
+        ]
+      }
+    },
+    "/quotes": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.quotes.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.quote_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.deposit"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.estimated_pickup"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/quotes"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "quotes"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.quotes"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "quotes"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.quotes.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.quote_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.deposit"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.estimated_pickup"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "quotes"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.quotes.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.quote_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.customer_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.deposit"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.vehicle_condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.estimated_pickup"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.quotes.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.quotes"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "quotes"
+        ]
+      }
+    },
+    "/lead_documents": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_url"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.uploaded_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/lead_documents"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "lead_documents"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.lead_documents"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "lead_documents"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_url"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.uploaded_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "lead_documents"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.file_url"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.uploaded_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_documents.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.lead_documents"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "lead_documents"
+        ]
+      }
+    },
+    "/lead_vehicles": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_vin"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.trailer_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_type"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/lead_vehicles"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "lead_vehicles"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.lead_vehicles"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "lead_vehicles"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_vin"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.trailer_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_type"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "lead_vehicles"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_year"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_make"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_model"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_vin"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.condition"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.trailer_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.lead_vehicles.vehicle_type"
+          },
+          {
+            "$ref": "#/parameters/body.lead_vehicles"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "lead_vehicles"
+        ]
+      }
+    },
+    "/profiles": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.profiles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.role"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.full_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.smtp_password"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.phone"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/profiles"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "profiles"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.profiles"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "profiles"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.profiles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.role"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.full_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.smtp_password"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.phone"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "profiles"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.profiles.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.first_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.last_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.role"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.email"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.full_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.smtp_password"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.profiles.phone"
+          },
+          {
+            "$ref": "#/parameters/body.profiles"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "profiles"
+        ]
+      }
+    },
+    "/tasks": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.tasks.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.title"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.due_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/tasks"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.tasks"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.tasks.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.title"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.due_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.tasks.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.user_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.title"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.due_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.lead_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.tasks.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.tasks"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      }
+    },
+    "/leads": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.leads.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.lead_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.estimated_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_budget"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.ship_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.source"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.order_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.deposit_amount"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.price_expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.electronic_signature"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_ip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.assigned_to"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_archived"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_paid_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_read"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.change_order_signatures"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/leads"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "leads"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.leads"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "leads"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.leads.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.lead_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.estimated_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_budget"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.ship_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.source"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.order_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.deposit_amount"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.price_expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.electronic_signature"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_ip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.assigned_to"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_archived"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_paid_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_read"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.change_order_signatures"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "leads"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.leads.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.lead_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_city"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_state"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.estimated_price"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.customer_budget"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.transport_type"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.sales_rep_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_at"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_zip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.ship_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.source"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.order_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.notes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.deposit_amount"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.price_expiration_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.electronic_signature"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_ip"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.signed_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.assigned_to"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.created_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_archived"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.delivery_date"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_pay_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.carrier_payment_method"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_terms"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.broker_fee_paid_by"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_address"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.is_read"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.origin_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.destination_contact_phone"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.leads.change_order_signatures"
+          },
+          {
+            "$ref": "#/parameters/body.leads"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "leads"
+        ]
+      }
+    },
+    "/carriers": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.carriers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.company_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.mc_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.dot_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.insurance_status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.preferred_routes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.available_trucks"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.rating"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.created_at"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/order"
+          },
+          {
+            "$ref": "#/parameters/range"
+          },
+          {
+            "$ref": "#/parameters/rangeUnit"
+          },
+          {
+            "$ref": "#/parameters/offset"
+          },
+          {
+            "$ref": "#/parameters/limit"
+          },
+          {
+            "$ref": "#/parameters/preferCount"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/carriers"
+              },
+              "type": "array"
+            }
+          },
+          "206": {
+            "description": "Partial Content"
+          }
+        },
+        "tags": [
+          "carriers"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/body.carriers"
+          },
+          {
+            "$ref": "#/parameters/select"
+          },
+          {
+            "$ref": "#/parameters/preferPost"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "tags": [
+          "carriers"
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.carriers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.company_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.mc_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.dot_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.insurance_status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.preferred_routes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.available_trucks"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.rating"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.created_at"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "carriers"
+        ]
+      },
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/rowFilter.carriers.id"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.company_name"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.mc_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.dot_number"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.insurance_status"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.preferred_routes"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.available_trucks"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.rating"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.carriers.created_at"
+          },
+          {
+            "$ref": "#/parameters/body.carriers"
+          },
+          {
+            "$ref": "#/parameters/preferReturn"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "carriers"
+        ]
+      }
+    },
+    "/rpc/is_admin": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) is_admin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "change_logs": {
+      "required": [
+        "id",
+        "operation"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "lead_id": {
+          "description": "Note:\nThis is a Foreign Key to `leads.id`.<fk table='leads' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "operation": {
+          "format": "text",
+          "type": "string"
+        },
+        "details": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "orders": {
+      "required": [
+        "id",
+        "order_number",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "order_number": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "quote_id": {
+          "description": "Note:\nThis is a Foreign Key to `quotes.id`.<fk table='quotes' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "carrier_id": {
+          "description": "Note:\nThis is a Foreign Key to `carriers.id`.<fk table='carriers' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "default": "Available",
+          "format": "text",
+          "type": "string"
+        },
+        "pickup_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "delivery_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "total_tariff": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "carrier_pay": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "broker_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "dispatcher_id": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "customers": {
+      "required": [
+        "id",
+        "first_name",
+        "last_name",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "first_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "last_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "quotes": {
+      "required": [
+        "id",
+        "quote_number",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "quote_number": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "lead_id": {
+          "description": "Note:\nThis is a Foreign Key to `leads.id`.<fk table='leads' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "vehicle_year": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_make": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_model": {
+          "format": "text",
+          "type": "string"
+        },
+        "origin_city": {
+          "format": "text",
+          "type": "string"
+        },
+        "origin_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_city": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "carrier_pay": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "customer_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "deposit": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "transport_type": {
+          "default": "Open",
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_condition": {
+          "default": "Running",
+          "format": "text",
+          "type": "string"
+        },
+        "estimated_pickup": {
+          "format": "date",
+          "type": "string"
+        },
+        "expiration_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "status": {
+          "default": "Draft",
+          "format": "text",
+          "type": "string"
+        },
+        "sales_rep_id": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "lead_documents": {
+      "required": [
+        "id",
+        "file_name",
+        "file_url"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "lead_id": {
+          "description": "Note:\nThis is a Foreign Key to `leads.id`.<fk table='leads' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "file_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "file_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "uploaded_by": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "lead_vehicles": {
+      "required": [
+        "id",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "lead_id": {
+          "description": "Note:\nThis is a Foreign Key to `leads.id`.<fk table='leads' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "vehicle_year": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_make": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_model": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_vin": {
+          "format": "text",
+          "type": "string"
+        },
+        "condition": {
+          "default": "Operable",
+          "format": "text",
+          "type": "string"
+        },
+        "trailer_type": {
+          "default": "Open",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "vehicle_type": {
+          "default": "Car",
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "profiles": {
+      "required": [
+        "id",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "first_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "last_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "role": {
+          "default": "Sales",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "full_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "smtp_password": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tasks": {
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "default": "gen_random_uuid()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "user_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "due_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "status": {
+          "default": "Pending",
+          "format": "text",
+          "type": "string"
+        },
+        "lead_id": {
+          "description": "Note:\nThis is a Foreign Key to `leads.id`.<fk table='leads' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "leads": {
+      "required": [
+        "id",
+        "lead_number",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "lead_number": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "origin_city": {
+          "format": "text",
+          "type": "string"
+        },
+        "origin_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_city": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "estimated_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "customer_budget": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "transport_type": {
+          "default": "Open",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "New",
+          "format": "text",
+          "type": "string"
+        },
+        "sales_rep_id": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "origin_zip": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_zip": {
+          "format": "text",
+          "type": "string"
+        },
+        "carrier_pay": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "ship_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "source": {
+          "default": "Manual",
+          "format": "text",
+          "type": "string"
+        },
+        "order_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "deposit_amount": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "payment_method": {
+          "default": "Cash On Delivery",
+          "format": "text",
+          "type": "string"
+        },
+        "price_expiration_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "electronic_signature": {
+          "format": "text",
+          "type": "string"
+        },
+        "signed_ip": {
+          "format": "text",
+          "type": "string"
+        },
+        "signed_date": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "assigned_to": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Note:\nThis is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "is_archived": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "carrier_id": {
+          "description": "Note:\nThis is a Foreign Key to `carriers.id`.<fk table='carriers' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "delivery_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "carrier_pay_terms": {
+          "format": "text",
+          "type": "string"
+        },
+        "carrier_payment_method": {
+          "format": "text",
+          "type": "string"
+        },
+        "broker_fee_terms": {
+          "format": "text",
+          "type": "string"
+        },
+        "broker_fee_paid_by": {
+          "default": "Customer",
+          "format": "text",
+          "type": "string"
+        },
+        "origin_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "is_read": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "origin_contact_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "origin_contact_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_contact_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "destination_contact_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "change_order_signatures": {
+          "format": "jsonb"
+        }
+      },
+      "type": "object"
+    },
+    "carriers": {
+      "required": [
+        "id",
+        "company_name",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "extensions.uuid_generate_v4()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "company_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "mc_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "dot_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "insurance_status": {
+          "default": "Active",
+          "format": "text",
+          "type": "string"
+        },
+        "preferred_routes": {
+          "format": "text",
+          "type": "string"
+        },
+        "available_trucks": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "rating": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "parameters": {
+    "preferParams": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string"
+    },
+    "preferReturn": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "enum": [
+        "return=representation",
+        "return=minimal",
+        "return=none"
+      ],
+      "in": "header",
+      "type": "string"
+    },
+    "preferCount": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "enum": [
+        "count=none"
+      ],
+      "in": "header",
+      "type": "string"
+    },
+    "preferPost": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "enum": [
+        "return=representation",
+        "return=minimal",
+        "return=none",
+        "resolution=ignore-duplicates",
+        "resolution=merge-duplicates"
+      ],
+      "in": "header",
+      "type": "string"
+    },
+    "select": {
+      "name": "select",
+      "description": "Filtering Columns",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "on_conflict": {
+      "name": "on_conflict",
+      "description": "On Conflict",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "order": {
+      "name": "order",
+      "description": "Ordering",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "range": {
+      "name": "Range",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "header",
+      "type": "string"
+    },
+    "rangeUnit": {
+      "name": "Range-Unit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "default": "items",
+      "in": "header",
+      "type": "string"
+    },
+    "offset": {
+      "name": "offset",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "limit": {
+      "name": "limit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.change_logs": {
+      "name": "change_logs",
+      "description": "change_logs",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/change_logs"
+      }
+    },
+    "rowFilter.change_logs.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.lead_id": {
+      "name": "lead_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.user_id": {
+      "name": "user_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.operation": {
+      "name": "operation",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.details": {
+      "name": "details",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.description": {
+      "name": "description",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_logs.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.orders": {
+      "name": "orders",
+      "description": "orders",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/orders"
+      }
+    },
+    "rowFilter.orders.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.order_number": {
+      "name": "order_number",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.quote_id": {
+      "name": "quote_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.carrier_id": {
+      "name": "carrier_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.status": {
+      "name": "status",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.pickup_date": {
+      "name": "pickup_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.delivery_date": {
+      "name": "delivery_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.total_tariff": {
+      "name": "total_tariff",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.carrier_pay": {
+      "name": "carrier_pay",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.broker_fee": {
+      "name": "broker_fee",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.dispatcher_id": {
+      "name": "dispatcher_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.customers": {
+      "name": "customers",
+      "description": "customers",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/customers"
+      }
+    },
+    "rowFilter.customers.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.first_name": {
+      "name": "first_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.last_name": {
+      "name": "last_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.email": {
+      "name": "email",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.phone": {
+      "name": "phone",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.notes": {
+      "name": "notes",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.created_by": {
+      "name": "created_by",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customers.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.quotes": {
+      "name": "quotes",
+      "description": "quotes",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/quotes"
+      }
+    },
+    "rowFilter.quotes.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.quote_number": {
+      "name": "quote_number",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.lead_id": {
+      "name": "lead_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.vehicle_year": {
+      "name": "vehicle_year",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.vehicle_make": {
+      "name": "vehicle_make",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.vehicle_model": {
+      "name": "vehicle_model",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.origin_city": {
+      "name": "origin_city",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.origin_state": {
+      "name": "origin_state",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.destination_city": {
+      "name": "destination_city",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.destination_state": {
+      "name": "destination_state",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.carrier_pay": {
+      "name": "carrier_pay",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.customer_price": {
+      "name": "customer_price",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.deposit": {
+      "name": "deposit",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.transport_type": {
+      "name": "transport_type",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.vehicle_condition": {
+      "name": "vehicle_condition",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.estimated_pickup": {
+      "name": "estimated_pickup",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.expiration_date": {
+      "name": "expiration_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.status": {
+      "name": "status",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.sales_rep_id": {
+      "name": "sales_rep_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.quotes.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.lead_documents": {
+      "name": "lead_documents",
+      "description": "lead_documents",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/lead_documents"
+      }
+    },
+    "rowFilter.lead_documents.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_documents.lead_id": {
+      "name": "lead_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_documents.file_name": {
+      "name": "file_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_documents.file_url": {
+      "name": "file_url",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_documents.uploaded_by": {
+      "name": "uploaded_by",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_documents.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.lead_vehicles": {
+      "name": "lead_vehicles",
+      "description": "lead_vehicles",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/lead_vehicles"
+      }
+    },
+    "rowFilter.lead_vehicles.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.lead_id": {
+      "name": "lead_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.vehicle_year": {
+      "name": "vehicle_year",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.vehicle_make": {
+      "name": "vehicle_make",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.vehicle_model": {
+      "name": "vehicle_model",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.vehicle_vin": {
+      "name": "vehicle_vin",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.condition": {
+      "name": "condition",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.trailer_type": {
+      "name": "trailer_type",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.lead_vehicles.vehicle_type": {
+      "name": "vehicle_type",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.profiles": {
+      "name": "profiles",
+      "description": "profiles",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/profiles"
+      }
+    },
+    "rowFilter.profiles.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.first_name": {
+      "name": "first_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.last_name": {
+      "name": "last_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.role": {
+      "name": "role",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.email": {
+      "name": "email",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.full_name": {
+      "name": "full_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.smtp_password": {
+      "name": "smtp_password",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.profiles.phone": {
+      "name": "phone",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.tasks": {
+      "name": "tasks",
+      "description": "tasks",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/tasks"
+      }
+    },
+    "rowFilter.tasks.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.user_id": {
+      "name": "user_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.title": {
+      "name": "title",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.description": {
+      "name": "description",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.due_date": {
+      "name": "due_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.status": {
+      "name": "status",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.lead_id": {
+      "name": "lead_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.tasks.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.leads": {
+      "name": "leads",
+      "description": "leads",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/leads"
+      }
+    },
+    "rowFilter.leads.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.lead_number": {
+      "name": "lead_number",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_city": {
+      "name": "origin_city",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_state": {
+      "name": "origin_state",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_city": {
+      "name": "destination_city",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_state": {
+      "name": "destination_state",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.estimated_price": {
+      "name": "estimated_price",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.customer_budget": {
+      "name": "customer_budget",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.transport_type": {
+      "name": "transport_type",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.status": {
+      "name": "status",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.sales_rep_id": {
+      "name": "sales_rep_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_zip": {
+      "name": "origin_zip",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_zip": {
+      "name": "destination_zip",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.carrier_pay": {
+      "name": "carrier_pay",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.ship_date": {
+      "name": "ship_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.source": {
+      "name": "source",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.order_id": {
+      "name": "order_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.notes": {
+      "name": "notes",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.deposit_amount": {
+      "name": "deposit_amount",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.payment_method": {
+      "name": "payment_method",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.price_expiration_date": {
+      "name": "price_expiration_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.electronic_signature": {
+      "name": "electronic_signature",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.signed_ip": {
+      "name": "signed_ip",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.signed_date": {
+      "name": "signed_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.assigned_to": {
+      "name": "assigned_to",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.created_by": {
+      "name": "created_by",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.is_archived": {
+      "name": "is_archived",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.carrier_id": {
+      "name": "carrier_id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.delivery_date": {
+      "name": "delivery_date",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.carrier_pay_terms": {
+      "name": "carrier_pay_terms",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.carrier_payment_method": {
+      "name": "carrier_payment_method",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.broker_fee_terms": {
+      "name": "broker_fee_terms",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.broker_fee_paid_by": {
+      "name": "broker_fee_paid_by",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_address": {
+      "name": "origin_address",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_address": {
+      "name": "destination_address",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.is_read": {
+      "name": "is_read",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_contact_name": {
+      "name": "origin_contact_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.origin_contact_phone": {
+      "name": "origin_contact_phone",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_contact_name": {
+      "name": "destination_contact_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.destination_contact_phone": {
+      "name": "destination_contact_phone",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.leads.change_order_signatures": {
+      "name": "change_order_signatures",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.carriers": {
+      "name": "carriers",
+      "description": "carriers",
+      "required": false,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/carriers"
+      }
+    },
+    "rowFilter.carriers.id": {
+      "name": "id",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.company_name": {
+      "name": "company_name",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.mc_number": {
+      "name": "mc_number",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.dot_number": {
+      "name": "dot_number",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.insurance_status": {
+      "name": "insurance_status",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.preferred_routes": {
+      "name": "preferred_routes",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.available_trucks": {
+      "name": "available_trucks",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.rating": {
+      "name": "rating",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.carriers.created_at": {
+      "name": "created_at",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    }
+  },
+  "externalDocs": {
+    "description": "PostgREST Documentation",
+    "url": "https://postgrest.org/en/v14/references/api.html"
+  }
+}
