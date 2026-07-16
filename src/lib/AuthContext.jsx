@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }) => {
     user,
     role: user?.email === 'info@nexgenautotransport.com' ? 'admin' : role,
     isAdmin: role === 'admin' || user?.email === 'info@nexgenautotransport.com',
+    isSuperAdmin: user?.email === 'info@nexgenautotransport.com',
     phone: phone || '(832) 886-1321',
     loading,
     signOut: () => supabase.auth.signOut(),
