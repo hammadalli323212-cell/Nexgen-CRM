@@ -108,48 +108,12 @@ const MyTasks = () => {
     }
   };
 
-  const repairTasks = async () => {
-    try {
-      setIsSaving(true);
-      toast.loading('Repairing old tasks...', { id: 'repair' });
-      
-      const { data: orphanedTasks, error: fetchErr } = await supabase
-        .from('tasks')
-        .select('*, leads(lead_number, assigned_to)')
-        .is('user_id', null);
-        
-      if (fetchErr) throw fetchErr;
-      
-      let repairedCount = 0;
-      for (const t of orphanedTasks) {
-        if (t.leads && t.leads.assigned_to) {
-          await supabase.from('tasks').update({ user_id: t.leads.assigned_to }).eq('id', t.id);
-          repairedCount++;
-        }
-      }
-      
-      toast.success(`Repaired ${repairedCount} old tasks!`, { id: 'repair' });
-      fetchTasks();
-    } catch (err) {
-      toast.error('Failed to repair: ' + err.message, { id: 'repair' });
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   return (
     <div className={styles.pageContainer} style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--surface-color)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--text-primary)' }}>My Tasks</h1>
-            <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>Manage your calendar events and reminders.</p>
-          </div>
-          {(isAdmin || isSuperAdmin) && (
-             <button onClick={repairTasks} disabled={isSaving} style={{ background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', marginLeft: '12px' }}>
-               Repair Old Tasks
-             </button>
-          )}
+        <div>
+          <h1 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--text-primary)' }}>My Tasks</h1>
+          <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>Manage your calendar events and reminders.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
