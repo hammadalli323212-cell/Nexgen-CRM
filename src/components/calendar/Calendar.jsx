@@ -140,9 +140,9 @@ const Calendar = ({ tasks = [] }) => {
         <div className={styles.timeGridContainer} style={{ flexDirection: 'column' }}>
           
           {/* All Day Row */}
-          <div style={{ display: 'flex', width: '100%', minHeight: '40px', borderBottom: '1px solid var(--border-color)' }}>
-            <div className={styles.timeColumn} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '8px', borderRight: '1px solid var(--border-color)', borderBottom: 'none' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>all-day</span>
+          <div style={{ display: 'flex', width: '100%', flex: 1, borderBottom: '1px solid var(--border-color)' }}>
+            <div className={styles.timeColumn} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', paddingTop: '16px', paddingRight: '8px', borderRight: '1px solid var(--border-color)', borderBottom: 'none' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Tasks</span>
             </div>
             
             <div className={styles.daysContainer}>
@@ -170,25 +170,6 @@ const Calendar = ({ tasks = [] }) => {
                   </div>
                 );
               })}
-            </div>
-          </div>
-          
-          {/* Hourly Slots Row */}
-          <div style={{ display: 'flex', width: '100%', flex: 1 }}>
-            <div className={styles.timeColumn}>
-              {HOURS.map(hour => (
-                <div key={hour} className={styles.timeLabel}>{hour}</div>
-              ))}
-            </div>
-            
-            <div className={styles.daysContainer}>
-              {dates.map((date, idx) => (
-                <div key={idx} className={`${styles.dayColumn} ${isToday(date) ? styles.today : ''}`}>
-                  {HOURS.map(hour => (
-                    <div key={hour} className={styles.timeSlot}></div>
-                  ))}
-                </div>
-              ))}
             </div>
           </div>
 
