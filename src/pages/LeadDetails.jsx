@@ -626,7 +626,7 @@ const LeadDetails = () => {
         }
         setLead({ ...lead, customers: { ...lead.customers, ...draftData } });
       } 
-      else if (panel === 'logistics' || panel === 'price' || panel === 'notes') {
+      else if (panel === 'logistics' || panel === 'price' || panel === 'notes' || panel === 'carrier') {
         const payload = { ...draftData };
         if (payload.estimated_price !== undefined) payload.estimated_price = parseFloat(payload.estimated_price) || null;
         if (payload.carrier_pay !== undefined) payload.carrier_pay = parseFloat(payload.carrier_pay) || null;
