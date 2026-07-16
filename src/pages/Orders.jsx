@@ -59,7 +59,7 @@ const Orders = () => {
           const formattedOrders = sortedData.map((order) => ({
             id: `NG-${order.order_id || order.lead_number}`,
             leadId: order.lead_number,
-            converted: order.order_created_at ? new Date(order.order_created_at).toLocaleString() : new Date(order.created_at).toLocaleString(),
+            converted: order.order_created_at ? new Date(order.order_created_at).toLocaleString() : 'N/A',
             leadDate: new Date(order.created_at).toLocaleString(),
             customer: order.customers
               ? `${order.customers.first_name || ''} ${order.customers.last_name && order.customers.last_name !== 'Unknown' ? order.customers.last_name : ''}`.trim()
