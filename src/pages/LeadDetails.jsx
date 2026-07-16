@@ -146,7 +146,28 @@ const LeadDetails = () => {
         `)
         .eq('lead_id', leadId)
         .order('created_at', { ascending: false });
-      if (logData) setLogs(logData);
+      let finalLogs = logData || [];
+      if (finalLogs.length > 0 && (data.status === 'Booked' || data.order_created_at)) {
+        const hasConversionLog = finalLogs.some(log => log.operation === 'Order Signed' || log.operation === 'Status Changed' || log.operation === 'Change Order Signed' || (log.operation === 'Entity Updated' && (log.description || '').includes('Booked')));
+        if (!hasConversionLog && user?.id) {
+          const { error: logErr } = await supabase.from('change_logs').insert([{
+            lead_id: leadId,
+            user_id: user.id,
+            operation: 'Order Signed',
+            details: 'Signature Captured',
+            description: 'Customer electronically signed the order form'
+          }]);
+          if (!logErr) {
+            const { data: healedLogs } = await supabase
+              .from('change_logs')
+              .select(`id, operation, details, description, created_at, user_id, profiles:user_id (first_name, last_name, full_name, email)`)
+              .eq('lead_id', leadId)
+              .order('created_at', { ascending: false });
+            if (healedLogs) finalLogs = healedLogs;
+          }
+        }
+      }
+      setLogs(finalLogs);
     };
 
     const fetchDocuments = async (leadId) => {
