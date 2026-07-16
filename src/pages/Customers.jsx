@@ -14,14 +14,15 @@ const Customers = () => {
   const [selectedCustomers, setSelectedCustomers] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isSuperAdmin } = useAuth();
+  const { isSuperAdmin, isAdmin, user } = useAuth();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const { data, error } = await supabase
-          .from('customers')
-          .select(`
+        let query = supabase.from('customers');
+        
+        if (isAdmin || isSuperAdmin) {
+          query = query.select(`
             id,
             first_name,
             last_name,
@@ -29,8 +30,20 @@ const Customers = () => {
             phone,
             created_at,
             leads ( id, estimated_price, created_at, status )
-          `)
-          .order('created_at', { ascending: false });
+          `);
+        } else {
+          query = query.select(`
+            id,
+            first_name,
+            last_name,
+            email,
+            phone,
+            created_at,
+            leads!inner ( id, estimated_price, created_at, status )
+          `).or(`created_by.eq.${user?.id},assigned_to.eq.${user?.id}`, { foreignTable: 'leads' });
+        }
+
+        const { data, error } = await query.order('created_at', { ascending: false });
 
         if (error) throw error;
 
