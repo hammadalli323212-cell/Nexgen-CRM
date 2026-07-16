@@ -34,6 +34,7 @@ const Orders = () => {
           ship_date,
           status,
           is_read,
+          carrier_company_name,
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `,
@@ -76,7 +77,7 @@ const Orders = () => {
             origin: `${order.origin_city || ''}${order.origin_state ? ', ' + order.origin_state : ''}` || 'Unknown',
             destination: `${order.destination_city || ''}${order.destination_state ? ', ' + order.destination_state : ''}` || 'Unknown',
             pickupDate: order.ship_date || "TBD",
-            carrier: "Unassigned",
+            carrier: order.carrier_company_name || "Unassigned",
             tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,
             status: order.status,
             isRead: order.is_read

@@ -569,6 +569,16 @@ const LeadDetails = () => {
       setDraftData([...(lead.lead_vehicles || [])]);
     } else if (panel === 'notes') {
       setDraftData({ notes: lead.notes || '' });
+    } else if (panel === 'carrier') {
+      setDraftData({
+        carrier_company_name: lead.carrier_company_name || '',
+        carrier_company_number: lead.carrier_company_number || '',
+        carrier_dispatch_number: lead.carrier_dispatch_number || '',
+        carrier_driver_number: lead.carrier_driver_number || '',
+        carrier_email: lead.carrier_email || '',
+        carrier_mc_number: lead.carrier_mc_number || '',
+        carrier_usdot_number: lead.carrier_usdot_number || ''
+      });
     }
   };
 
@@ -1459,6 +1469,95 @@ const LeadDetails = () => {
               </div>
             </div>
           )}
+
+          {/* Assigned Carrier Panel */}
+          <div className={styles.panel} style={{ marginBottom: '20px' }}>
+            <div className={styles.panelHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Truck size={18} /> Assigned Carrier
+              </div>
+              {editingPanel !== 'carrier' && (
+                <button onClick={() => handleEditClick('carrier')} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><Edit2 size={14} /></button>
+              )}
+            </div>
+            <div className={styles.panelBody}>
+              {editingPanel === 'carrier' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>Carrier Company Name</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_company_name} onChange={e => setDraftData({...draftData, carrier_company_name: e.target.value})} placeholder="Company Name" />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>Company Number</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_company_number} onChange={e => setDraftData({...draftData, carrier_company_number: e.target.value})} placeholder="Company Number" />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Email</label>
+                      <input type="email" className={styles.input} value={draftData.carrier_email} onChange={e => setDraftData({...draftData, carrier_email: e.target.value})} placeholder="Email" />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>Dispatch Number</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_dispatch_number} onChange={e => setDraftData({...draftData, carrier_dispatch_number: e.target.value})} placeholder="Dispatch Number" />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Driver Number</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_driver_number} onChange={e => setDraftData({...draftData, carrier_driver_number: e.target.value})} placeholder="Driver Number" />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>MC Number</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_mc_number} onChange={e => setDraftData({...draftData, carrier_mc_number: e.target.value})} placeholder="MC Number" />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>USDOT Number</label>
+                      <input type="text" className={styles.input} value={draftData.carrier_usdot_number} onChange={e => setDraftData({...draftData, carrier_usdot_number: e.target.value})} placeholder="USDOT Number" />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
+                    <button onClick={handleCancelEdit} className={styles.btnSecondary}>Cancel</button>
+                    <button onClick={() => handleInlineSave('carrier')} className={styles.btnPrimary} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14}/> Save</button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Company Name</span>
+                    <span className={styles.infoValue}>{lead.carrier_company_name || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Email</span>
+                    <span className={styles.infoValue}>{lead.carrier_email || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Company Number</span>
+                    <span className={styles.infoValue}>{lead.carrier_company_number || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Dispatch Number</span>
+                    <span className={styles.infoValue}>{lead.carrier_dispatch_number || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Driver Number</span>
+                    <span className={styles.infoValue}>{lead.carrier_driver_number || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>MC Number</span>
+                    <span className={styles.infoValue}>{lead.carrier_mc_number || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>USDOT Number</span>
+                    <span className={styles.infoValue}>{lead.carrier_usdot_number || '-'}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* File Attachment Panel */}
           <div className={styles.panel}>
