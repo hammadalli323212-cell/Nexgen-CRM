@@ -45,6 +45,7 @@ const LeadDetails = () => {
   const [emailPreviewData, setEmailPreviewData] = useState(null);
   const [activeEmailPayload, setActiveEmailPayload] = useState(null);
   const [activeEmailEndpoint, setActiveEmailEndpoint] = useState(null);
+  const [debugError, setDebugError] = useState(null);
 
   const STATUS_OPTIONS = [
     'New', 'Quoted', 'Follow Up', 'Booked', 'Dispatched', 'In Transit', 'Delivered', 'Cancelled'
@@ -131,7 +132,8 @@ const LeadDetails = () => {
         }
 
       } catch (err) {
-        console.error('Error fetching lead details:', err);
+        console.error("Error fetching lead:", err);
+        setDebugError(err.message || String(err));
       } finally {
         setLoading(false);
       }
@@ -225,7 +227,12 @@ const LeadDetails = () => {
   }
 
   if (!lead) {
-    return <div className={styles.loading}>Lead not found.</div>;
+    return (
+      <div className={styles.loading}>
+        <div>Lead not found.</div>
+        {debugError && <div style={{ color: 'red', marginTop: '10px' }}>Debug: {debugError}</div>}
+      </div>
+    );
   }
 
   const handlePreviewEmail = async (endpoint, payload, loadingSetter) => {
