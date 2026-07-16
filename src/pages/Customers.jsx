@@ -11,6 +11,7 @@ const columnHelper = createColumnHelper();
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
+  const [selectedCustomers, setSelectedCustomers] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { isSuperAdmin } = useAuth();
@@ -64,19 +65,28 @@ const Customers = () => {
     fetchCustomers();
   }, []);
 
-  const handleDeleteCustomer = async (e, customerId, customerName) => {
-    e.stopPropagation(); // Prevent row click navigation
-    if (!window.confirm(`Are you sure you want to permanently delete customer ${customerName}? This will also delete their associated leads and cannot be undone.`)) return;
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Are you sure you want to permanently delete ${selectedCustomers.size} customers? This will also delete their associated leads and cannot be undone.`)) return;
     
     try {
-      const { error } = await supabase.from('customers').delete().eq('id', customerId);
+      const { error } = await supabase.from('customers').delete().in('id', Array.from(selectedCustomers));
       if (error) throw error;
-      toast.success('Customer deleted successfully!');
-      setCustomers(prev => prev.filter(c => c.id !== customerId));
+      toast.success('Customers deleted successfully!');
+      setCustomers(prev => prev.filter(c => !selectedCustomers.has(c.id)));
+      setSelectedCustomers(new Set());
     } catch (err) {
-      console.error('Failed to delete customer:', err);
-      toast.error('Failed to delete customer.');
+      console.error('Failed to delete customers:', err);
+      toast.error('Failed to delete customers.');
     }
+  };
+
+  const toggleSelection = (id) => {
+    setSelectedCustomers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) newSet.delete(id);
+      else newSet.add(id);
+      return newSet;
+    });
   };
 
   const columns = useMemo(() => {
@@ -90,25 +100,24 @@ const Customers = () => {
     ];
 
     if (isSuperAdmin) {
-      cols.push(
-        columnHelper.display({
-          id: 'actions',
-          header: 'Actions',
-          cell: (info) => (
-            <button 
-              onClick={(e) => handleDeleteCustomer(e, info.row.original.id, info.row.original.name)}
-              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontWeight: 'bold' }}
-              title="Delete Customer"
-            >
-              Delete
-            </button>
-          )
+      cols.unshift(
+        columnHelper.accessor('select', {
+          header: () => null,
+          cell: info => (
+            <input 
+              type="checkbox" 
+              checked={selectedCustomers.has(info.row.original.id)} 
+              onChange={() => toggleSelection(info.row.original.id)} 
+              onClick={(e) => e.stopPropagation()}
+              style={{ cursor: 'pointer', transform: 'scale(1.2)' }}
+            />
+          ),
         })
       );
     }
 
     return cols;
-  }, [isSuperAdmin]);
+  }, [isSuperAdmin, selectedCustomers]);
 
   return (
     <div>
@@ -116,6 +125,17 @@ const Customers = () => {
         <div className={styles.pageTitle}>
           <h1>Customers</h1>
           <p>Customer relationship management and history.</p>
+        </div>
+        <div className={styles.headerActions}>
+          {isSuperAdmin && selectedCustomers.size > 0 && (
+            <button 
+              className={styles.btnSecondary} 
+              onClick={handleBulkDelete}
+              style={{ borderColor: '#ef4444', color: '#ef4444' }}
+            >
+              Delete Selected ({selectedCustomers.size})
+            </button>
+          )}
         </div>
       </div>
       
