@@ -42,7 +42,7 @@ const Dashboard = () => {
         };
         
         // Fetch all relevant records in the timeframe
-        const { data: records } = await buildQuery('leads', 'id, status, deposit_amount');
+        const { data: records } = await buildQuery('leads', 'id, status, deposit_amount, broker_fee_collected');
         
         let totalLeads = 0;
         let totalOrders = 0;
@@ -57,7 +57,9 @@ const Dashboard = () => {
                 totalOrders++;
                 if (r.status === 'Dispatched') {
                    totalDispatched++;
-                   brokerFee += (r.deposit_amount || 0);
+                   if (r.broker_fee_collected === true) {
+                      brokerFee += (r.deposit_amount || 0);
+                   }
                 }
              } else {
                 totalLeads++;
@@ -139,7 +141,7 @@ const Dashboard = () => {
           <span className={styles.statValue}>{loading ? '-' : stats.totalDispatched}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Dispatched Broker Fee</span>
+          <span className={styles.statTitle}>Collected Broker Fee</span>
           <span className={styles.statValue} style={{ color: 'var(--success)' }}>
             {loading ? '-' : `$${stats.brokerFee.toFixed(2)}`}
           </span>

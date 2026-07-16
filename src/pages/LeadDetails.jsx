@@ -1148,6 +1148,17 @@ const LeadDetails = () => {
                      </div>
                   </div>
 
+                  <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                     <div style={{ flex: 1 }}>
+                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Broker Fee Collected</label>
+                       <select value={draftData.broker_fee_collected ? 'Yes' : 'No'} onChange={e => setDraftData({...draftData, broker_fee_collected: e.target.value === 'Yes'})} style={{ width: '100%', padding: '6px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px' }}>
+                         <option value="No">No</option>
+                         <option value="Yes">Yes</option>
+                       </select>
+                     </div>
+                     <div style={{ flex: 2 }}></div>
+                  </div>
+
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
                     <button onClick={handleCancelEdit} style={{ padding: '4px 8px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
                     <button onClick={() => handleInlineSave('price')} style={{ padding: '4px 8px', background: '#10b981', border: 'none', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14}/> Save</button>
@@ -1188,6 +1199,16 @@ const LeadDetails = () => {
                      <div className={styles.infoBlock}>
                         <span className={styles.infoLabel}>Broker Fee Paid By</span>
                         <span className={styles.infoValue}>{lead.broker_fee_paid_by || 'Customer'}</span>
+                     </div>
+                     <div className={styles.infoBlock}>
+                        <span className={styles.infoLabel}>Broker Fee Collected</span>
+                        <span className={styles.infoValue}>
+                           {lead.broker_fee_collected ? (
+                             <span style={{ color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14}/> Yes</span>
+                           ) : (
+                             <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><X size={14}/> No</span>
+                           )}
+                        </span>
                      </div>
                      <div className={styles.infoBlock}>
                         <span className={styles.infoLabel}>Broker Fee Terms</span>
