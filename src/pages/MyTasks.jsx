@@ -21,7 +21,7 @@ const MyTasks = () => {
     try {
       let query = supabase
         .from('tasks')
-        .select('*, leads(lead_number, assigned_to, customers(first_name, last_name))')
+        .select('*, leads(lead_number, status, assigned_to, customers(first_name, last_name))')
         .order('due_date', { ascending: true });
         
       if (!isAdmin && !isSuperAdmin) {
@@ -42,7 +42,8 @@ const MyTasks = () => {
       const mappedTasks = data.map(t => {
         let titleSuffix = '';
         if (t.leads) {
-          titleSuffix += ` - NG-${t.leads.lead_number || 'N/A'}`;
+          const typeLabel = t.leads.status === 'Booked' ? 'Order' : 'Lead';
+          titleSuffix += ` - ${typeLabel} NG-${t.leads.lead_number || 'N/A'}`;
           if (t.leads.customers) {
             const fName = t.leads.customers.first_name || '';
             const lName = t.leads.customers.last_name || '';
