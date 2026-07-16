@@ -208,12 +208,20 @@ const Leads = () => {
           };
 
           if (email && !email.startsWith('unknown')) {
-            const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', email).maybeSingle();
-            if (data && checkNameMatch(data)) existingCustomer = data;
+            const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', email).limit(10);
+            if (data) {
+              existingCustomer = data.find(c => checkNameMatch(c)) || null;
+            }
           }
           if (!existingCustomer && phone) {
-            const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('phone', phone).maybeSingle();
-            if (data && checkNameMatch(data)) existingCustomer = data;
+            const digits = phone.replace(/\D/g, '');
+            if (digits.length >= 7) {
+              const pattern = '%' + digits.split('').join('%') + '%';
+              const { data } = await supabase.from('customers').select('id, first_name, last_name').ilike('phone', pattern).limit(10);
+              if (data) {
+                existingCustomer = data.find(c => checkNameMatch(c)) || null;
+              }
+            }
           }
 
           if (existingCustomer) {

@@ -70,11 +70,19 @@ const LeadForm = ({ isOrder = false }) => {
       }
       
       const val = customer[activeSuggestionField];
-      const { data, error } = await supabase
-        .from('customers')
-        .select('id, first_name, last_name, email, phone')
-        .ilike(activeSuggestionField, `%${val}%`)
-        .limit(5);
+      
+      let query = supabase.from('customers').select('id, first_name, last_name, email, phone');
+      
+      if (activeSuggestionField === 'phone') {
+        const digits = val.replace(/\D/g, '');
+        if (digits.length < 3) return; // not enough digits
+        const pattern = '%' + digits.split('').join('%') + '%';
+        query = query.ilike('phone', pattern);
+      } else {
+        query = query.ilike(activeSuggestionField, `%${val}%`);
+      }
+      
+      const { data, error } = await query.limit(5);
 
       if (!error && data && data.length > 0) {
         setCustomerSuggestions(data);
@@ -277,12 +285,20 @@ const LeadForm = ({ isOrder = false }) => {
         };
 
         if (customer.email) {
-          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', customer.email).maybeSingle();
-          if (data && checkNameMatch(data)) existingCustomer = data;
+          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', customer.email).limit(10);
+          if (data) {
+            existingCustomer = data.find(c => checkNameMatch(c)) || null;
+          }
         }
         if (!existingCustomer && customer.phone) {
-          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('phone', customer.phone).maybeSingle();
-          if (data && checkNameMatch(data)) existingCustomer = data;
+          const digits = customer.phone.replace(/\D/g, '');
+          if (digits.length >= 7) {
+            const pattern = '%' + digits.split('').join('%') + '%';
+            const { data } = await supabase.from('customers').select('id, first_name, last_name').ilike('phone', pattern).limit(10);
+            if (data) {
+              existingCustomer = data.find(c => checkNameMatch(c)) || null;
+            }
+          }
         }
 
         if (existingCustomer) {
