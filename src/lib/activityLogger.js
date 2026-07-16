@@ -9,7 +9,7 @@ import { supabase } from './supabase';
  * @param {string} description - Detailed description of what changed
  */
 export const logActivity = async (leadId, userId, operation, details, description) => {
-  if (!leadId || !userId) return;
+  if (!leadId) return;
   
   try {
     const { error } = await supabase.from('change_logs').insert([{

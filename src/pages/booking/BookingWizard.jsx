@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { generateOrderPDF } from '../../lib/pdfGenerator';
+import { logActivity } from '../../lib/activityLogger';
 import styles from './BookingWizard.module.css';
 
 const STEPS = [
@@ -194,6 +195,13 @@ const BookingWizard = () => {
       const { error } = await supabase.from('leads').update(updatePayload).eq('lead_number', id);
 
       if (error) throw error;
+      
+      // Log the signature activity
+      if (isChangeOrder) {
+        await logActivity(leadData.id, null, 'Change Order Signed', 'Signature Captured', 'Customer electronically signed the change order');
+      } else {
+        await logActivity(leadData.id, null, 'Order Signed', 'Signature Captured', 'Customer electronically signed the order form');
+      }
       
       setLeadData(prev => ({
         ...prev,
