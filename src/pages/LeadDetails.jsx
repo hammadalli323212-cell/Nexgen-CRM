@@ -1116,8 +1116,8 @@ const LeadDetails = () => {
                   </div>
                 </div>
               ) : (
-                <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.5', color: 'var(--text-muted)' }}>
-                  {lead.notes ? lead.notes : <span style={{ opacity: 0.5, fontStyle: 'italic' }}>No notes added.</span>}
+                <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.5', color: 'var(--text-primary)' }}>
+                  {lead.notes ? lead.notes : <span style={{ opacity: 0.7, fontStyle: 'italic', color: 'var(--text-muted)' }}>No notes added.</span>}
                 </div>
               )}
             </div>
