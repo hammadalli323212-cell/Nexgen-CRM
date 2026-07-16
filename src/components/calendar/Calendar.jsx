@@ -124,7 +124,7 @@ const Calendar = ({ tasks = [] }) => {
 
   const renderTimeGrid = (dates) => {
     return (
-      <div className={styles.calendarGrid}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
         {/* Header Row */}
         <div style={{ display: 'grid', gridTemplateColumns: `60px repeat(${dates.length}, 1fr)` }}>
           <div className={styles.dayName} style={{ borderRight: '1px solid var(--border-color)' }}></div>
