@@ -37,7 +37,7 @@ const Orders = () => {
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `,
           )
-          .eq("status", "Booked")
+          .in("status", ["Booked", "Dispatched", "In Transit", "Delivered"])
           .eq("is_archived", false)
           .order("created_at", { ascending: false });
 

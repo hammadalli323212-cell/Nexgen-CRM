@@ -41,7 +41,10 @@ const Leads = () => {
           assignee:profiles!assigned_to(first_name, last_name, full_name),
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
-        `).neq('status', 'Booked').eq('is_archived', false).order('created_at', { ascending: false });
+        `)
+        .in('status', ['New', 'Quoted', 'Follow Up', 'Cancelled'])
+        .eq('is_archived', false)
+        .order('created_at', { ascending: false });
         
         if (!isAdmin && user) {
           query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
