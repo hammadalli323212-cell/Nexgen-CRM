@@ -614,7 +614,7 @@ const LeadDetails = () => {
         }
         setLead({ ...lead, customers: { ...lead.customers, ...draftData } });
       } 
-      else if (panel === 'logistics' || panel === 'price') {
+      else if (panel === 'logistics' || panel === 'price' || panel === 'notes') {
         const payload = { ...draftData };
         if (payload.estimated_price !== undefined) payload.estimated_price = parseFloat(payload.estimated_price) || null;
         if (payload.carrier_pay !== undefined) payload.carrier_pay = parseFloat(payload.carrier_pay) || null;
@@ -1092,14 +1092,34 @@ const LeadDetails = () => {
           </div>
 
           {/* Memo / Notes Panel */}
-          {lead.notes && (
-            <div className={styles.panel}>
-              <div className={styles.panelHeader}>Memo / Notes</div>
-              <div className={styles.panelBody} style={{ whiteSpace: 'pre-wrap', lineHeight: '1.5', color: 'var(--text-muted)' }}>
-                {lead.notes}
-              </div>
+          <div className={styles.panel}>
+            <div className={styles.panelHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>Memo / Notes</div>
+              {editingPanel !== 'notes' && (
+                <button onClick={() => handleEditClick('notes')} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><Edit2 size={14} /></button>
+              )}
             </div>
-          )}
+            <div className={styles.panelBody}>
+              {editingPanel === 'notes' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <textarea 
+                    value={draftData.notes || ''} 
+                    onChange={e => setDraftData({...draftData, notes: e.target.value})}
+                    style={{ width: '100%', minHeight: '100px', padding: '8px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', resize: 'vertical' }}
+                    placeholder="Add notes..."
+                  />
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                    <button onClick={handleCancelEdit} style={{ padding: '4px 8px', background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
+                    <button onClick={() => handleInlineSave('notes')} style={{ padding: '4px 8px', background: '#10b981', border: 'none', color: 'var(--text-primary)', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14}/> Save</button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.5', color: 'var(--text-muted)' }}>
+                  {lead.notes ? lead.notes : <span style={{ opacity: 0.5, fontStyle: 'italic' }}>No notes added.</span>}
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Removed Signed Order Form Panel from here */}
 
