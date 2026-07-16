@@ -1276,7 +1276,12 @@ const LeadDetails = () => {
                         <tr key={t.id} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--brand-blue)' }}>{t.title}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-secondary)' }}>{t.description || '-'}</td>
-                          <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-primary)' }}>{new Date(t.due_date).toLocaleDateString()}</td>
+                          <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-primary)' }}>
+                            {t.due_date ? (() => {
+                              const [y, m, d] = t.due_date.split('-');
+                              return new Date(y, m - 1, d).toLocaleDateString();
+                            })() : ''}
+                          </td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right' }}>
                             <button onClick={() => handleDeleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline' }}>Delete</button>
                           </td>

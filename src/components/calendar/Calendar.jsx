@@ -90,7 +90,10 @@ const Calendar = ({ tasks = [] }) => {
         <div className={styles.daysGrid}>
           {gridCells.map((cell, idx) => {
             const dayTasks = tasks.filter(task => {
-              const taskDate = new Date(task.date);
+              if (!task.date) return false;
+              // Parse YYYY-MM-DD as local date to prevent timezone shift
+              const [y, m, d] = task.date.split('-');
+              const taskDate = new Date(y, m - 1, d);
               return taskDate.getDate() === cell.date.getDate() &&
                      taskDate.getMonth() === cell.date.getMonth() &&
                      taskDate.getFullYear() === cell.date.getFullYear();
@@ -144,7 +147,9 @@ const Calendar = ({ tasks = [] }) => {
           <div className={styles.daysContainer}>
             {dates.map((date, idx) => {
                const dayTasks = tasks.filter(task => {
-                const taskDate = new Date(task.date);
+                if (!task.date) return false;
+                const [y, m, d] = task.date.split('-');
+                const taskDate = new Date(y, m - 1, d);
                 return taskDate.getDate() === date.getDate() &&
                        taskDate.getMonth() === date.getMonth() &&
                        taskDate.getFullYear() === date.getFullYear();
