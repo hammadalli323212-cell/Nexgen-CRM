@@ -208,19 +208,41 @@ const LeadForm = ({ isOrder = false }) => {
           phone: customer.phone,
         }).eq('id', customerId);
       } else {
-        // Insert new customer
-        const { data: customerData, error: customerError } = await supabase
-          .from('customers')
-          .insert([{
-            first_name: firstName,
-            last_name: lastName,
-            email: customer.email,
-            phone: customer.phone,
-          }])
-          .select()
-          .single();
-        if (customerError) throw customerError;
-        customerId = customerData.id;
+        // Check for existing customer by email or phone
+        let existingCustomer = null;
+        if (customer.email) {
+          const { data } = await supabase.from('customers').select('id').eq('email', customer.email).maybeSingle();
+          if (data) existingCustomer = data;
+        }
+        if (!existingCustomer && customer.phone) {
+          const { data } = await supabase.from('customers').select('id').eq('phone', customer.phone).maybeSingle();
+          if (data) existingCustomer = data;
+        }
+
+        if (existingCustomer) {
+          customerId = existingCustomer.id;
+          // Update existing customer with any new info
+          await supabase.from('customers').update({
+            first_name: firstName || undefined,
+            last_name: lastName || undefined,
+            email: customer.email || undefined,
+            phone: customer.phone || undefined,
+          }).eq('id', customerId);
+        } else {
+          // Insert new customer
+          const { data: customerData, error: customerError } = await supabase
+            .from('customers')
+            .insert([{
+              first_name: firstName,
+              last_name: lastName,
+              email: customer.email,
+              phone: customer.phone,
+            }])
+            .select()
+            .single();
+          if (customerError) throw customerError;
+          customerId = customerData.id;
+        }
       }
 
       const leadPayload = {

@@ -197,14 +197,24 @@ const Leads = () => {
 
           // 1. Check or Insert Customer
           let customerId;
-          const { data: existingCustomer } = await supabase
-            .from('customers')
-            .select('id')
-            .eq('email', email)
-            .maybeSingle();
+          let existingCustomer = null;
+
+          if (email && !email.startsWith('unknown')) {
+            const { data } = await supabase.from('customers').select('id').eq('email', email).maybeSingle();
+            if (data) existingCustomer = data;
+          }
+          if (!existingCustomer && phone) {
+            const { data } = await supabase.from('customers').select('id').eq('phone', phone).maybeSingle();
+            if (data) existingCustomer = data;
+          }
 
           if (existingCustomer) {
             customerId = existingCustomer.id;
+            // Optionally update existing customer details here
+            await supabase.from('customers').update({
+              first_name: firstName || undefined,
+              last_name: lastName || undefined,
+            }).eq('id', customerId);
           } else {
             const { data: newCustomer, error: customerError } = await supabase
               .from('customers')
