@@ -205,7 +205,7 @@ const BookingWizard = () => {
       if (isChangeOrder) {
         await logActivity(leadData.id, logUserId, 'Change Order Signed', 'Signature Captured', 'Customer electronically signed the change order');
       } else {
-        await logActivity(leadData.id, logUserId, 'Order Signed', 'Signature Captured', 'Customer electronically signed the order form');
+        await logActivity(leadData.id, logUserId, 'Order Signed', 'Signature Captured', 'Customer electronically signed the order form (Lead -> Order)');
       }
       
       setLeadData(prev => ({

@@ -155,7 +155,7 @@ const LeadDetails = () => {
             user_id: user.id,
             operation: 'Order Signed',
             details: 'Signature Captured',
-            description: 'Customer electronically signed the order form'
+            description: 'Customer electronically signed the order form (Lead -> Order)'
           }]);
           if (!logErr) {
             const { data: healedLogs } = await supabase
