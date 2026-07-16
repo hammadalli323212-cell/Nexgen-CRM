@@ -1498,11 +1498,13 @@ const LeadDetails = () => {
                         {new Date(log.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                       </td>
                       <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>
-                        {log.profiles 
-                          ? ((log.profiles.first_name || log.profiles.last_name) 
-                              ? `${log.profiles.first_name || ''} ${log.profiles.last_name || ''}`.trim() 
-                              : 'Agent')
-                          : 'System'}
+                        {log.operation.includes('Signed')
+                          ? 'Customer' 
+                          : (log.profiles 
+                            ? ((log.profiles.first_name || log.profiles.last_name) 
+                                ? `${log.profiles.first_name || ''} ${log.profiles.last_name || ''}`.trim() 
+                                : (log.profiles.full_name || log.profiles.email || 'Agent'))
+                            : 'System')}
                       </td>
                       <td style={{ padding: '12px 16px', color: 'var(--brand-blue)' }}>{log.operation}</td>
                       <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{log.details}</td>
