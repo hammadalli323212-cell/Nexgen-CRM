@@ -208,26 +208,29 @@ const LeadForm = ({ isOrder = false }) => {
           phone: customer.phone,
         }).eq('id', customerId);
       } else {
-        // Check for existing customer by email or phone
+        // Check for existing customer by email or phone, but ONLY if name matches
         let existingCustomer = null;
+        
+        const checkNameMatch = (data) => {
+          const dbFirst = (data.first_name || '').toLowerCase().trim();
+          const dbLast = (data.last_name || '').toLowerCase().trim();
+          const reqFirst = firstName.toLowerCase().trim();
+          const reqLast = lastName.toLowerCase().trim();
+          return dbFirst === reqFirst && dbLast === reqLast;
+        };
+
         if (customer.email) {
-          const { data } = await supabase.from('customers').select('id').eq('email', customer.email).maybeSingle();
-          if (data) existingCustomer = data;
+          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', customer.email).maybeSingle();
+          if (data && checkNameMatch(data)) existingCustomer = data;
         }
         if (!existingCustomer && customer.phone) {
-          const { data } = await supabase.from('customers').select('id').eq('phone', customer.phone).maybeSingle();
-          if (data) existingCustomer = data;
+          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('phone', customer.phone).maybeSingle();
+          if (data && checkNameMatch(data)) existingCustomer = data;
         }
 
         if (existingCustomer) {
           customerId = existingCustomer.id;
-          // Update existing customer with any new info
-          await supabase.from('customers').update({
-            first_name: firstName || undefined,
-            last_name: lastName || undefined,
-            email: customer.email || undefined,
-            phone: customer.phone || undefined,
-          }).eq('id', customerId);
+          // User requested: DO NOT DO SMART UPDATE.
         } else {
           // Insert new customer
           const { data: customerData, error: customerError } = await supabase

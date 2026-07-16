@@ -198,23 +198,27 @@ const Leads = () => {
           // 1. Check or Insert Customer
           let customerId;
           let existingCustomer = null;
+          
+          const checkNameMatch = (data) => {
+            const dbFirst = (data.first_name || '').toLowerCase().trim();
+            const dbLast = (data.last_name || '').toLowerCase().trim();
+            const reqFirst = firstName.toLowerCase().trim();
+            const reqLast = lastName.toLowerCase().trim();
+            return dbFirst === reqFirst && dbLast === reqLast;
+          };
 
           if (email && !email.startsWith('unknown')) {
-            const { data } = await supabase.from('customers').select('id').eq('email', email).maybeSingle();
-            if (data) existingCustomer = data;
+            const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', email).maybeSingle();
+            if (data && checkNameMatch(data)) existingCustomer = data;
           }
           if (!existingCustomer && phone) {
-            const { data } = await supabase.from('customers').select('id').eq('phone', phone).maybeSingle();
-            if (data) existingCustomer = data;
+            const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('phone', phone).maybeSingle();
+            if (data && checkNameMatch(data)) existingCustomer = data;
           }
 
           if (existingCustomer) {
             customerId = existingCustomer.id;
-            // Optionally update existing customer details here
-            await supabase.from('customers').update({
-              first_name: firstName || undefined,
-              last_name: lastName || undefined,
-            }).eq('id', customerId);
+            // User requested: DO NOT DO SMART UPDATE.
           } else {
             const { data: newCustomer, error: customerError } = await supabase
               .from('customers')
