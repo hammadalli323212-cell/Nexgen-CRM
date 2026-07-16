@@ -86,6 +86,7 @@ const LeadDetails = () => {
             carrier_payment_method,
             broker_fee_terms,
             broker_fee_paid_by,
+            broker_fee_collected,
             payment_method,
             price_expiration_date,
             electronic_signature,
