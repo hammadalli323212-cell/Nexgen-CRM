@@ -44,6 +44,63 @@ const LeadForm = ({ isOrder = false }) => {
   const [notes, setNotes] = useState('');
   
   const [isSaving, setIsSaving] = useState(false);
+  const [activeSuggestionField, setActiveSuggestionField] = useState(null);
+  const [customerSuggestions, setCustomerSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  
+  // Click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(`.${styles.autocompleteDropdown}`)) {
+        setShowSuggestions(false);
+        setActiveSuggestionField(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Fetch suggestions
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!activeSuggestionField || !customer[activeSuggestionField] || customer[activeSuggestionField].length < 3) {
+        setCustomerSuggestions([]);
+        setShowSuggestions(false);
+        return;
+      }
+      
+      const val = customer[activeSuggestionField];
+      const { data, error } = await supabase
+        .from('customers')
+        .select('id, first_name, last_name, email, phone')
+        .ilike(activeSuggestionField, `%${val}%`)
+        .limit(5);
+
+      if (!error && data && data.length > 0) {
+        setCustomerSuggestions(data);
+        setShowSuggestions(true);
+      } else {
+        setCustomerSuggestions([]);
+        setShowSuggestions(false);
+      }
+    };
+
+    const timer = setTimeout(fetchSuggestions, 400);
+    return () => clearTimeout(timer);
+  }, [customer.phone, customer.email, activeSuggestionField]);
+
+  const handleSuggestionClick = (c) => {
+    setCustomer(prev => ({
+      ...prev,
+      first_name: c.first_name || '',
+      last_name: c.last_name || '',
+      email: c.email || '',
+      phone: c.phone || '',
+      id: c.id
+    }));
+    setShowSuggestions(false);
+    setActiveSuggestionField(null);
+  };
   const [isLoading, setIsLoading] = useState(isEditMode);
   const [fetchingZip, setFetchingZip] = useState({ pickup: false, dropoff: false });
 
@@ -379,15 +436,63 @@ const LeadForm = ({ isOrder = false }) => {
               <label>Last Name</label>
               <input type="text" className={styles.input} value={customer.last_name} onChange={e => setCustomer({...customer, last_name: e.target.value})} />
             </div>
-            <div className={styles.formGroup}>
+            <div className={styles.formGroup} style={{ position: 'relative' }}>
               <label>Phone Number</label>
-              <input type="tel" className={styles.input} value={customer.phone} onChange={e => setCustomer({...customer, phone: e.target.value})} />
+              <input 
+                type="tel" 
+                className={styles.input} 
+                value={customer.phone} 
+                onChange={e => {
+                  setActiveSuggestionField('phone');
+                  setCustomer({...customer, phone: e.target.value});
+                }} 
+                onFocus={() => {
+                  if (customer.phone?.length >= 3) {
+                    setActiveSuggestionField('phone');
+                    setShowSuggestions(true);
+                  }
+                }}
+              />
+              {showSuggestions && activeSuggestionField === 'phone' && (
+                <div className={styles.autocompleteDropdown}>
+                  {customerSuggestions.map(s => (
+                    <div key={s.id} className={styles.autocompleteItem} onClick={() => handleSuggestionClick(s)}>
+                      <span className={styles.autocompleteName}>{s.first_name} {s.last_name}</span>
+                      <span className={styles.autocompleteDetails}>{s.phone} | {s.email}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.formRow}>
-            <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
+            <div className={styles.formGroup} style={{ gridColumn: '1 / -1', position: 'relative' }}>
               <label>Email Address</label>
-              <input type="email" className={styles.input} value={customer.email} onChange={e => setCustomer({...customer, email: e.target.value})} />
+              <input 
+                type="email" 
+                className={styles.input} 
+                value={customer.email} 
+                onChange={e => {
+                  setActiveSuggestionField('email');
+                  setCustomer({...customer, email: e.target.value});
+                }} 
+                onFocus={() => {
+                  if (customer.email?.length >= 3) {
+                    setActiveSuggestionField('email');
+                    setShowSuggestions(true);
+                  }
+                }}
+              />
+              {showSuggestions && activeSuggestionField === 'email' && (
+                <div className={styles.autocompleteDropdown}>
+                  {customerSuggestions.map(s => (
+                    <div key={s.id} className={styles.autocompleteItem} onClick={() => handleSuggestionClick(s)}>
+                      <span className={styles.autocompleteName}>{s.first_name} {s.last_name}</span>
+                      <span className={styles.autocompleteDetails}>{s.phone} | {s.email}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className={styles.formRow}>
