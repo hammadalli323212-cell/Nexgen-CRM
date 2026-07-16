@@ -1483,40 +1483,38 @@ const LeadDetails = () => {
             <div className={styles.panelBody}>
               {editingPanel === 'carrier' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Carrier Company Name</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_company_name} onChange={e => setDraftData({...draftData, carrier_company_name: e.target.value})} placeholder="Company Name" />
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Carrier Company Name</label>
+                    <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_company_name} onChange={e => setDraftData({...draftData, carrier_company_name: e.target.value})} placeholder="Company Name" />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Company Number</label>
+                      <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_company_number} onChange={e => setDraftData({...draftData, carrier_company_number: e.target.value})} placeholder="Company Number" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Email</label>
+                      <input type="email" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_email} onChange={e => setDraftData({...draftData, carrier_email: e.target.value})} placeholder="Email" />
                     </div>
                   </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Company Number</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_company_number} onChange={e => setDraftData({...draftData, carrier_company_number: e.target.value})} placeholder="Company Number" />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dispatch Number</label>
+                      <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_dispatch_number} onChange={e => setDraftData({...draftData, carrier_dispatch_number: e.target.value})} placeholder="Dispatch Number" />
                     </div>
-                    <div className={styles.formGroup}>
-                      <label>Email</label>
-                      <input type="email" className={styles.input} value={draftData.carrier_email} onChange={e => setDraftData({...draftData, carrier_email: e.target.value})} placeholder="Email" />
-                    </div>
-                  </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Dispatch Number</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_dispatch_number} onChange={e => setDraftData({...draftData, carrier_dispatch_number: e.target.value})} placeholder="Dispatch Number" />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Driver Number</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_driver_number} onChange={e => setDraftData({...draftData, carrier_driver_number: e.target.value})} placeholder="Driver Number" />
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Driver Number</label>
+                      <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_driver_number} onChange={e => setDraftData({...draftData, carrier_driver_number: e.target.value})} placeholder="Driver Number" />
                     </div>
                   </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>MC Number</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_mc_number} onChange={e => setDraftData({...draftData, carrier_mc_number: e.target.value})} placeholder="MC Number" />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>MC Number</label>
+                      <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_mc_number} onChange={e => setDraftData({...draftData, carrier_mc_number: e.target.value})} placeholder="MC Number" />
                     </div>
-                    <div className={styles.formGroup}>
-                      <label>USDOT Number</label>
-                      <input type="text" className={styles.input} value={draftData.carrier_usdot_number} onChange={e => setDraftData({...draftData, carrier_usdot_number: e.target.value})} placeholder="USDOT Number" />
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>USDOT Number</label>
+                      <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_usdot_number} onChange={e => setDraftData({...draftData, carrier_usdot_number: e.target.value})} placeholder="USDOT Number" />
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '8px' }}>
