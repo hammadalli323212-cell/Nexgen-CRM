@@ -89,6 +89,7 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: auto 1fr;
   flex: 1;
+  min-height: 0;
 }
 
 .dayName {
@@ -111,6 +112,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: minmax(100px, 1fr);
+  overflow-y: auto;
 }
 
 .dayCell {
