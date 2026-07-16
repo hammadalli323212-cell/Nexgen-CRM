@@ -265,6 +265,9 @@ const LeadForm = ({ isOrder = false }) => {
       } else {
         // Insert Lead
         leadPayload.status = isOrder ? 'Booked' : (leadPayload.estimated_price > 0 ? 'Quoted' : 'New');
+        if (isOrder) {
+          leadPayload.order_created_at = new Date().toISOString();
+        }
         leadPayload.assigned_to = user?.id;
         leadPayload.created_by = user?.id;
         const { data: leadData, error: leadError } = await supabase

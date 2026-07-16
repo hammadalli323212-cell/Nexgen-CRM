@@ -25,6 +25,7 @@ const Orders = () => {
           lead_number, 
           order_id,
           created_at, 
+          order_created_at,
           origin_city, 
           origin_state, 
           destination_city, 
@@ -39,7 +40,7 @@ const Orders = () => {
           )
           .in("status", ["Booked", "Dispatched", "In Transit", "Delivered"])
           .eq("is_archived", false)
-          .order("created_at", { ascending: false });
+          .order("order_created_at", { ascending: false, nullsFirst: false });
 
         if (!isAdmin && user) {
           query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
@@ -50,11 +51,15 @@ const Orders = () => {
         if (error) throw error;
 
         if (data && data.length > 0) {
-          const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          const sortedData = data.sort((a, b) => {
+            const dateA = new Date(a.order_created_at || a.created_at);
+            const dateB = new Date(b.order_created_at || b.created_at);
+            return dateB - dateA;
+          });
           const formattedOrders = sortedData.map((order) => ({
             id: `NG-${order.order_id || order.lead_number}`,
             leadId: order.lead_number,
-            created: new Date(order.created_at).toLocaleDateString(),
+            created: new Date(order.order_created_at || order.created_at).toLocaleDateString(),
             customer: order.customers
               ? `${order.customers.first_name || ''} ${order.customers.last_name && order.customers.last_name !== 'Unknown' ? order.customers.last_name : ''}`.trim()
               : "Unknown",

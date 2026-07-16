@@ -366,10 +366,15 @@ const LeadDetails = () => {
     const newStatus = e.target.value;
     setIsUpdatingStatus(true);
     try {
-      const { error } = await supabase.from('leads').update({ status: newStatus }).eq('lead_number', id);
+      const payload = { status: newStatus };
+      if (['Booked', 'Dispatched', 'In Transit', 'Delivered'].includes(newStatus) && !lead.order_created_at) {
+        payload.order_created_at = new Date().toISOString();
+      }
+      
+      const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
       if (error) throw error;
       
-      setLead({ ...lead, status: newStatus });
+      setLead({ ...lead, ...payload });
 
       await logActivity(lead.id, user.id, 'Status Changed', 'Status Update', `Status: ${lead.status} -> ${newStatus}`);
       const { data } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
