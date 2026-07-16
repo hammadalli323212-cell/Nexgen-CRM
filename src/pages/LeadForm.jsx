@@ -100,9 +100,9 @@ const LeadForm = ({ isOrder = false }) => {
   const handleSuggestionClick = (c) => {
     setCustomer(prev => ({
       ...prev,
-      first_name: c.first_name || '',
-      last_name: c.last_name || '',
-      email: c.email || '',
+      first_name: c.first_name === 'Unknown' ? '' : (c.first_name || ''),
+      last_name: c.last_name === 'Unknown' ? '' : (c.last_name || ''),
+      email: c.email && c.email.startsWith('unknown') ? '' : (c.email || ''),
       phone: c.phone || '',
       id: c.id
     }));
@@ -473,8 +473,13 @@ const LeadForm = ({ isOrder = false }) => {
                 <div className={styles.autocompleteDropdown}>
                   {customerSuggestions.map(s => (
                     <div key={s.id} className={styles.autocompleteItem} onClick={() => handleSuggestionClick(s)}>
-                      <span className={styles.autocompleteName}>{s.first_name} {s.last_name}</span>
-                      <span className={styles.autocompleteDetails}>{s.phone} | {s.email}</span>
+                      <span className={styles.autocompleteName}>
+                        {s.first_name === 'Unknown' ? '' : s.first_name} {s.last_name === 'Unknown' ? '' : s.last_name}
+                      </span>
+                      <span className={styles.autocompleteDetails}>
+                        {s.phone} {s.phone && s.email && !s.email.startsWith('unknown') ? ' | ' : ''}
+                        {s.email?.startsWith('unknown') ? '' : s.email}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -503,8 +508,13 @@ const LeadForm = ({ isOrder = false }) => {
                 <div className={styles.autocompleteDropdown}>
                   {customerSuggestions.map(s => (
                     <div key={s.id} className={styles.autocompleteItem} onClick={() => handleSuggestionClick(s)}>
-                      <span className={styles.autocompleteName}>{s.first_name} {s.last_name}</span>
-                      <span className={styles.autocompleteDetails}>{s.phone} | {s.email}</span>
+                      <span className={styles.autocompleteName}>
+                        {s.first_name === 'Unknown' ? '' : s.first_name} {s.last_name === 'Unknown' ? '' : s.last_name}
+                      </span>
+                      <span className={styles.autocompleteDetails}>
+                        {s.phone} {s.phone && s.email && !s.email.startsWith('unknown') ? ' | ' : ''}
+                        {s.email?.startsWith('unknown') ? '' : s.email}
+                      </span>
                     </div>
                   ))}
                 </div>
