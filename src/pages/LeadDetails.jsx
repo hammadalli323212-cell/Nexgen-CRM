@@ -735,7 +735,12 @@ const LeadDetails = () => {
             </select>
           </h1>
           <div className={styles.subTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Created on {new Date(lead.created_at).toLocaleString()}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span>{lead.order_created_at ? 'Lead created on' : 'Created on'} {new Date(lead.created_at).toLocaleString()}</span>
+              {lead.order_created_at && (
+                <span>Order created on {new Date(lead.order_created_at).toLocaleString()}</span>
+              )}
+            </div>
             <span style={{ 
               backgroundColor: 'rgba(59, 130, 246, 0.15)', 
               color: 'var(--brand-blue)', 
