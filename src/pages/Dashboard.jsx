@@ -42,7 +42,7 @@ const Dashboard = () => {
         };
         
         // Fetch all relevant records in the timeframe
-        const { data: records } = await buildQuery('leads', 'id, status, deposit_amount, broker_fee_collected');
+        const { data: records } = await buildQuery('leads', 'id, status, estimated_price, carrier_pay, broker_fee_collected');
         
         let totalLeads = 0;
         let totalOrders = 0;
@@ -57,9 +57,9 @@ const Dashboard = () => {
                 totalOrders++;
                 if (r.status === 'Dispatched') {
                    totalDispatched++;
-                   if (r.broker_fee_collected === true) {
-                      brokerFee += (r.deposit_amount || 0);
-                   }
+                }
+                if (r.broker_fee_collected === true) {
+                   brokerFee += ((r.estimated_price || 0) - (r.carrier_pay || 0));
                 }
              } else {
                 totalLeads++;
