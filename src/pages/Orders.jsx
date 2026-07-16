@@ -59,7 +59,8 @@ const Orders = () => {
           const formattedOrders = sortedData.map((order) => ({
             id: `NG-${order.order_id || order.lead_number}`,
             leadId: order.lead_number,
-            created: new Date(order.order_created_at || order.created_at).toLocaleDateString(),
+            converted: order.order_created_at ? new Date(order.order_created_at).toLocaleDateString() : 'N/A',
+            leadDate: new Date(order.created_at).toLocaleDateString(),
             customer: order.customers
               ? `${order.customers.first_name || ''} ${order.customers.last_name && order.customers.last_name !== 'Unknown' ? order.customers.last_name : ''}`.trim()
               : "Unknown",
@@ -113,8 +114,12 @@ const Orders = () => {
           </div>
         ),
       }),
-      columnHelper.accessor("created", {
-        header: "Created",
+      columnHelper.accessor("converted", {
+        header: "Converted",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("leadDate", {
+        header: "Lead Date",
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("customer", {
