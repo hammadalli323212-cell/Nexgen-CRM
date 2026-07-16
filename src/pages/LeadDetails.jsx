@@ -369,6 +369,7 @@ const LeadDetails = () => {
       const payload = { status: newStatus };
       if (['Booked', 'Dispatched', 'In Transit', 'Delivered'].includes(newStatus) && !lead.order_created_at) {
         payload.order_created_at = new Date().toISOString();
+        payload.is_read = false;
       }
       
       const { error } = await supabase.from('leads').update(payload).eq('lead_number', id);
