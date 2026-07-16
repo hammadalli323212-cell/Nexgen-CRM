@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import DataTable from '../components/common/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/AuthContext';
 import styles from './Leads.module.css';
+import { toast } from 'react-hot-toast';
 
 const columnHelper = createColumnHelper();
 
@@ -11,6 +13,7 @@ const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { isSuperAdmin } = useAuth();
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -61,17 +64,51 @@ const Customers = () => {
     fetchCustomers();
   }, []);
 
-  const columns = useMemo(
-    () => [
+  const handleDeleteCustomer = async (e, customerId, customerName) => {
+    e.stopPropagation(); // Prevent row click navigation
+    if (!window.confirm(`Are you sure you want to permanently delete customer ${customerName}? This will also delete their associated leads and cannot be undone.`)) return;
+    
+    try {
+      const { error } = await supabase.from('customers').delete().eq('id', customerId);
+      if (error) throw error;
+      toast.success('Customer deleted successfully!');
+      setCustomers(prev => prev.filter(c => c.id !== customerId));
+    } catch (err) {
+      console.error('Failed to delete customer:', err);
+      toast.error('Failed to delete customer.');
+    }
+  };
+
+  const columns = useMemo(() => {
+    const cols = [
       columnHelper.accessor('name', { header: 'Name' }),
       columnHelper.accessor('phone', { header: 'Phone' }),
       columnHelper.accessor('email', { header: 'Email' }),
       columnHelper.accessor('orders', { header: 'Total Leads' }),
       columnHelper.accessor('ltv', { header: 'Lifetime Value' }),
       columnHelper.accessor('lastActive', { header: 'Last Active' }),
-    ],
-    []
-  );
+    ];
+
+    if (isSuperAdmin) {
+      cols.push(
+        columnHelper.display({
+          id: 'actions',
+          header: 'Actions',
+          cell: (info) => (
+            <button 
+              onClick={(e) => handleDeleteCustomer(e, info.row.original.id, info.row.original.name)}
+              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontWeight: 'bold' }}
+              title="Delete Customer"
+            >
+              Delete
+            </button>
+          )
+        })
+      );
+    }
+
+    return cols;
+  }, [isSuperAdmin]);
 
   return (
     <div>
