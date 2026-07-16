@@ -29,7 +29,7 @@ const Customers = () => {
             email,
             phone,
             created_at,
-            leads ( id, estimated_price, created_at, status )
+            leads ( id, estimated_price, deposit_amount, created_at, status )
           `);
         } else {
           query = query.select(`
@@ -39,7 +39,7 @@ const Customers = () => {
             email,
             phone,
             created_at,
-            leads!inner ( id, estimated_price, created_at, status )
+            leads!inner ( id, estimated_price, deposit_amount, created_at, status )
           `).or(`created_by.eq.${user?.id},assigned_to.eq.${user?.id}`, { foreignTable: 'leads' });
         }
 
@@ -49,7 +49,7 @@ const Customers = () => {
 
         const formatted = data.map(c => {
           const totalOrders = c.leads ? c.leads.length : 0;
-          const ltv = c.leads ? c.leads.reduce((sum, lead) => sum + (lead.estimated_price || 0), 0) : 0;
+          const ltv = c.leads ? c.leads.reduce((sum, lead) => sum + (lead.deposit_amount || 0), 0) : 0;
           
           let lastActive = c.created_at;
           if (c.leads && c.leads.length > 0) {
