@@ -126,7 +126,7 @@ const LeadDetails = () => {
         };
         if (data && data.id) {
           fetchTasks(data.id);
-          fetchLogs(data.id);
+          fetchLogs(data.id, data);
           fetchDocuments(data.id);
         }
 
@@ -137,7 +137,7 @@ const LeadDetails = () => {
       }
     };
     
-    const fetchLogs = async (leadId) => {
+    const fetchLogs = async (leadId, leadObj) => {
       const { data: logData } = await supabase
         .from('change_logs')
         .select(`
@@ -147,7 +147,7 @@ const LeadDetails = () => {
         .eq('lead_id', leadId)
         .order('created_at', { ascending: false });
       let finalLogs = logData || [];
-      if (finalLogs.length > 0 && (data.status === 'Booked' || data.order_created_at)) {
+      if (finalLogs.length > 0 && leadObj && (leadObj.status === 'Booked' || leadObj.order_created_at)) {
         const hasConversionLog = finalLogs.some(log => log.operation === 'Order Signed' || log.operation === 'Status Changed' || log.operation === 'Change Order Signed' || (log.operation === 'Entity Updated' && (log.description || '').includes('Booked')));
         if (!hasConversionLog && user?.id) {
           const { error: logErr } = await supabase.from('change_logs').insert([{
