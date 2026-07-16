@@ -136,46 +136,62 @@ const Calendar = ({ tasks = [] }) => {
         </div>
         
         {/* Time Grid Body */}
-        <div className={styles.timeGridContainer}>
-          <div className={styles.timeColumn}>
-            <div className={styles.timeLabel}>all-day</div>
-            {HOURS.map(hour => (
-              <div key={hour} className={styles.timeLabel}>{hour}</div>
-            ))}
-          </div>
+        {/* Time Grid Body */}
+        <div className={styles.timeGridContainer} style={{ flexDirection: 'column' }}>
           
-          <div className={styles.daysContainer}>
-            {dates.map((date, idx) => {
-               const dayTasks = tasks.filter(task => {
-                if (!task.date) return false;
-                const [y, m, d] = task.date.split('-');
-                const taskDate = new Date(y, m - 1, d);
-                return taskDate.getDate() === date.getDate() &&
-                       taskDate.getMonth() === date.getMonth() &&
-                       taskDate.getFullYear() === date.getFullYear();
-              });
+          {/* All Day Row */}
+          <div style={{ display: 'flex', width: '100%', minHeight: '40px', borderBottom: '1px solid var(--border-color)' }}>
+            <div className={styles.timeColumn} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '8px', borderRight: '1px solid var(--border-color)', borderBottom: 'none' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>all-day</span>
+            </div>
+            
+            <div className={styles.daysContainer}>
+              {dates.map((date, idx) => {
+                const dayTasks = tasks.filter(task => {
+                  if (!task.date) return false;
+                  const [y, m, d] = task.date.split('-');
+                  const taskDate = new Date(y, m - 1, d);
+                  return taskDate.getDate() === date.getDate() &&
+                         taskDate.getMonth() === date.getMonth() &&
+                         taskDate.getFullYear() === date.getFullYear();
+                });
 
-              return (
-                <div key={idx} className={`${styles.dayColumn} ${isToday(date) ? styles.today : ''}`}>
-                  {/* All Day Slot */}
-                  <div className={`${styles.timeSlot} ${styles.solid}`}>
+                return (
+                  <div key={idx} className={`${styles.dayColumn} ${isToday(date) ? styles.today : ''}`} style={{ borderBottom: 'none', padding: '4px' }}>
                     {dayTasks.map(task => (
                       <div 
                         key={task.id} 
                         className={`${styles.taskItem} ${task.urgent ? styles.urgent : ''} ${task.completed ? styles.completed : ''}`}
+                        style={{ marginBottom: '4px' }}
                       >
                         {task.title}
                       </div>
                     ))}
                   </div>
-                  {/* Hourly Slots */}
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Hourly Slots Row */}
+          <div style={{ display: 'flex', width: '100%', flex: 1 }}>
+            <div className={styles.timeColumn}>
+              {HOURS.map(hour => (
+                <div key={hour} className={styles.timeLabel}>{hour}</div>
+              ))}
+            </div>
+            
+            <div className={styles.daysContainer}>
+              {dates.map((date, idx) => (
+                <div key={idx} className={`${styles.dayColumn} ${isToday(date) ? styles.today : ''}`}>
                   {HOURS.map(hour => (
                     <div key={hour} className={styles.timeSlot}></div>
                   ))}
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
+
         </div>
       </div>
     );
