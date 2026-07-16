@@ -176,6 +176,10 @@ const BookingWizard = () => {
         is_read: false
       };
 
+      if (!leadData.order_created_at && !isChangeOrder) {
+        updatePayload.order_created_at = new Date().toISOString();
+      }
+
       if (isChangeOrder) {
         const existingSignatures = Array.isArray(leadData.change_order_signatures) ? leadData.change_order_signatures : [];
         updatePayload.change_order_signatures = [
