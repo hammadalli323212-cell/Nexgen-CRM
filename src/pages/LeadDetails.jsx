@@ -1237,7 +1237,8 @@ const LeadDetails = () => {
                             color: lead.broker_fee_collected ? 'var(--success)' : 'var(--text-primary)', 
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            outline: 'none'
+                            outline: 'none',
+                            width: '80px'
                           }}
                         >
                           <option value="No" style={{color: 'var(--text-primary)'}}>No</option>
