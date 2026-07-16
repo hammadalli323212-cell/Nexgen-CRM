@@ -21,7 +21,7 @@ const MyTasks = () => {
     try {
       let query = supabase
         .from('tasks')
-        .select('*, leads(lead_number, customers(first_name, last_name))')
+        .select('*, leads(lead_number, assigned_to, customers(first_name, last_name))')
         .order('due_date', { ascending: true });
         
       if (!isAdmin && !isSuperAdmin) {
@@ -54,8 +54,14 @@ const MyTasks = () => {
         }
         
         let titlePrefix = '';
-        if ((isAdmin || isSuperAdmin) && t.user_id) {
-          const agentName = profilesMap[t.user_id] || 'Unknown Agent';
+        if ((isAdmin || isSuperAdmin)) {
+          let agentName = t.user_id ? profilesMap[t.user_id] : null;
+          if (!agentName && t.leads && t.leads.assigned_to) {
+            agentName = profilesMap[t.leads.assigned_to];
+          }
+          if (!agentName) {
+            agentName = 'Unknown Agent';
+          }
           titlePrefix = `[${agentName}] `;
         }
         

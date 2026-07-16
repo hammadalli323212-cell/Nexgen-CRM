@@ -91,8 +91,8 @@ const LeadDetails = () => {
             signed_date,
             change_order_signatures,
             assigned_to,
-            assignee:profiles!assigned_to(first_name, last_name),
-            creator:profiles!created_by(first_name, last_name),
+            assignee:profiles!assigned_to(first_name, last_name, full_name, email),
+            creator:profiles!created_by(first_name, last_name, full_name, email),
             customers (id, first_name, last_name, email, phone),
             lead_vehicles (id, vehicle_year, vehicle_make, vehicle_model, vehicle_type, vehicle_vin, condition, trailer_type)
           `)
@@ -141,7 +141,7 @@ const LeadDetails = () => {
         .from('change_logs')
         .select(`
           id, created_at, operation, details, description,
-          profiles:user_id (first_name, last_name)
+          profiles:user_id (first_name, last_name, full_name, email)
         `)
         .eq('lead_id', leadId)
         .order('created_at', { ascending: false });
@@ -246,7 +246,7 @@ const LeadDetails = () => {
       toast.success(`${emailType} emailed to ${activeEmailPayload.customerEmail} successfully!`);
       
       await logActivity(lead.id, user.id, 'Email Sent', emailType, `${emailType} emailed to ${activeEmailPayload.customerEmail}${cc ? ` (CC: ${cc})` : ''}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name, full_name, email)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
     } catch (err) {
       console.error("Failed to send email:", err);
@@ -402,7 +402,7 @@ const LeadDetails = () => {
       setTaskForm({ title: 'Call', due_date: '', description: '' });
 
       await logActivity(lead.id, user.id, 'Task Added', taskForm.title, `Due Date: ${taskForm.due_date} | ${taskForm.description}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name, full_name, email)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
 
     } catch (err) {
@@ -421,7 +421,7 @@ const LeadDetails = () => {
 
       const deletedTask = tasks.find(t => t.id === taskId);
       await logActivity(lead.id, user.id, 'Task Deleted', deletedTask?.title || 'Unknown', `Deleted task due ${deletedTask?.due_date}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name, full_name, email)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
 
     } catch (err) {
@@ -456,7 +456,7 @@ const LeadDetails = () => {
       setDocuments([docRecord, ...documents]);
 
       await logActivity(lead.id, user.id, 'Document Uploaded', file.name, `Uploaded file: ${file.name}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name, full_name, email)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
 
     } catch (error) {
@@ -483,7 +483,7 @@ const LeadDetails = () => {
       setDocuments(documents.filter(d => d.id !== docId));
 
       await logActivity(lead.id, user.id, 'Document Deleted', fileName, `Deleted file: ${fileName}`);
-      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name)').eq('lead_id', lead.id).order('created_at', { ascending: false });
+      const { data: logsData } = await supabase.from('change_logs').select('*, profiles:user_id(first_name, last_name, full_name, email)').eq('lead_id', lead.id).order('created_at', { ascending: false });
       if (logsData) setLogs(logsData);
 
     } catch (err) {

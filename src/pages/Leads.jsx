@@ -38,7 +38,7 @@ const Leads = () => {
           transport_type, 
           status,
           is_read,
-          assignee:profiles!assigned_to(first_name, last_name),
+          assignee:profiles!assigned_to(first_name, last_name, full_name),
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `).neq('status', 'Booked').eq('is_archived', false).order('created_at', { ascending: false });
@@ -70,7 +70,7 @@ const Leads = () => {
             carrierPay: `$${lead.carrier_pay || 0}`,
             brokerFee: `$${(lead.estimated_price || 0) - (lead.carrier_pay || 0)}`,
             shipDate: lead.ship_date || '',
-            assignedTo: lead.assignee ? `${lead.assignee.first_name} ${lead.assignee.last_name}` : 'Unassigned',
+            assignedTo: lead.assignee ? (lead.assignee.full_name || `${lead.assignee.first_name || ''} ${lead.assignee.last_name || ''}`.trim() || 'Unassigned') : 'Unassigned',
             source: lead.source || 'Manual',
             status: lead.status,
             isRead: lead.is_read
