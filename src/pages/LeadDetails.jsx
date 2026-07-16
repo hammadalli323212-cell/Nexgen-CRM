@@ -60,6 +60,7 @@ const LeadDetails = () => {
             lead_number, 
             is_archived,
             created_at, 
+            order_created_at,
             source,
             origin_address,
             origin_city, 

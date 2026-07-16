@@ -201,10 +201,11 @@ const BookingWizard = () => {
       if (error) throw error;
       
       // Log the signature activity
+      const logUserId = leadData.assigned_to || leadData.created_by;
       if (isChangeOrder) {
-        await logActivity(leadData.id, null, 'Change Order Signed', 'Signature Captured', 'Customer electronically signed the change order');
+        await logActivity(leadData.id, logUserId, 'Change Order Signed', 'Signature Captured', 'Customer electronically signed the change order');
       } else {
-        await logActivity(leadData.id, null, 'Order Signed', 'Signature Captured', 'Customer electronically signed the order form');
+        await logActivity(leadData.id, logUserId, 'Order Signed', 'Signature Captured', 'Customer electronically signed the order form');
       }
       
       setLeadData(prev => ({
