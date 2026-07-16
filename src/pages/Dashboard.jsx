@@ -6,12 +6,15 @@ import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
   const { user, isAdmin } = useAuth();
+  const todayStr = new Date().toISOString().split('T')[0];
   const [stats, setStats] = useState({
-    pickups: 0,
-    deliveries: 0,
-    pendingQuotes: 0,
-    revenue: 0
+    totalLeads: 0,
+    totalOrders: 0,
+    totalDispatched: 0,
+    brokerFee: 0
   });
+  const [fromDate, setFromDate] = useState(todayStr);
+  const [toDate, setToDate] = useState(todayStr);
   const [recentActivities, setRecentActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,46 +23,53 @@ const Dashboard = () => {
       try {
         if (!user) return;
         
-        const todayStr = new Date().toISOString().split('T')[0];
-        
-        // Base query builder helper
         const buildQuery = (table, selectStr, countOpts) => {
           let query = supabase.from(table).select(selectStr, countOpts);
           if (!isAdmin) {
-             // If not admin, only show leads assigned to them or created by them
              query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
           }
+          
+          if (fromDate) {
+             const start = new Date(`${fromDate}T00:00:00`);
+             query = query.gte('created_at', start.toISOString());
+          }
+          if (toDate) {
+             const end = new Date(`${toDate}T23:59:59.999`);
+             query = query.lte('created_at', end.toISOString());
+          }
+          
           return query;
         };
         
-        // 1. Today's Pickups
-        const { count: pickupsCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('ship_date', todayStr).eq('is_archived', false);
+        // Fetch all relevant records in the timeframe
+        const { data: records } = await buildQuery('leads', 'id, status, deposit_amount');
         
-        // 2. Today's Deliveries
-        const { count: deliveriesCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('delivery_date', todayStr).eq('is_archived', false);
+        let totalLeads = 0;
+        let totalOrders = 0;
+        let totalDispatched = 0;
+        let brokerFee = 0;
         
-        // 3. Pending Quotes (Status 'New')
-        const { count: pendingCount } = await buildQuery('leads', '*', { count: 'exact', head: true }).eq('status', 'New').eq('is_archived', false);
-        
-        // 4. Revenue Today (Broker fees of leads created today)
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-        const { data: revenueLeads } = await buildQuery('leads', 'estimated_price, carrier_pay').gte('created_at', todayStart.toISOString()).eq('is_archived', false);
-        
-        let revenue = 0;
-        if (revenueLeads) {
-          revenueLeads.forEach(lead => {
-            const price = lead.estimated_price || 0;
-            const pay = lead.carrier_pay || 0;
-            revenue += (price - pay);
-          });
+        const orderStatuses = ['Booked', 'Dispatched', 'Picked Up', 'Delivered', 'Completed', 'Canceled'];
+
+        if (records) {
+           records.forEach(r => {
+             if (orderStatuses.includes(r.status)) {
+                totalOrders++;
+                if (r.status === 'Dispatched') {
+                   totalDispatched++;
+                   brokerFee += (r.deposit_amount || 0);
+                }
+             } else {
+                totalLeads++;
+             }
+           });
         }
 
         setStats({
-          pickups: pickupsCount || 0,
-          deliveries: deliveriesCount || 0,
-          pendingQuotes: pendingCount || 0,
-          revenue: revenue
+          totalLeads,
+          totalOrders,
+          totalDispatched,
+          brokerFee
         });
 
         // 5. Recent Activity
@@ -84,37 +94,59 @@ const Dashboard = () => {
     };
     
     fetchDashboardData();
-  }, [user, isAdmin]);
+  }, [user, isAdmin, fromDate, toDate]);
 
   return (
     <div className={styles.dashboard}>
-      <div className={styles.header}>
-        <h1>Dashboard</h1>
-        <p>Welcome back. Here is your operational overview for today.</p>
+      <div className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h1>Dashboard</h1>
+          <p>Welcome back. Here is your operational overview.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>From</label>
+            <input 
+              type="date" 
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>To</label>
+            <input 
+              type="date" 
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              style={{ padding: '8px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Today's Pickups</span>
-          <span className={styles.statValue}>{loading ? '-' : stats.pickups}</span>
+          <span className={styles.statTitle}>Total Leads</span>
+          <span className={styles.statValue}>{loading ? '-' : stats.totalLeads}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Today's Deliveries</span>
-          <span className={styles.statValue}>{loading ? '-' : stats.deliveries}</span>
+          <span className={styles.statTitle}>Total Orders</span>
+          <span className={styles.statValue}>{loading ? '-' : stats.totalOrders}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Pending Leads</span>
-          <span className={styles.statValue}>{loading ? '-' : stats.pendingQuotes}</span>
+          <span className={styles.statTitle}>Dispatched Orders</span>
+          <span className={styles.statValue}>{loading ? '-' : stats.totalDispatched}</span>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statTitle}>Revenue Today</span>
+          <span className={styles.statTitle}>Dispatched Broker Fee</span>
           <span className={styles.statValue} style={{ color: 'var(--success)' }}>
-            {loading ? '-' : `$${stats.revenue.toFixed(2)}`}
+            {loading ? '-' : `$${stats.brokerFee.toFixed(2)}`}
           </span>
         </div>
       </div>
 
-      <div className={styles.panelsGrid}>
+      <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr' }}>
         <div className={styles.panel}>
           <h2>Recent Activity</h2>
           {loading ? (
@@ -124,14 +156,6 @@ const Dashboard = () => {
           ) : (
             <div style={{ color: 'var(--text-muted)', marginTop: '20px' }}>No recent activity.</div>
           )}
-        </div>
-        <div className={styles.panel}>
-          <h2>Quick Links</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '20px' }}>
-             <a href="/leads/new" style={{ color: 'var(--brand-blue)', textDecoration: 'none' }}>+ Create New Lead</a>
-             <a href="/quotes/wizard-create" style={{ color: 'var(--brand-blue)', textDecoration: 'none' }}>+ Generate Quote</a>
-             <a href="/dispatch" style={{ color: 'var(--brand-blue)', textDecoration: 'none' }}>View Dispatch Board</a>
-          </div>
         </div>
       </div>
     </div>
