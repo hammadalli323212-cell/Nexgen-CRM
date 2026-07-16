@@ -31,7 +31,8 @@ const CustomerDetails = () => {
               lead_number, 
               order_id, 
               status, 
-              estimated_price, 
+              estimated_price,
+              deposit_amount, 
               created_at, 
               origin_city, 
               origin_state, 
@@ -105,7 +106,7 @@ const CustomerDetails = () => {
   }
 
   const totalOrders = customer.leads ? customer.leads.length : 0;
-  const ltv = customer.leads ? customer.leads.reduce((sum, lead) => sum + (lead.estimated_price || 0), 0) : 0;
+  const ltv = customer.leads ? customer.leads.reduce((sum, lead) => sum + (lead.deposit_amount || 0), 0) : 0;
   
   const leadsData = (customer.leads || []).map(lead => ({
     ...lead,
