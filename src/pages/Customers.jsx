@@ -131,7 +131,7 @@ const Customers = () => {
             <button 
               className={styles.btnSecondary} 
               onClick={handleBulkDelete}
-              style={{ borderColor: '#ef4444', color: '#ef4444' }}
+              style={{ backgroundColor: '#ef4444', color: 'white', borderColor: '#ef4444', padding: '8px 16px', borderRadius: '6px', fontWeight: '500', cursor: 'pointer' }}
             >
               Delete Selected ({selectedCustomers.size})
             </button>
