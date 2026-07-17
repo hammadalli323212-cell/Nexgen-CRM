@@ -134,11 +134,12 @@ const Reports = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: 'var(--bg-dark)', padding: '10px', border: '1px solid var(--border-color)', borderRadius: '4px' }}>
-          <p style={{ margin: 0, color: 'var(--text-primary)', fontWeight: 'bold' }}>{label || payload[0].name}</p>
+        <div className={styles.glassTooltip}>
+          <p style={{ margin: 0, marginBottom: '8px', color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.95rem' }}>{label || payload[0].name}</p>
           {payload.map((p, idx) => (
-            <p key={idx} style={{ margin: 0, color: p.color || 'var(--text-secondary)' }}>
-              {p.name}: {p.name === 'Revenue' ? `$${p.value}` : p.value}
+            <p key={idx} style={{ margin: 0, display: 'flex', justifyContent: 'space-between', gap: '20px', color: p.color || 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '500' }}>
+              <span>{p.name}:</span>
+              <span>{p.name === 'Revenue' ? `$${p.value.toLocaleString()}` : p.value}</span>
             </p>
           ))}
         </div>
@@ -160,36 +161,36 @@ const Reports = () => {
           <h1>Reports & Analytics</h1>
           <p>Visualizing data from {formatDisplayDate(dateRange.from)} to {formatDisplayDate(dateRange.to)}</p>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <div className={styles.dateFilter}>
-            <Calendar size={14} />
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginLeft: '4px' }}>From</span>
-            <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} />
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+          <div className={styles.dateFilter} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Calendar size={16} style={{ color: 'var(--brand-blue)' }} />
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>From</span>
+            <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} className={styles.datePickerInput} />
           </div>
-          <div className={styles.dateFilter}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>To</span>
-            <input type="date" name="to" value={dateRange.to} onChange={handleDateChange} />
+          <div className={styles.dateFilter} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>To</span>
+            <input type="date" name="to" value={dateRange.to} onChange={handleDateChange} className={styles.datePickerInput} />
           </div>
         </div>
       </div>
 
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--brand-blue)' }}>
           <span className={styles.statTitle}>Total Leads</span>
           <span className={styles.statValue}>{loading ? '-' : summaryStats.totalLeads}</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--warning)' }}>
           <span className={styles.statTitle}>Total Orders (Booked+)</span>
           <span className={styles.statValue}>{loading ? '-' : summaryStats.totalOrders}</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--info)' }}>
           <span className={styles.statTitle}>Conversion Rate</span>
-          <span className={styles.statValue} style={{ color: 'var(--brand-blue)' }}>{loading ? '-' : summaryStats.conversionRate}</span>
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)', WebkitBackgroundClip: 'text' }}>{loading ? '-' : summaryStats.conversionRate}</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--success)' }}>
           <span className={styles.statTitle}>Collected Broker Profit</span>
-          <span className={styles.statValue} style={{ color: 'var(--success)' }}>
-            {loading ? '-' : `$${summaryStats.totalRevenue.toFixed(2)}`}
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', WebkitBackgroundClip: 'text' }}>
+            {loading ? '-' : `$${summaryStats.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           </span>
         </div>
       </div>
@@ -202,13 +203,21 @@ const Reports = () => {
             <div style={{ height: '300px', width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={sourceData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">
+                  <defs>
                     {sourceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <linearGradient key={`grad-${index}`} id={`colorGrad-${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.4}/>
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <Pie data={sourceData} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
+                    {sourceData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={`url(#colorGrad-${index})`} />
                     ))}
                   </Pie>
                   <RechartsTooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}/>
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.85rem', paddingTop: '20px' }}/>
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -222,13 +231,21 @@ const Reports = () => {
             <div style={{ height: '300px', width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">
+                  <defs>
                     {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[(index+3) % COLORS.length]} />
+                      <linearGradient key={`gradStatus-${index}`} id={`colorGradStatus-${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={COLORS[(index+3) % COLORS.length]} stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor={COLORS[(index+3) % COLORS.length]} stopOpacity={0.4}/>
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
+                    {statusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={`url(#colorGradStatus-${index})`} />
                     ))}
                   </Pie>
                   <RechartsTooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}/>
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.85rem', paddingTop: '20px' }}/>
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -244,15 +261,29 @@ const Reports = () => {
             <div style={{ height: '400px', width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={userPerformance} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} />
-                  <YAxis yAxisId="left" stroke="var(--text-secondary)" tick={{fontSize: 12}} />
-                  <YAxis yAxisId="right" orientation="right" stroke="var(--success)" tick={{fontSize: 12}} />
-                  <RechartsTooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.9rem' }} />
-                  <Bar yAxisId="left" dataKey="leads" name="Total Leads" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                  <Bar yAxisId="left" dataKey="orders" name="Orders Booked" fill="#10b981" radius={[4, 4, 0, 0]} />
-                  <Bar yAxisId="right" dataKey="revenue" name="Revenue" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                  <defs>
+                    <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.2}/>
+                    </linearGradient>
+                    <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.2}/>
+                    </linearGradient>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.2}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dy={10} />
+                  <YAxis yAxisId="left" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dx={-10} />
+                  <YAxis yAxisId="right" orientation="right" stroke="var(--success)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dx={10} />
+                  <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+                  <Legend wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.9rem', paddingTop: '15px' }} iconType="circle" />
+                  <Bar yAxisId="left" dataKey="leads" name="Total Leads" fill="url(#colorLeads)" radius={[6, 6, 0, 0]} barSize={20} />
+                  <Bar yAxisId="left" dataKey="orders" name="Orders Booked" fill="url(#colorOrders)" radius={[6, 6, 0, 0]} barSize={20} />
+                  <Bar yAxisId="right" dataKey="revenue" name="Revenue" fill="url(#colorRev)" radius={[6, 6, 0, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -268,11 +299,17 @@ const Reports = () => {
             <div style={{ height: '300px', width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={carrierVolume} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} />
-                  <YAxis stroke="var(--text-secondary)" tick={{fontSize: 12}} allowDecimals={false} />
-                  <RechartsTooltip content={<CustomTooltip />} />
-                  <Bar dataKey="Dispatches" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                  <defs>
+                    <linearGradient id="colorCarrier" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.2}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dy={10} />
+                  <YAxis stroke="var(--text-secondary)" tick={{fontSize: 12}} allowDecimals={false} axisLine={false} tickLine={false} dx={-10} />
+                  <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+                  <Bar dataKey="Dispatches" fill="url(#colorCarrier)" radius={[6, 6, 0, 0]} barSize={40} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
