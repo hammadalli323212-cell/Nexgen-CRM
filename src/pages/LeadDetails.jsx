@@ -49,9 +49,11 @@ const LeadDetails = () => {
   const [activeEmailEndpoint, setActiveEmailEndpoint] = useState(null);
   const [debugError, setDebugError] = useState(null);
 
-  const STATUS_OPTIONS = [
-    'New', 'Quoted', 'Follow Up', 'Booked', 'Dispatched', 'In Transit', 'Delivered', 'Cancelled'
-  ];
+  const isOrderView = location.pathname.startsWith('/orders');
+
+  const STATUS_OPTIONS = isOrderView
+    ? ['Booked', 'Dispatched', 'In Transit', 'Delivered', 'Completed', 'Cancelled']
+    : ['New', 'Quoted', 'Follow Up', 'Cancelled'];
 
   useEffect(() => {
     const fetchLeadDetails = async () => {
@@ -786,7 +788,7 @@ const LeadDetails = () => {
     }
   };
 
-  const isOrderView = location.pathname.startsWith('/orders');
+
 
   return (
     <div className={styles.pageContainer}>
