@@ -132,26 +132,40 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
         ],
     });
 
+    const pricingBody = [
+        ['Total Tariff:', `$${tariff.toFixed(2)}`]
+    ];
+
+    const hideFirst = !leadData.broker_fee_terms || leadData.broker_fee_terms === 'N/A';
+    const hideFinal = !leadData.carrier_pay_terms || leadData.carrier_pay_terms === 'N/A';
+
+    if (!hideFirst) {
+        pricingBody.push(['First Payment:', `$${deposit.toFixed(2)}`]);
+        pricingBody.push([`Due: ${firstPaymentDue}`, `Method: ${firstPaymentMethod}`]);
+    }
+
+    if (!hideFinal) {
+        pricingBody.push([`Final Payment:`, `$${nextPayment.toFixed(2)}`]);
+        pricingBody.push([`Due: ${finalPaymentDue}`, `Method: ${finalPaymentMethod}`]);
+    }
+
     autoTable(doc, {
         ...autotableTheme,
         startY: doc.lastAutoTable.finalY + 10,
         head: [['Pricing Summary', '']],
-        body: [
-            ['Total Tariff:', `$${tariff.toFixed(2)}`],
-            ['First Payment:', `$${deposit.toFixed(2)}`],
-            [`Due: ${firstPaymentDue}`, `Method: ${firstPaymentMethod}`],
-            [`Final Payment:`, `$${nextPayment.toFixed(2)}`],
-            [`Due: ${finalPaymentDue}`, `Method: ${finalPaymentMethod}`]
-        ],
+        body: pricingBody,
         didParseCell: function (data) {
-            if (data.row.index === 3 && data.section === 'body') {
-                data.cell.styles.fontStyle = 'bold';
-                data.cell.styles.textColor = [220, 38, 38]; 
-            }
-            if ((data.row.index === 2 || data.row.index === 4) && data.section === 'body') {
-                data.cell.styles.fontStyle = 'italic';
-                data.cell.styles.textColor = [100, 116, 139]; 
-                data.cell.styles.fontSize = 8;
+            if (data.section === 'body') {
+                const cellText = data.row.cells[0]?.text?.[0] || '';
+                if (cellText.startsWith('Final Payment')) {
+                    data.cell.styles.fontStyle = 'bold';
+                    data.cell.styles.textColor = [220, 38, 38]; 
+                }
+                if (cellText.startsWith('Due:')) {
+                    data.cell.styles.fontStyle = 'italic';
+                    data.cell.styles.textColor = [100, 116, 139]; 
+                    data.cell.styles.fontSize = 8;
+                }
             }
         }
     });

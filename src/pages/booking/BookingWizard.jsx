@@ -508,23 +508,32 @@ const BookingWizard = () => {
                 <span>Total tariff</span>
                 <span>${tariff.toFixed(2)}</span>
               </div>
-              <div className={styles.priceRow}>
-                <span>First Payment</span>
-                <span>${deposit.toFixed(2)}</span>
-              </div>
-              <div className={styles.priceRow} style={{ color: '#555', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
-                <span style={{flex: 1}}>Due: {firstPaymentDue}</span>
-                <span style={{textAlign: 'right'}}>{firstPaymentMethod}</span>
-              </div>
               
-              <div className={styles.priceRow} style={{ marginTop: '10px' }}>
-                <span>Final Payment</span>
-                <span>${nextPayment.toFixed(2)}</span>
-              </div>
-              <div className={styles.priceRow} style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
-                <span style={{flex: 1}}>Due: {finalPaymentDue}</span>
-                <span style={{textAlign: 'right'}}>{finalPaymentMethod}</span>
-              </div>
+              {(!leadData.broker_fee_terms || leadData.broker_fee_terms === 'N/A') ? null : (
+                <>
+                  <div className={styles.priceRow}>
+                    <span>First Payment</span>
+                    <span>${deposit.toFixed(2)}</span>
+                  </div>
+                  <div className={styles.priceRow} style={{ color: '#555', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
+                    <span style={{flex: 1}}>Due: {firstPaymentDue}</span>
+                    <span style={{textAlign: 'right'}}>{firstPaymentMethod}</span>
+                  </div>
+                </>
+              )}
+              
+              {(!leadData.carrier_pay_terms || leadData.carrier_pay_terms === 'N/A') ? null : (
+                <>
+                  <div className={styles.priceRow} style={{ marginTop: '10px' }}>
+                    <span>Final Payment</span>
+                    <span>${nextPayment.toFixed(2)}</span>
+                  </div>
+                  <div className={styles.priceRow} style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
+                    <span style={{flex: 1}}>Due: {finalPaymentDue}</span>
+                    <span style={{textAlign: 'right'}}>{finalPaymentMethod}</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
