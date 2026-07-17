@@ -29,7 +29,7 @@ const Reports = () => {
         if (!user) return;
         setLoading(true);
         
-        let query = supabase.from('leads').select('*, assignee:profiles!assigned_to(first_name, last_name), carriers(company_name)')
+        let query = supabase.from('leads').select('*, assignee:profiles!assigned_to(first_name, last_name, full_name), carriers(company_name)')
           .eq('is_archived', false)
           .gte('created_at', `${dateRange.from}T00:00:00Z`)
           .lte('created_at', `${dateRange.to}T23:59:59Z`);
@@ -74,7 +74,7 @@ const Reports = () => {
           }
 
           // Agg Users
-          const userName = lead.assignee ? `${lead.assignee.first_name} ${lead.assignee.last_name}` : 'Unassigned';
+          const userName = lead.assignee ? (lead.assignee.full_name || `${lead.assignee.first_name || ''} ${lead.assignee.last_name || ''}`.trim() || 'Unknown Agent') : 'Unassigned';
           if (!usersMap[userName]) {
             usersMap[userName] = { name: userName, leads: 0, orders: 0, revenue: 0 };
           }
