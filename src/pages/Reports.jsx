@@ -293,63 +293,65 @@ const Reports = () => {
         </div>
       </div>
 
-      <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr', marginTop: '20px' }}>
-        {/* User Performance Table */}
-        <div className={styles.panel} style={{ padding: '0' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
-            <h2 style={{ margin: 0, border: 'none', padding: 0 }}>User Performance</h2>
-          </div>
-          {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : userPerformance.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No data found.</div> : (
-            <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
-              <table className={styles.reportTable}>
-                <thead>
-                  <tr>
-                    <th>Agent Name</th>
-                    <th style={{ textAlign: 'right' }}>Total Leads</th>
-                    <th style={{ textAlign: 'right' }}>Active Leads</th>
-                    <th style={{ textAlign: 'right' }}>Total Orders</th>
-                    <th style={{ textAlign: 'right' }}>Completed Orders</th>
-                    <th style={{ textAlign: 'right' }}>Lead to Order Conv.</th>
-                    <th style={{ textAlign: 'right' }}>Lead to Completed Conv.</th>
-                    <th style={{ textAlign: 'right' }}>Broker Profit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userPerformance.map((u, i) => (
-                    <React.Fragment key={i}>
-                      <tr onClick={() => toggleUserExpand(u.name)} style={{ cursor: 'pointer' }}>
-                        <td style={{ fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px', color: expandedUsers[u.name] ? 'var(--brand-blue)' : 'inherit' }}>
-                          {expandedUsers[u.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                          {u.name}
-                        </td>
-                        <td style={{ textAlign: 'right' }}>{u.leads}</td>
-                        <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
-                        <td style={{ textAlign: 'right' }}>{u.orders}</td>
-                        <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
-                        <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion_to_order}%</td>
-                        <td style={{ textAlign: 'right', color: 'var(--success)' }}>{u.conversion_to_completed}%</td>
-                        <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
-                      </tr>
-                      {expandedUsers[u.name] && u.sources.map((s, j) => (
-                        <tr key={`${i}-${j}`} style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
-                          <td style={{ paddingLeft: '40px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>↳ {s.name}</td>
-                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads}</td>
-                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads - s.orders}</td>
-                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.orders}</td>
-                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.completed_orders}</td>
-                          <td style={{ textAlign: 'right', color: 'rgba(59, 130, 246, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_order}%</td>
-                          <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_completed}%</td>
-                          <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>${s.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
-                        </tr>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
+      {isAdmin && (
+        <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr', marginTop: '20px' }}>
+          {/* User Performance Table */}
+          <div className={styles.panel} style={{ padding: '0' }}>
+            <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
+              <h2 style={{ margin: 0, border: 'none', padding: 0 }}>User Performance</h2>
             </div>
-          )}
+            {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : userPerformance.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No data found.</div> : (
+              <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+                <table className={styles.reportTable}>
+                  <thead>
+                    <tr>
+                      <th>Agent Name</th>
+                      <th style={{ textAlign: 'right' }}>Total Leads</th>
+                      <th style={{ textAlign: 'right' }}>Active Leads</th>
+                      <th style={{ textAlign: 'right' }}>Total Orders</th>
+                      <th style={{ textAlign: 'right' }}>Completed Orders</th>
+                      <th style={{ textAlign: 'right' }}>Lead to Order Conv.</th>
+                      <th style={{ textAlign: 'right' }}>Lead to Completed Conv.</th>
+                      <th style={{ textAlign: 'right' }}>Broker Profit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userPerformance.map((u, i) => (
+                      <React.Fragment key={i}>
+                        <tr onClick={() => toggleUserExpand(u.name)} style={{ cursor: 'pointer' }}>
+                          <td style={{ fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px', color: expandedUsers[u.name] ? 'var(--brand-blue)' : 'inherit' }}>
+                            {expandedUsers[u.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                            {u.name}
+                          </td>
+                          <td style={{ textAlign: 'right' }}>{u.leads}</td>
+                          <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
+                          <td style={{ textAlign: 'right' }}>{u.orders}</td>
+                          <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
+                          <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion_to_order}%</td>
+                          <td style={{ textAlign: 'right', color: 'var(--success)' }}>{u.conversion_to_completed}%</td>
+                          <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
+                        </tr>
+                        {expandedUsers[u.name] && u.sources.map((s, j) => (
+                          <tr key={`${i}-${j}`} style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                            <td style={{ paddingLeft: '40px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>↳ {s.name}</td>
+                            <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads}</td>
+                            <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads - s.orders}</td>
+                            <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.orders}</td>
+                            <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.completed_orders}</td>
+                            <td style={{ textAlign: 'right', color: 'rgba(59, 130, 246, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_order}%</td>
+                            <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_completed}%</td>
+                            <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>${s.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
+                          </tr>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       
       <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr', marginTop: '20px', marginBottom: '40px' }}>
          {/* Carrier Volume Table */}
