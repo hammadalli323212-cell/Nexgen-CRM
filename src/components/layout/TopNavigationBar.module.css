@@ -1,7 +1,7 @@
 .navbar {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #0f4c9c, #1e3a8a); /* Smoother deep blue gradient */
+  background-color: var(--brand-blue);
   height: 56px; /* Slightly taller for breathing room */
   padding: 0 var(--space-xl);
   color: #ffffff;
@@ -60,7 +60,7 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #1e3a8a; /* Deep blue to match gradient */
+  background-color: var(--brand-blue);
   min-width: 200px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25); /* Smoother shadow */
   z-index: 1000;
