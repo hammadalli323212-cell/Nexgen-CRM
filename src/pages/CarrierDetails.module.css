@@ -103,9 +103,16 @@
 .companyName {
   font-size: 1.6rem;
   color: var(--text-primary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-weight: 700;
   letter-spacing: -0.5px;
+}
+
+.outOf {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .rating {

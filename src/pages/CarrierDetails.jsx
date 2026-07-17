@@ -145,6 +145,9 @@ const CarrierDetails = () => {
                     {carrier.company_name?.charAt(0)?.toUpperCase()}
                   </div>
                   <h3 className={styles.companyName}>{carrier.company_name}</h3>
+                  {carrier.out_of && (
+                    <div className={styles.outOf}>Out of {carrier.out_of}</div>
+                  )}
                   <div className={styles.rating}>
                     <Star size={16} fill="#f59e0b" color="#f59e0b" />
                     {carrier.rating || 'N/A'} Rating
