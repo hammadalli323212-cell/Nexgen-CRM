@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Truck, Phone, ArrowLeft, Star, FileText } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { ArrowLeft, Truck, Star, Phone, Hash, FileText } from 'lucide-react';
 import DataTable from '../components/common/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
-import styles from './LeadDetails.module.css';
+import styles from './CarrierDetails.module.css';
 
 const columnHelper = createColumnHelper();
 
@@ -124,7 +124,7 @@ const CarrierDetails = () => {
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <button onClick={() => navigate('/carriers')} className={styles.backButton}>
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} />
           Back to Carriers
         </button>
       </div>
@@ -139,13 +139,13 @@ const CarrierDetails = () => {
               </h2>
             </div>
             <div className={styles.panelBody}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div style={{ textAlign: 'center', padding: '20px 0', borderBottom: '1px solid var(--border-color)' }}>
-                  <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'var(--brand-blue)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', margin: '0 auto 15px' }}>
+              <div className={styles.leftColumn}>
+                <div className={styles.avatarWrapper}>
+                  <div className={styles.avatar}>
                     {carrier.company_name?.charAt(0)?.toUpperCase()}
                   </div>
-                  <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '5px' }}>{carrier.company_name}</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', color: 'var(--text-secondary)' }}>
+                  <h3 className={styles.companyName}>{carrier.company_name}</h3>
+                  <div className={styles.rating}>
                     <Star size={16} fill="#f59e0b" color="#f59e0b" />
                     {carrier.rating || 'N/A'} Rating
                   </div>
