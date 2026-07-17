@@ -56,7 +56,7 @@ const Orders = () => {
 
         if (error) throw error;
 
-        if (data && data.length > 0) {
+        if (data) {
           const sortedData = data.sort((a, b) => {
             const dateA = new Date(a.order_created_at || a.created_at);
             const dateB = new Date(b.order_created_at || b.created_at);
@@ -84,7 +84,7 @@ const Orders = () => {
             pickupDate: order.ship_date || "TBD",
             source: order.source || "Unknown",
             carrier: order.carrier_company_name || "Unassigned",
-            tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,
+            tariff: order.estimated_price != null ? `$${parseFloat(order.estimated_price).toFixed(2)}` : "$0.00",
             status: order.status,
             isRead: order.is_read,
             assignedTo: order.assignee ? (order.assignee.full_name || `${order.assignee.first_name || ''} ${order.assignee.last_name || ''}`.trim() || 'Unknown') : 'Unassigned'
