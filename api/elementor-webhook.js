@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     const nameStr = getField(['name', 'Name']);
     const emailStr = getField(['email', 'Email']);
     const phoneStr = getField(['phone', 'Phone', 'Phone (10 digits)']);
-    const shipDateRaw = getField(['date', 'Ship Date', 'shipDate', 'Estimated Ship Date', 'pickup_date', 'Pickup Date', 'shipping_date', 'date_1', 'Date']);
+    const shipDateRaw = getField(['date', 'Ship Date', 'shipDate', 'Estimated Ship Date', 'pickup_date', 'Pickup Date', 'shipping_date', 'date_1', 'Date', 'Ship Date (mm/dd/yyyy)']);
     const notesStr = getField(['comments', 'Comment From Shipper', 'notes']);
 
     // DEBUG: Always create a lead if we hit this endpoint, even if fields are missing, 
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
       destination_city: destCity,
       ship_date: shipDateRaw || null,
       status: 'New',
-      notes: (notesStr.trim() + '\n\nDEBUG PAYLOAD:\n' + JSON.stringify(req.body, null, 2)).trim(),
+      notes: notesStr.trim(),
     };
 
     const { data: leadData, error: leadError } = await supabaseAdmin
