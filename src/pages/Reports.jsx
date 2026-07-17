@@ -193,6 +193,12 @@ const Reports = () => {
                       <td style={{ textAlign: 'right' }}>{s.value}</td>
                     </tr>
                   ))}
+                  <tr style={{ fontWeight: 'bold', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}>
+                    <td>Total</td>
+                    <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>
+                      {sourceData.reduce((acc, curr) => acc + curr.value, 0)}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -220,6 +226,12 @@ const Reports = () => {
                       <td style={{ textAlign: 'right' }}>{s.value}</td>
                     </tr>
                   ))}
+                  <tr style={{ fontWeight: 'bold', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}>
+                    <td>Total</td>
+                    <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>
+                      {statusData.reduce((acc, curr) => acc + curr.value, 0)}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
