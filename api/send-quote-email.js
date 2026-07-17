@@ -117,7 +117,7 @@ ${vRows}
 <ul style="margin:0;padding:0;list-style:none">
 <li style="margin:0 0 12px;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; Be cautious of unusually low quotes. These companies often collect a deposit upfront, then increase the price at pickup &mdash; a common tactic known as "Bait and Switch."</li>
 <li style="margin:0 0 12px;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; A legitimate broker will never require a deposit before a carrier is assigned. If someone asks for payment upfront, consider it a warning sign.</li>
-<li style="margin:0;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; <strong>NexGen Auto Transport does NOT collect any payment until your vehicle is picked up.</strong></li>
+<li style="margin:0;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; <strong>NexGen Auto Transport DOES NOT collect any payment until your vehicle is picked up.</strong></li>
 </ul>
 </div>
 
@@ -178,7 +178,7 @@ Total Price: $${leadData.estimated_price||0}
 Protect Yourself:
 * Be cautious of unusually low quotes. These companies often collect a deposit upfront, then increase the price at pickup - a common tactic known as "Bait and Switch."
 * A legitimate broker will never require a deposit before a carrier is assigned. If someone asks for payment upfront, consider it a warning sign.
-* NexGen Auto Transport does NOT collect any payment until your vehicle is picked up.
+* NexGen Auto Transport DOES NOT collect any payment until your vehicle is picked up.
 
 ${bookingLink ? `Book Now Securely: ${bookingLink}\n` : ''}
 Questions? We're here to help.
