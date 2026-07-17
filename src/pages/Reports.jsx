@@ -36,7 +36,7 @@ const Reports = () => {
         setLoading(true);
         
         // Base query to fetch ALL raw leads in the date range so we can aggregate in JS
-        let query = supabase.from('leads').select('*, assignee:profiles!assigned_to(first_name, last_name), carriers(name)')
+        let query = supabase.from('leads').select('*, assignee:profiles!assigned_to(first_name, last_name), carriers(company_name)')
           .eq('is_archived', false)
           .gte('created_at', `${dateRange.from}T00:00:00Z`)
           .lte('created_at', `${dateRange.to}T23:59:59Z`);
@@ -93,7 +93,7 @@ const Reports = () => {
 
           // Agg Carriers
           if (lead.carrier_id && lead.carriers) {
-            const carrierName = lead.carriers.name;
+            const carrierName = lead.carriers.company_name || 'Unknown';
             carriersMap[carrierName] = (carriersMap[carrierName] || 0) + 1;
           }
         });
@@ -147,12 +147,18 @@ const Reports = () => {
     return null;
   };
 
+  const formatDisplayDate = (dateStr) => {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    return `${m}/${d}/${y}`;
+  };
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div>
           <h1>Reports & Analytics</h1>
-          <p>Visualizing data from {new Date(dateRange.from).toLocaleDateString()} to {new Date(dateRange.to).toLocaleDateString()}</p>
+          <p>Visualizing data from {formatDisplayDate(dateRange.from)} to {formatDisplayDate(dateRange.to)}</p>
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <div className={styles.dateFilter}>
