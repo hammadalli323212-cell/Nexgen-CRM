@@ -2,6 +2,7 @@ import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool } from 'lucide-react';
+import { getStatusColors, getAgentColors, SourceBadge } from '../components/common/Badges';
 import { supabase } from '../lib/supabase';
 import { generateOrderPDF } from '../lib/pdfGenerator';
 import { useAuth } from '../lib/AuthContext';
@@ -798,14 +799,15 @@ const LeadDetails = () => {
               disabled={isUpdatingStatus}
               style={{
                  fontSize: '0.9rem',
-                 padding: '4px 8px',
+                 padding: '4px 10px',
                  borderRadius: '12px',
-                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                 color: 'var(--brand-blue)',
-                 border: '1px solid rgba(59, 130, 246, 0.3)',
+                 backgroundColor: getStatusColors(lead.status).bg,
+                 color: getStatusColors(lead.status).text,
+                 border: `1px solid ${getStatusColors(lead.status).border}`,
                  outline: 'none',
                  cursor: 'pointer',
-                 fontWeight: '600'
+                 fontWeight: '600',
+                 textTransform: 'uppercase'
               }}
             >
               {STATUS_OPTIONS.map(status => (
@@ -820,19 +822,9 @@ const LeadDetails = () => {
                 <span>Order created on {new Date(lead.order_created_at).toLocaleString()}</span>
               )}
             </div>
-            <span style={{ 
-              backgroundColor: 'rgba(59, 130, 246, 0.15)', 
-              color: 'var(--brand-blue)', 
-              padding: '2px 8px', 
-              borderRadius: '4px', 
-              fontSize: '0.8rem',
-              fontWeight: '600',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              display: 'inline-flex',
-              alignItems: 'center'
-            }}>
-              Source: {lead.source || 'Manual'}
-            </span>
+            <div style={{ transform: 'scale(1.1)', transformOrigin: 'left center' }}>
+              <SourceBadge source={lead.source} />
+            </div>
           </div>
         </div>
         <div className={styles.actions}>
@@ -843,11 +835,20 @@ const LeadDetails = () => {
                 value={lead.assigned_to || ''} 
                 onChange={handleAssign}
                 disabled={isAssigning}
-                style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', outline: 'none', cursor: 'pointer' }}
+                style={{ 
+                  padding: '6px 12px', 
+                  borderRadius: '12px', 
+                  backgroundColor: getAgentColors(lead.assignee?.full_name || lead.assignee?.email).bg, 
+                  color: getAgentColors(lead.assignee?.full_name || lead.assignee?.email).text, 
+                  border: `1px solid ${getAgentColors(lead.assignee?.full_name || lead.assignee?.email).border}`, 
+                  outline: 'none', 
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
               >
-                <option value="">Unassigned</option>
+                <option value="" style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>Unassigned</option>
                 {teamMembers.map(member => (
-                  <option key={member.id} value={member.id}>{member.full_name || member.email}</option>
+                  <option key={member.id} value={member.id} style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>{member.full_name || member.email}</option>
                 ))}
               </select>
             </div>

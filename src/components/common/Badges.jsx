@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const StatusBadge = ({ status }) => {
+export const getStatusColors = (status) => {
   const colors = {
     'New': { bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' }, // Blue
     'Quoted': { bg: 'rgba(234, 179, 8, 0.15)', text: '#facc15', border: 'rgba(234, 179, 8, 0.3)' }, // Yellow
@@ -13,8 +13,11 @@ export const StatusBadge = ({ status }) => {
     'Completed': { bg: 'rgba(20, 184, 166, 0.15)', text: '#2dd4bf', border: 'rgba(20, 184, 166, 0.3)' }, // Teal
     'Canceled': { bg: 'rgba(239, 68, 68, 0.15)', text: '#f87171', border: 'rgba(239, 68, 68, 0.3)' }, // Red
   };
+  return colors[status] || { bg: 'rgba(255,255,255,0.1)', text: '#a1a1aa', border: 'rgba(255,255,255,0.2)' };
+};
 
-  const style = colors[status] || { bg: 'rgba(255,255,255,0.1)', text: '#a1a1aa', border: 'rgba(255,255,255,0.2)' };
+export const StatusBadge = ({ status }) => {
+  const style = getStatusColors(status);
 
   return (
     <span style={{
@@ -51,28 +54,41 @@ export const SourceBadge = ({ source }) => {
   );
 };
 
+export const getAgentColors = (name) => {
+  const n = name || 'Unassigned';
+  if (n === 'Unassigned') {
+    return { bg: 'transparent', text: 'var(--text-muted)', border: 'transparent', hue: 0 };
+  }
+  let hash = 0;
+  for (let i = 0; i < n.length; i++) {
+    hash = n.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs((hash * 137) % 360);
+  return {
+    bg: `hsla(${hue}, 70%, 50%, 0.15)`,
+    text: `hsl(${hue}, 70%, 65%)`,
+    border: `hsla(${hue}, 70%, 50%, 0.3)`,
+    hue
+  };
+};
+
 export const AgentBadge = ({ name }) => {
   const n = name || 'Unassigned';
   if (n === 'Unassigned') {
     return <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Unassigned</span>;
   }
 
-  let hash = 0;
-  for (let i = 0; i < n.length; i++) {
-    hash = n.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  // Spread colors out
-  const hue = Math.abs((hash * 137) % 360);
+  const { bg, text, border, hue } = getAgentColors(n);
   const initials = n.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <div style={{
         width: '26px', height: '26px', borderRadius: '50%',
-        backgroundColor: `hsla(${hue}, 70%, 50%, 0.15)`,
-        color: `hsl(${hue}, 70%, 65%)`,
+        backgroundColor: bg,
+        color: text,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '0.75rem', fontWeight: 'bold', border: `1px solid hsla(${hue}, 70%, 50%, 0.3)`
+        fontSize: '0.75rem', fontWeight: 'bold', border: `1px solid ${border}`
       }}>
         {initials}
       </div>
