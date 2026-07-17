@@ -43,7 +43,7 @@ const Leads = () => {
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
         `)
-        .in('status', ['New', 'Quoted', 'Follow Up', 'Cancelled'])
+        .in('status', ['New', 'Quoted', 'Follow Up'])
         .eq('is_archived', false)
         .order('created_at', { ascending: false });
         

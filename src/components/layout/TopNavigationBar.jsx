@@ -81,7 +81,15 @@ const TopNavigationBar = ({ onSearchClick }) => {
         { name: 'Archived Records', icon: <Star size={14} style={{opacity: 0.5}} />, path: '/archive' }
       ]
     },
-    { name: 'Orders', path: '/orders', hasDropdown: true },
+    { 
+      name: 'Orders', 
+      path: '/orders', 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'Active Orders', icon: <Star size={14} />, path: '/orders' },
+        { name: 'Canceled Orders', icon: <Star size={14} style={{opacity: 0.5}} />, path: '/orders/canceled' }
+      ]
+    },
     { name: 'Dispatch', path: '/dispatch' },
     { name: 'Customers', path: '/customers' },
     { name: 'Carriers', path: '/carriers', hasDropdown: true },

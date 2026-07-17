@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import DataTable from "../components/common/DataTable";
 import { supabase } from "../lib/supabase";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import styles from "./Leads.module.css";
 import { StatusBadge, SourceBadge, AgentBadge } from '../components/common/Badges';
@@ -13,6 +13,8 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const isCanceledTab = location.pathname.includes('/canceled');
   const { user, isAdmin, loading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const Orders = () => {
           assignee:profiles!assigned_to (first_name, last_name, full_name)
         `,
           )
-          .in("status", ["Booked", "Dispatched", "In Transit", "Delivered"])
+          .in("status", isCanceledTab ? ["Cancelled"] : ["Booked", "Dispatched", "In Transit", "Delivered"])
           .eq("is_archived", false)
           .order("order_created_at", { ascending: false, nullsFirst: false });
 
@@ -98,7 +100,7 @@ const Orders = () => {
     if (!authLoading) {
       fetchOrders();
     }
-  }, [user, isAdmin, authLoading]);
+  }, [user, isAdmin, authLoading, isCanceledTab]);
 
   const columns = useMemo(
     () => [
@@ -176,8 +178,8 @@ const Orders = () => {
     <div>
       <div className={styles.pageHeader}>
         <div className={styles.pageTitle}>
-          <h1>Orders</h1>
-          <p>Track and manage your booked orders.</p>
+          <h1>{isCanceledTab ? 'Canceled Orders' : 'Orders'}</h1>
+          <p>Track and manage your {isCanceledTab ? 'canceled' : 'booked'} orders.</p>
         </div>
       </div>
       <div className={styles.tableWrapper}>
