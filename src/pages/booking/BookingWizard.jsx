@@ -67,12 +67,31 @@ const BookingWizard = () => {
 
   // Auto-trigger print if ?download=true is in the URL
   useEffect(() => {
-    if (isSuccess && new URLSearchParams(window.location.search).get('download') === 'true') {
+    if (isSuccess && new URLSearchParams(window.location.search).get('download') === 'true' && leadData) {
       setTimeout(() => {
+        const quoteNumber = `NG-${leadData.order_id || leadData.lead_number}`;
+        const tariff = Number(leadData.estimated_price) || 0;
+        let deposit = 0;
+        const terms = (leadData.broker_fee_terms || '').toLowerCase().replace(/\\s+/g, '');
+        if (terms === 'paymentonorder' || terms === 'paymentonpickup') {
+          const override = Number(leadData.deposit_amount);
+          deposit = override > 0 ? override : (Number(leadData.estimated_price || 0) - Number(leadData.carrier_pay || 0));
+        }
+        const nextPayment = tariff - deposit;
+        const firstPaymentDue = leadData.broker_fee_terms || 'Payment on Order';
+        const firstPaymentMethod = leadData.payment_method || 'Credit Card';
+        const finalPaymentDue = leadData.carrier_pay_terms || 'Payment on Delivery';
+        const finalPaymentMethod = leadData.carrier_payment_method || 'Cash / Certified Funds';
+        const vehicles = leadData.lead_vehicles || [];
+        const cargoLabel = vehicles.length > 0 
+          ? vehicles.map(v => `${v.vehicle_year || ''} ${v.vehicle_make || ''} ${v.vehicle_model || ''}`).join(', ') 
+          : 'Pending Vehicle Details';
+        const transportType = leadData.transport_type || 'Open';
+
         generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'download');
       }, 800);
     }
-  }, [isSuccess, leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress]);
+  }, [isSuccess, leadData, formData, ipAddress]);
 
   useEffect(() => {
     // Auth Check & Fetch Data
