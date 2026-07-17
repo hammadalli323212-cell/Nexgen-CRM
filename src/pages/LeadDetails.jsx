@@ -669,6 +669,41 @@ const LeadDetails = () => {
         const { error } = await supabase.from('leads').update(payloadClean).eq('lead_number', id);
         if (error) throw error;
         setLead({ ...lead, ...payload });
+
+        // --- CARRIER POOL AUTO-SYNC ---
+        if (panel === 'carrier' && payload.carrier_company_name) {
+          const carrierName = payload.carrier_company_name.trim();
+          if (carrierName) {
+            try {
+              const { data: existingCarrier } = await supabase
+                .from('carriers')
+                .select('id')
+                .ilike('company_name', carrierName)
+                .maybeSingle();
+
+              const carrierPayload = {
+                company_name: carrierName,
+                mc_number: payload.carrier_mc_number || '',
+                dot_number: payload.carrier_usdot_number || '',
+              };
+
+              if (existingCarrier) {
+                await supabase.from('carriers').update(carrierPayload).eq('id', existingCarrier.id);
+              } else {
+                await supabase.from('carriers').insert([{
+                  ...carrierPayload,
+                  insurance_status: 'Pending',
+                  rating: 5.0,
+                  available_trucks: 1
+                }]);
+              }
+            } catch (carrierErr) {
+              console.error('Failed to auto-sync carrier to pool:', carrierErr);
+              // We do not throw here to prevent blocking the lead save if the pool sync fails
+            }
+          }
+        }
+        // --- END CARRIER POOL AUTO-SYNC ---
       }
       else if (panel === 'vehicles') {
         changes.push('Vehicles list updated');

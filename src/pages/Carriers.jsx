@@ -15,7 +15,7 @@ const Carriers = () => {
   
   // Form state
   const [formData, setFormData] = useState({
-    name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: ''
+    company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: ''
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -43,7 +43,7 @@ const Carriers = () => {
       if (error) throw error;
       
       setIsModalOpen(false);
-      setFormData({ name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: '' });
+      setFormData({ company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: '' });
       fetchCarriers();
     } catch (err) {
       toast.error('Error saving carrier: ' + err.message);
@@ -54,7 +54,7 @@ const Carriers = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', { header: 'Carrier Name' }),
+      columnHelper.accessor('company_name', { header: 'Carrier Name' }),
       columnHelper.accessor('mc_number', { header: 'MC Number' }),
       columnHelper.accessor('insurance_status', {
         header: 'Insurance',
@@ -103,7 +103,7 @@ const Carriers = () => {
             <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '4px', fontSize: '0.9rem' }}>Carrier Name *</label>
-                <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
+                <input required type="text" value={formData.company_name} onChange={e => setFormData({...formData, company_name: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
