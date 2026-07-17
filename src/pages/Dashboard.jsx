@@ -49,13 +49,13 @@ const Dashboard = () => {
         let totalDispatched = 0;
         let brokerFee = 0;
         
-        const orderStatuses = ['Booked', 'Dispatched', 'Picked Up', 'Delivered', 'Completed', 'Canceled'];
+        const orderStatuses = ['Booked', 'Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed', 'Canceled'];
 
         if (records) {
            records.forEach(r => {
              if (orderStatuses.includes(r.status)) {
                 totalOrders++;
-                if (r.status === 'Dispatched') {
+                if (['Dispatched', 'In Transit', 'Picked Up', 'Delivered'].includes(r.status)) {
                    totalDispatched++;
                 }
                 if (r.broker_fee_collected === true) {
