@@ -105,3 +105,36 @@
   border-bottom: 1px solid var(--border-color);
   padding-bottom: var(--space-sm);
 }
+
+.reportTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.reportTable th, .reportTable td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reportTable th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reportTable tr:last-child td {
+  border-bottom: none;
+}
+
+.reportTable tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.reportTable td {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}

@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import styles from './Dashboard.module.css'; // Reusing dashboard grid styles
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
+import styles from './Dashboard.module.css';
 import { Calendar } from 'lucide-react';
-
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899'];
 
 const Reports = () => {
   const { user, isAdmin } = useAuth();
@@ -35,7 +29,6 @@ const Reports = () => {
         if (!user) return;
         setLoading(true);
         
-        // Base query to fetch ALL raw leads in the date range so we can aggregate in JS
         let query = supabase.from('leads').select('*, assignee:profiles!assigned_to(first_name, last_name), carriers(company_name)')
           .eq('is_archived', false)
           .gte('created_at', `${dateRange.from}T00:00:00Z`)
@@ -106,15 +99,15 @@ const Reports = () => {
           totalRevenue: tRevenue
         });
 
-        setSourceData(Object.keys(sources).map(key => ({ name: key, value: sources[key] })));
+        setSourceData(Object.keys(sources).map(key => ({ name: key, value: sources[key] })).sort((a,b) => b.value - a.value));
         
-        setStatusData(Object.keys(statuses).map(key => ({ name: key, value: statuses[key] })));
+        setStatusData(Object.keys(statuses).map(key => ({ name: key, value: statuses[key] })).sort((a,b) => b.value - a.value));
 
-        setCarrierVolume(Object.keys(carriersMap).map(key => ({ name: key, Dispatches: carriersMap[key] })).sort((a,b) => b.Dispatches - a.Dispatches).slice(0, 10));
+        setCarrierVolume(Object.keys(carriersMap).map(key => ({ name: key, dispatches: carriersMap[key] })).sort((a,b) => b.dispatches - a.dispatches).slice(0, 10));
 
         setUserPerformance(Object.values(usersMap).map(u => ({
           ...u,
-          Conversion: u.leads > 0 ? parseFloat(((u.orders / u.leads) * 100).toFixed(1)) : 0
+          conversion: u.leads > 0 ? parseFloat(((u.orders / u.leads) * 100).toFixed(1)) : 0
         })).sort((a,b) => b.leads - a.leads));
 
       } catch (err) {
@@ -129,23 +122,6 @@ const Reports = () => {
 
   const handleDateChange = (e) => {
     setDateRange({ ...dateRange, [e.target.name]: e.target.value });
-  };
-
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className={styles.glassTooltip}>
-          <p style={{ margin: 0, marginBottom: '8px', color: 'var(--text-primary)', fontWeight: '600', fontSize: '0.95rem' }}>{label || payload[0].name}</p>
-          {payload.map((p, idx) => (
-            <p key={idx} style={{ margin: 0, display: 'flex', justifyContent: 'space-between', gap: '20px', color: p.color || 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '500' }}>
-              <span>{p.name}:</span>
-              <span>{p.name === 'Revenue' ? `$${p.value.toLocaleString()}` : p.value}</span>
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
   };
 
   const formatDisplayDate = (dateStr) => {
@@ -196,122 +172,120 @@ const Reports = () => {
       </div>
 
       <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr 1fr', marginTop: '20px' }}>
-        {/* Lead Sources Pie Chart */}
-        <div className={styles.panel}>
-          <h2>Lead Sources</h2>
-          {loading ? <div style={{color:'var(--text-muted)'}}>Loading...</div> : sourceData.length === 0 ? <div style={{color:'var(--text-muted)'}}>No data found.</div> : (
-            <div style={{ height: '300px', width: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <defs>
-                    {sourceData.map((entry, index) => (
-                      <linearGradient key={`grad-${index}`} id={`colorGrad-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.4}/>
-                      </linearGradient>
-                    ))}
-                  </defs>
-                  <Pie data={sourceData} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
-                    {sourceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={`url(#colorGrad-${index})`} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.85rem', paddingTop: '20px' }}/>
-                </PieChart>
-              </ResponsiveContainer>
+        {/* Lead Sources Table */}
+        <div className={styles.panel} style={{ padding: '0' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: 0, border: 'none', padding: 0 }}>Lead Sources</h2>
+          </div>
+          {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : sourceData.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No data found.</div> : (
+            <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+              <table className={styles.reportTable}>
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th style={{ textAlign: 'right' }}>Total Leads</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sourceData.map((s, i) => (
+                    <tr key={i}>
+                      <td>{s.name}</td>
+                      <td style={{ textAlign: 'right' }}>{s.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
 
-        {/* Operational Statuses Pie Chart */}
-        <div className={styles.panel}>
-          <h2>Operational Status (Orders)</h2>
-          {loading ? <div style={{color:'var(--text-muted)'}}>Loading...</div> : statusData.length === 0 ? <div style={{color:'var(--text-muted)'}}>No data found.</div> : (
-            <div style={{ height: '300px', width: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <defs>
-                    {statusData.map((entry, index) => (
-                      <linearGradient key={`gradStatus-${index}`} id={`colorGradStatus-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={COLORS[(index+3) % COLORS.length]} stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor={COLORS[(index+3) % COLORS.length]} stopOpacity={0.4}/>
-                      </linearGradient>
-                    ))}
-                  </defs>
-                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={`url(#colorGradStatus-${index})`} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.85rem', paddingTop: '20px' }}/>
-                </PieChart>
-              </ResponsiveContainer>
+        {/* Operational Statuses Table */}
+        <div className={styles.panel} style={{ padding: '0' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: 0, border: 'none', padding: 0 }}>Operational Status (Orders)</h2>
+          </div>
+          {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : statusData.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No data found.</div> : (
+            <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+              <table className={styles.reportTable}>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th style={{ textAlign: 'right' }}>Volume</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {statusData.map((s, i) => (
+                    <tr key={i}>
+                      <td>{s.name}</td>
+                      <td style={{ textAlign: 'right' }}>{s.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
       </div>
 
       <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr', marginTop: '20px' }}>
-        {/* User Performance Bar Chart */}
-        <div className={styles.panel}>
-          <h2>User Performance (Leads vs Orders)</h2>
-          {loading ? <div style={{color:'var(--text-muted)'}}>Loading...</div> : userPerformance.length === 0 ? <div style={{color:'var(--text-muted)'}}>No data found.</div> : (
-            <div style={{ height: '400px', width: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={userPerformance} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.2}/>
-                    </linearGradient>
-                    <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.2}/>
-                    </linearGradient>
-                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.2}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis yAxisId="left" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dx={-10} />
-                  <YAxis yAxisId="right" orientation="right" stroke="var(--success)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dx={10} />
-                  <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-                  <Legend wrapperStyle={{ color: 'var(--text-primary)', fontSize: '0.9rem', paddingTop: '15px' }} iconType="circle" />
-                  <Bar yAxisId="left" dataKey="leads" name="Total Leads" fill="url(#colorLeads)" radius={[6, 6, 0, 0]} barSize={20} />
-                  <Bar yAxisId="left" dataKey="orders" name="Orders Booked" fill="url(#colorOrders)" radius={[6, 6, 0, 0]} barSize={20} />
-                  <Bar yAxisId="right" dataKey="revenue" name="Revenue" fill="url(#colorRev)" radius={[6, 6, 0, 0]} barSize={20} />
-                </BarChart>
-              </ResponsiveContainer>
+        {/* User Performance Table */}
+        <div className={styles.panel} style={{ padding: '0' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: 0, border: 'none', padding: 0 }}>User Performance</h2>
+          </div>
+          {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : userPerformance.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No data found.</div> : (
+            <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+              <table className={styles.reportTable}>
+                <thead>
+                  <tr>
+                    <th>Agent Name</th>
+                    <th style={{ textAlign: 'right' }}>Leads Assigned</th>
+                    <th style={{ textAlign: 'right' }}>Orders Booked</th>
+                    <th style={{ textAlign: 'right' }}>Conversion Rate</th>
+                    <th style={{ textAlign: 'right' }}>Broker Profit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userPerformance.map((u, i) => (
+                    <tr key={i}>
+                      <td style={{ fontWeight: '500' }}>{u.name}</td>
+                      <td style={{ textAlign: 'right' }}>{u.leads}</td>
+                      <td style={{ textAlign: 'right' }}>{u.orders}</td>
+                      <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion}%</td>
+                      <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
       </div>
       
       <div className={styles.panelsGrid} style={{ gridTemplateColumns: '1fr', marginTop: '20px', marginBottom: '40px' }}>
-         {/* Carrier Volume Bar Chart */}
-         <div className={styles.panel}>
-          <h2>Top Carriers by Dispatched Volume</h2>
-          {loading ? <div style={{color:'var(--text-muted)'}}>Loading...</div> : carrierVolume.length === 0 ? <div style={{color:'var(--text-muted)'}}>No dispatches found.</div> : (
-            <div style={{ height: '300px', width: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={carrierVolume} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="colorCarrier" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.2}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis dataKey="name" stroke="var(--text-secondary)" tick={{fontSize: 12}} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis stroke="var(--text-secondary)" tick={{fontSize: 12}} allowDecimals={false} axisLine={false} tickLine={false} dx={-10} />
-                  <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-                  <Bar dataKey="Dispatches" fill="url(#colorCarrier)" radius={[6, 6, 0, 0]} barSize={40} />
-                </BarChart>
-              </ResponsiveContainer>
+         {/* Carrier Volume Table */}
+         <div className={styles.panel} style={{ padding: '0' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: 0, border: 'none', padding: 0 }}>Top Carriers by Dispatched Volume</h2>
+          </div>
+          {loading ? <div style={{padding: '20px', color:'var(--text-muted)'}}>Loading...</div> : carrierVolume.length === 0 ? <div style={{padding: '20px', color:'var(--text-muted)'}}>No dispatches found.</div> : (
+            <div style={{ overflowX: 'auto', paddingBottom: '10px' }}>
+              <table className={styles.reportTable}>
+                <thead>
+                  <tr>
+                    <th>Carrier Name</th>
+                    <th style={{ textAlign: 'right' }}>Total Dispatches</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {carrierVolume.map((c, i) => (
+                    <tr key={i}>
+                      <td style={{ fontWeight: '500' }}>{c.name}</td>
+                      <td style={{ textAlign: 'right', color: '#8b5cf6', fontWeight: 'bold' }}>{c.dispatches}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
