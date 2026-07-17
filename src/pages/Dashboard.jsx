@@ -9,8 +9,11 @@ const Dashboard = () => {
   const todayStr = new Date().toISOString().split('T')[0];
   const [stats, setStats] = useState({
     totalLeads: 0,
+    activeLeads: 0,
     totalOrders: 0,
-    totalDispatched: 0,
+    completedOrders: 0,
+    conversionRate: '0%',
+    completedConversionRate: '0%',
     brokerFee: 0
   });
   const [fromDate, setFromDate] = useState(todayStr);
@@ -46,31 +49,35 @@ const Dashboard = () => {
         
         let totalLeads = 0;
         let totalOrders = 0;
-        let totalDispatched = 0;
+        let completedOrders = 0;
         let brokerFee = 0;
         
-        const orderStatuses = ['Booked', 'Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed', 'Canceled'];
+        const orderStatuses = ['Booked', 'Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
+        const completedStatuses = ['Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
 
         if (records) {
            records.forEach(r => {
-             if (orderStatuses.includes(r.status)) {
+             totalLeads++;
+             const isOrder = orderStatuses.includes(r.status);
+             if (isOrder) {
                 totalOrders++;
-                if (['Dispatched', 'In Transit', 'Picked Up', 'Delivered'].includes(r.status)) {
-                   totalDispatched++;
-                }
-                if (r.broker_fee_collected === true) {
-                   brokerFee += ((r.estimated_price || 0) - (r.carrier_pay || 0));
-                }
-             } else {
-                totalLeads++;
+             }
+             if (completedStatuses.includes(r.status)) {
+                completedOrders++;
+             }
+             if (isOrder && r.broker_fee_collected === true) {
+                brokerFee += ((r.estimated_price || 0) - (r.carrier_pay || 0));
              }
            });
         }
 
         setStats({
           totalLeads,
+          activeLeads: totalLeads - totalOrders,
           totalOrders,
-          totalDispatched,
+          completedOrders,
+          conversionRate: totalLeads > 0 ? ((totalOrders / totalLeads) * 100).toFixed(1) + '%' : '0%',
+          completedConversionRate: totalLeads > 0 ? ((completedOrders / totalLeads) * 100).toFixed(1) + '%' : '0%',
           brokerFee
         });
 
@@ -128,22 +135,34 @@ const Dashboard = () => {
       </div>
 
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--brand-blue)' }}>
           <span className={styles.statTitle}>Total Leads</span>
           <span className={styles.statValue}>{loading ? '-' : stats.totalLeads}</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--brand-blue)' }}>
+          <span className={styles.statTitle}>Active Leads</span>
+          <span className={styles.statValue}>{loading ? '-' : stats.activeLeads}</span>
+        </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--warning)' }}>
           <span className={styles.statTitle}>Total Orders</span>
           <span className={styles.statValue}>{loading ? '-' : stats.totalOrders}</span>
         </div>
-        <div className={styles.statCard}>
-          <span className={styles.statTitle}>Dispatched Orders</span>
-          <span className={styles.statValue}>{loading ? '-' : stats.totalDispatched}</span>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--warning)' }}>
+          <span className={styles.statTitle}>Completed Orders</span>
+          <span className={styles.statValue}>{loading ? '-' : stats.completedOrders}</span>
         </div>
-        <div className={styles.statCard}>
-          <span className={styles.statTitle}>Collected Broker Fee</span>
-          <span className={styles.statValue} style={{ color: 'var(--success)' }}>
-            {loading ? '-' : `$${stats.brokerFee.toFixed(2)}`}
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--info)' }}>
+          <span className={styles.statTitle}>Lead to Order Conv.</span>
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)', WebkitBackgroundClip: 'text' }}>{loading ? '-' : stats.conversionRate}</span>
+        </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--success)' }}>
+          <span className={styles.statTitle}>Lead to Completed Conv.</span>
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', WebkitBackgroundClip: 'text' }}>{loading ? '-' : stats.completedConversionRate}</span>
+        </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--success)' }}>
+          <span className={styles.statTitle}>Collected Broker Profit</span>
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', WebkitBackgroundClip: 'text' }}>
+            {loading ? '-' : `$${stats.brokerFee.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           </span>
         </div>
       </div>
