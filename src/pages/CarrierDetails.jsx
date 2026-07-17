@@ -183,10 +183,7 @@ const CarrierDetails = () => {
                     {carrier.driver_phone || '-'}
                   </div>
                 </div>
-                <div className={styles.infoBlock}>
-                  <span className={styles.infoLabel}>Out Of</span>
-                  <span className={styles.infoValue}>{carrier.out_of || '-'}</span>
-                </div>
+
                 <div className={styles.infoBlock}>
                   <span className={styles.infoLabel}>Insurance Status</span>
                   <span className={styles.infoValue}>{carrier.insurance_status || '-'}</span>
