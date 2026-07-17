@@ -36,7 +36,8 @@ const Orders = () => {
           is_read,
           carrier_company_name,
           customers (first_name, last_name),
-          lead_vehicles (vehicle_year, vehicle_make, vehicle_model)
+          lead_vehicles (vehicle_year, vehicle_make, vehicle_model),
+          assignee:profiles!assigned_to (first_name, last_name, full_name)
         `,
           )
           .in("status", ["Booked", "Dispatched", "In Transit", "Delivered"])
@@ -80,7 +81,8 @@ const Orders = () => {
             carrier: order.carrier_company_name || "Unassigned",
             tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,
             status: order.status,
-            isRead: order.is_read
+            isRead: order.is_read,
+            assignedTo: order.assignee ? (order.assignee.full_name || `${order.assignee.first_name || ''} ${order.assignee.last_name || ''}`.trim() || 'Unknown') : 'Unassigned'
           }));
 
           setOrders(formattedOrders);
@@ -145,6 +147,10 @@ const Orders = () => {
       }),
       columnHelper.accessor("carrier", {
         header: "Carrier",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("assignedTo", {
+        header: "Assigned To",
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("tariff", {
