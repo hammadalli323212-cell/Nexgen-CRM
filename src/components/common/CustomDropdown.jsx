@@ -34,8 +34,8 @@ export const CustomDropdown = ({ value, options, onChange, renderButton, renderO
       {isOpen && (
         <div style={{
           position: 'absolute', top: '100%', left: 0, marginTop: '8px',
-          backgroundColor: '#1e293b', // Tailwind slate-800
-          border: '1px solid #334155', // Tailwind slate-700
+          backgroundColor: 'var(--bg-panel)', 
+          border: '1px solid var(--border-color)', 
           borderRadius: '12px',
           boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
           zIndex: 50,
@@ -61,13 +61,13 @@ export const CustomDropdown = ({ value, options, onChange, renderButton, renderO
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                backgroundColor: value === opt.value ? 'rgba(255,255,255,0.05)' : 'transparent',
+                backgroundColor: value === opt.value ? 'var(--bg-panel-hover)' : 'transparent',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = value === opt.value ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--bg-panel-hover)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = value === opt.value ? 'var(--bg-panel-hover)' : 'transparent' }}
             >
               <div style={{ flex: 1 }}>
-                {renderOption ? renderOption(opt) : <span style={{ color: '#f8fafc', fontSize: '0.9rem', fontWeight: '500' }}>{opt.label}</span>}
+                {renderOption ? renderOption(opt) : <span style={{ color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: '500' }}>{opt.label}</span>}
               </div>
               {value === opt.value && <Check size={14} color="#3b82f6" />}
             </div>
