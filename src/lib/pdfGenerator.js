@@ -139,13 +139,13 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
     const hideFirst = !leadData.broker_fee_terms || leadData.broker_fee_terms === 'N/A';
     const hideFinal = !leadData.carrier_pay_terms || leadData.carrier_pay_terms === 'N/A';
 
+    pricingBody.push(['First Payment:', `$${deposit.toFixed(2)}`]);
     if (!hideFirst) {
-        pricingBody.push(['First Payment:', `$${deposit.toFixed(2)}`]);
         pricingBody.push([`Due: ${firstPaymentDue}`, `Method: ${firstPaymentMethod}`]);
     }
 
+    pricingBody.push([`Final Payment:`, `$${nextPayment.toFixed(2)}`]);
     if (!hideFinal) {
-        pricingBody.push([`Final Payment:`, `$${nextPayment.toFixed(2)}`]);
         pricingBody.push([`Due: ${finalPaymentDue}`, `Method: ${finalPaymentMethod}`]);
     }
 
