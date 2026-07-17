@@ -912,9 +912,11 @@ const LeadDetails = () => {
             <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote} style={{ background: 'linear-gradient(135deg, #0ea5e9, #2563eb)' }}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
             </button>
-            <button className={styles.btnWarning} onClick={handleArchiveToggle}>
-              {lead.is_archived ? 'Restore' : 'Archive'}
-            </button>
+            {!isOrderView && (
+              <button className={styles.btnWarning} onClick={handleArchiveToggle}>
+                {lead.is_archived ? 'Restore' : 'Archive'}
+              </button>
+            )}
             {isAdmin && (
               <button className={styles.btnDanger} onClick={handleDelete}>Delete</button>
             )}
