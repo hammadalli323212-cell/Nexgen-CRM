@@ -107,10 +107,28 @@ export default async function handler(req, res) {
       });
     }
 
+    const textVersion = `
+Hi ${customerName || 'Customer'},
+
+${isChangeOrder 
+  ? "A change has been made to your order with NexGen Auto Transport. Please click the link below to review and sign the updated change order." 
+  : "Thank you for choosing NexGen Auto Transport! Please click the link below to review your order details and securely sign your contract."}
+
+${bookingLink ? `Secure Link: ${bookingLink}\n` : ''}
+
+If you have any questions, we're here to help.
+
+Best regards,
+${fromName}
+NexGen Auto Transport
+${senderPhone}
+`.trim();
+
     const mailOptions = {
       from: `"${fromName}" <${senderEmail}>`,
       to: customerEmail,
       subject: subjectLine,
+      text: textVersion,
       html: html
     };
 

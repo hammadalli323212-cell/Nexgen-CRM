@@ -71,21 +71,21 @@ export default async function handler(req, res) {
 <table style="width:100%;border-collapse:collapse">
 <tr>
 <td style="padding:0 0 12px;vertical-align:top">
-<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">📍 Origin</p>
+<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">Origin</p>
 <p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.origin_city || ''}${leadData.origin_state ? ', ' + leadData.origin_state : ''} ${leadData.origin_zip || ''}</p>
 </td>
 <td style="padding:0 0 12px;vertical-align:top">
-<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">📍 Destination</p>
+<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">Destination</p>
 <p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.destination_city || ''}${leadData.destination_state ? ', ' + leadData.destination_state : ''} ${leadData.destination_zip || ''}</p>
 </td>
 </tr>
 <tr>
 <td style="padding:12px 0 0;border-top:1px solid #e2e8f0;vertical-align:top">
-<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">📅 Est. Ship Date</p>
+<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">Est. Ship Date</p>
 <p style="margin:4px 0 0;font-size:15px;color:#1e293b;font-weight:600">${leadData.ship_date ? new Date(leadData.ship_date).toLocaleDateString() : 'TBD'}</p>
 </td>
 <td style="padding:12px 0 0;border-top:1px solid #e2e8f0;vertical-align:top">
-<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">💰 Total Price</p>
+<p style="margin:0;font-size:12px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:1px">Total Price</p>
 <p style="margin:4px 0 0;font-size:20px;color:#2563eb;font-weight:800">$${leadData.estimated_price||0}</p>
 </td>
 </tr>
@@ -98,7 +98,7 @@ ${bookingLink ? `
 </div>
 ` : ''}
 
-<h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">🚗 Vehicle Details</h3>
+<h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">Vehicle Details</h3>
 <table style="width:100%;border-collapse:collapse;margin:0 0 24px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
 <thead>
 <tr style="background:#f9fafb">
@@ -112,11 +112,11 @@ ${vRows}
 </tbody>
 </table>
 
-<h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">🏆 Why Choose NexGen?</h3>
+<h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">Why Choose NexGen?</h3>
 <ul style="margin:0 0 24px;padding:0;list-style:none">
-<li style="margin:0 0 8px;font-size:14px;color:#4b5563">✅ <strong>Fully Licensed & Bonded</strong> - FMCSA compliant</li>
-<li style="margin:0 0 8px;font-size:14px;color:#4b5563">🔒 <strong>Fully Insured</strong> - Bumper-to-bumper coverage</li>
-<li style="margin:0 0 8px;font-size:14px;color:#4b5563">⭐ <strong>Top Rated</strong> - 5-star customer service</li>
+<li style="margin:0 0 8px;font-size:14px;color:#4b5563">&bull; <strong>Fully Licensed & Bonded</strong> - FMCSA compliant</li>
+<li style="margin:0 0 8px;font-size:14px;color:#4b5563">&bull; <strong>Fully Insured</strong> - Bumper-to-bumper coverage</li>
+<li style="margin:0 0 8px;font-size:14px;color:#4b5563">&bull; <strong>Top Rated</strong> - 5-star customer service</li>
 </ul>
 
 <div style="background:#f8fafc;padding:16px;border-radius:8px;margin:0 0 24px;text-align:center">
@@ -156,11 +156,31 @@ ${vRows}
       });
     }
 
+    const textVersion = `
+Hi ${customerName || 'Customer'},
+
+Thank you for requesting a quote from NexGen Auto Transport! Here are the details for your upcoming shipment:
+
+Origin: ${leadData.origin_city || ''}${leadData.origin_state ? ', ' + leadData.origin_state : ''} ${leadData.origin_zip || ''}
+Destination: ${leadData.destination_city || ''}${leadData.destination_state ? ', ' + leadData.destination_state : ''} ${leadData.destination_zip || ''}
+Est. Ship Date: ${leadData.ship_date ? new Date(leadData.ship_date).toLocaleDateString() : 'TBD'}
+Total Price: $${leadData.estimated_price||0}
+
+${bookingLink ? `Book Now Securely: ${bookingLink}\n` : ''}
+Questions? We're here to help.
+Phone: ${senderPhone}
+
+Best regards,
+${fromName}
+NexGen Auto Transport
+`.trim();
+
     const mailOptions = {
       from: `"${fromName}" <${senderEmail}>`,
       replyTo: senderEmail,
       to: customerEmail,
       subject: subjectLine,
+      text: textVersion,
       html: html
     };
 
