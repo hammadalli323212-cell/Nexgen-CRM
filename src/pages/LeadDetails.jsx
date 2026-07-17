@@ -53,7 +53,7 @@ const LeadDetails = () => {
 
   const STATUS_OPTIONS = isOrderView
     ? ['Booked', 'Dispatched', 'In Transit', 'Delivered', 'Completed', 'Cancelled']
-    : ['New', 'Quoted', 'Follow Up', 'Cancelled'];
+    : ['New', 'Quoted', 'Follow Up'];
 
   useEffect(() => {
     const fetchLeadDetails = async () => {
