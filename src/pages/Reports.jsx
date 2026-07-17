@@ -76,10 +76,16 @@ const Reports = () => {
           // Agg Users
           const userName = lead.assignee ? (lead.assignee.full_name || `${lead.assignee.first_name || ''} ${lead.assignee.last_name || ''}`.trim() || 'Unknown Agent') : 'Unassigned';
           if (!usersMap[userName]) {
-            usersMap[userName] = { name: userName, leads: 0, orders: 0, revenue: 0 };
+            usersMap[userName] = { name: userName, leads: 0, orders: 0, completed_orders: 0, revenue: 0 };
           }
           usersMap[userName].leads++;
           if (isOrder) usersMap[userName].orders++;
+          
+          const completedStatuses = ['Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
+          if (completedStatuses.includes(lead.status)) {
+             usersMap[userName].completed_orders++;
+          }
+
           if (isOrder && lead.broker_fee_collected) {
             usersMap[userName].revenue += ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
           }
@@ -253,7 +259,8 @@ const Reports = () => {
                     <th>Agent Name</th>
                     <th style={{ textAlign: 'right' }}>Total Leads</th>
                     <th style={{ textAlign: 'right' }}>Active Leads</th>
-                    <th style={{ textAlign: 'right' }}>Orders Booked</th>
+                    <th style={{ textAlign: 'right' }}>Total Orders</th>
+                    <th style={{ textAlign: 'right' }}>Completed Orders</th>
                     <th style={{ textAlign: 'right' }}>Conversion Rate</th>
                     <th style={{ textAlign: 'right' }}>Broker Profit</th>
                   </tr>
@@ -265,6 +272,7 @@ const Reports = () => {
                       <td style={{ textAlign: 'right' }}>{u.leads}</td>
                       <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
                       <td style={{ textAlign: 'right' }}>{u.orders}</td>
+                      <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
                       <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion}%</td>
                       <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
                     </tr>
