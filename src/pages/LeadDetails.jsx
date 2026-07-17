@@ -1,8 +1,9 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool } from 'lucide-react';
+import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool, ChevronDown } from 'lucide-react';
 import { getStatusColors, getAgentColors, SourceBadge } from '../components/common/Badges';
+import { CustomDropdown } from '../components/common/CustomDropdown';
 import { supabase } from '../lib/supabase';
 import { generateOrderPDF } from '../lib/pdfGenerator';
 import { useAuth } from '../lib/AuthContext';
@@ -369,8 +370,7 @@ const LeadDetails = () => {
     }, setIsSendingQuote);
   };
 
-  const handleAssign = async (e) => {
-    const newAssigneeId = e.target.value;
+  const handleAssign = async (newAssigneeId) => {
     setIsAssigning(true);
     try {
       const { error } = await supabase.from('leads').update({ assigned_to: newAssigneeId || null }).eq('lead_number', id);
@@ -403,8 +403,7 @@ const LeadDetails = () => {
     }
   };
 
-  const handleStatusChange = async (e) => {
-    const newStatus = e.target.value;
+  const handleStatusChange = async (newStatus) => {
     setIsUpdatingStatus(true);
     try {
       const payload = { status: newStatus };
@@ -793,33 +792,39 @@ const LeadDetails = () => {
         <div className={styles.titleArea}>
           <h1 className={styles.leadTitle} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             {isOrderView ? 'Order' : 'Lead'} #NG-{lead.order_id || lead.lead_number}
-            <select 
-              value={lead.status} 
+            <CustomDropdown
+              value={lead.status}
+              options={STATUS_OPTIONS.map(s => ({ value: s, label: s }))}
               onChange={handleStatusChange}
-              disabled={isUpdatingStatus}
-              style={{
-                 fontSize: '0.9rem',
-                 padding: '4px 10px',
-                 borderRadius: '12px',
-                 backgroundColor: getStatusColors(lead.status).bg,
-                 color: getStatusColors(lead.status).text,
-                 border: `1px solid ${getStatusColors(lead.status).border}`,
-                 outline: 'none',
-                 cursor: 'pointer',
-                 fontWeight: '600',
-                 textTransform: 'uppercase'
+              renderButton={(selectedOption, isOpen) => (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  fontSize: '0.9rem',
+                  padding: '4px 10px',
+                  borderRadius: '12px',
+                  backgroundColor: getStatusColors(lead.status).bg,
+                  color: getStatusColors(lead.status).text,
+                  border: `1px solid ${getStatusColors(lead.status).border}`,
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  opacity: isUpdatingStatus ? 0.7 : 1
+                }}>
+                  {selectedOption?.label || lead.status}
+                  <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                </div>
+              )}
+              renderOption={(opt) => {
+                const colors = getStatusColors(opt.value);
+                return (
+                  <span style={{
+                    display: 'inline-flex', padding: '2px 8px', borderRadius: '8px', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase',
+                    backgroundColor: colors.bg, color: colors.text, border: `1px solid ${colors.border}`
+                  }}>
+                    {opt.label}
+                  </span>
+                );
               }}
-            >
-              {STATUS_OPTIONS.map(status => (
-                <option 
-                  key={status} 
-                  value={status} 
-                  style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}
-                >
-                  {status}
-                </option>
-              ))}
-            </select>
+            />
           </h1>
           <div className={styles.subTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -836,33 +841,48 @@ const LeadDetails = () => {
         <div className={styles.actions}>
           {isAdmin && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '16px' }}>
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Assign to:</span>
-              <select 
-                value={lead.assigned_to || ''} 
+              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Assigned Agent:</span>
+              <CustomDropdown
+                value={lead.assigned_to || ''}
+                options={[
+                  { value: '', label: 'Unassigned', color: getAgentColors('Unassigned') },
+                  ...teamMembers.map(m => ({
+                    value: m.id,
+                    label: m.full_name || m.email,
+                    color: getAgentColors(m.full_name || m.email)
+                  }))
+                ]}
                 onChange={handleAssign}
-                disabled={isAssigning}
-                style={{ 
-                  padding: '6px 12px', 
-                  borderRadius: '12px', 
-                  backgroundColor: getAgentColors(lead.assignee?.full_name || lead.assignee?.email).bg, 
-                  color: getAgentColors(lead.assignee?.full_name || lead.assignee?.email).text, 
-                  border: `1px solid ${getAgentColors(lead.assignee?.full_name || lead.assignee?.email).border}`, 
-                  outline: 'none', 
-                  cursor: 'pointer',
-                  fontWeight: '600'
+                dropdownStyle={{ right: 0, left: 'auto', minWidth: '220px' }}
+                renderButton={(selectedOption, isOpen) => {
+                  const mColor = selectedOption?.color || getAgentColors('Unassigned');
+                  return (
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: '8px',
+                      padding: '6px 12px',
+                      borderRadius: '12px',
+                      backgroundColor: mColor.bg,
+                      color: mColor.text,
+                      border: `1px solid ${mColor.border}`,
+                      fontWeight: '600',
+                      opacity: isAssigning ? 0.7 : 1
+                    }}>
+                      <span>{selectedOption?.label || 'Unassigned'}</span>
+                      <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                    </div>
+                  );
                 }}
-              >
-                <option value="" style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>Unassigned</option>
-                {teamMembers.map(member => (
-                  <option 
-                    key={member.id} 
-                    value={member.id} 
-                    style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}
-                  >
-                    {member.full_name || member.email}
-                  </option>
-                ))}
-              </select>
+                renderOption={(opt) => {
+                  return (
+                    <span style={{
+                      fontWeight: '600',
+                      color: opt.color.text,
+                    }}>
+                      {opt.label}
+                    </span>
+                  );
+                }}
+              />
             </div>
           )}
           
