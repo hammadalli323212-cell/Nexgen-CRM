@@ -44,6 +44,8 @@ export const CustomDropdown = ({ value, options, onChange, renderButton, renderO
           overflowY: 'auto',
           display: 'flex', flexDirection: 'column',
           padding: '6px',
+          fontSize: '1rem',
+          lineHeight: 'normal',
           ...dropdownStyle
         }}>
           {options.map((opt) => (
