@@ -251,7 +251,8 @@ const Reports = () => {
                 <thead>
                   <tr>
                     <th>Agent Name</th>
-                    <th style={{ textAlign: 'right' }}>Leads Assigned</th>
+                    <th style={{ textAlign: 'right' }}>Total Leads</th>
+                    <th style={{ textAlign: 'right' }}>Active Leads</th>
                     <th style={{ textAlign: 'right' }}>Orders Booked</th>
                     <th style={{ textAlign: 'right' }}>Conversion Rate</th>
                     <th style={{ textAlign: 'right' }}>Broker Profit</th>
@@ -262,6 +263,7 @@ const Reports = () => {
                     <tr key={i}>
                       <td style={{ fontWeight: '500' }}>{u.name}</td>
                       <td style={{ textAlign: 'right' }}>{u.leads}</td>
+                      <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
                       <td style={{ textAlign: 'right' }}>{u.orders}</td>
                       <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion}%</td>
                       <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
