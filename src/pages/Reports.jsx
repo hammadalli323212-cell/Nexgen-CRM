@@ -44,6 +44,7 @@ const Reports = () => {
         // 1. Summary Stats
         let tLeads = 0;
         let tOrders = 0;
+        let tCompletedOrders = 0;
         let tRevenue = 0;
 
         // Aggregation objects
@@ -53,12 +54,17 @@ const Reports = () => {
         const carriersMap = {};
 
         const orderStatuses = ['Booked', 'Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
+        const completedStatuses = ['Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
 
         leads?.forEach(lead => {
           tLeads++;
           
           const isOrder = orderStatuses.includes(lead.status);
           if (isOrder) tOrders++;
+
+          if (completedStatuses.includes(lead.status)) {
+             tCompletedOrders++;
+          }
 
           if (orderStatuses.includes(lead.status) && lead.broker_fee_collected) {
             tRevenue += ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
@@ -81,7 +87,6 @@ const Reports = () => {
           usersMap[userName].leads++;
           if (isOrder) usersMap[userName].orders++;
           
-          const completedStatuses = ['Dispatched', 'In Transit', 'Picked Up', 'Delivered', 'Completed'];
           if (completedStatuses.includes(lead.status)) {
              usersMap[userName].completed_orders++;
           }
@@ -100,8 +105,11 @@ const Reports = () => {
         // Finalize state formatting
         setSummaryStats({
           totalLeads: tLeads,
+          activeLeads: tLeads - tOrders,
           totalOrders: tOrders,
+          completedOrders: tCompletedOrders,
           conversionRate: tLeads > 0 ? ((tOrders / tLeads) * 100).toFixed(1) + '%' : '0%',
+          completedConversionRate: tLeads > 0 ? ((tCompletedOrders / tLeads) * 100).toFixed(1) + '%' : '0%',
           totalRevenue: tRevenue
         });
 
@@ -162,13 +170,25 @@ const Reports = () => {
           <span className={styles.statTitle}>Total Leads</span>
           <span className={styles.statValue}>{loading ? '-' : summaryStats.totalLeads}</span>
         </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--brand-blue)' }}>
+          <span className={styles.statTitle}>Active Leads</span>
+          <span className={styles.statValue}>{loading ? '-' : summaryStats.activeLeads}</span>
+        </div>
         <div className={styles.statCard} style={{ borderTop: '3px solid var(--warning)' }}>
-          <span className={styles.statTitle}>Total Orders (Booked+)</span>
+          <span className={styles.statTitle}>Total Orders</span>
           <span className={styles.statValue}>{loading ? '-' : summaryStats.totalOrders}</span>
         </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--warning)' }}>
+          <span className={styles.statTitle}>Completed Orders</span>
+          <span className={styles.statValue}>{loading ? '-' : summaryStats.completedOrders}</span>
+        </div>
         <div className={styles.statCard} style={{ borderTop: '3px solid var(--info)' }}>
-          <span className={styles.statTitle}>Conversion Rate</span>
+          <span className={styles.statTitle}>Lead to Order Conv.</span>
           <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)', WebkitBackgroundClip: 'text' }}>{loading ? '-' : summaryStats.conversionRate}</span>
+        </div>
+        <div className={styles.statCard} style={{ borderTop: '3px solid var(--success)' }}>
+          <span className={styles.statTitle}>Lead to Completed Conv.</span>
+          <span className={styles.statValue} style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', WebkitBackgroundClip: 'text' }}>{loading ? '-' : summaryStats.completedConversionRate}</span>
         </div>
         <div className={styles.statCard} style={{ borderTop: '3px solid var(--success)' }}>
           <span className={styles.statTitle}>Collected Broker Profit</span>
