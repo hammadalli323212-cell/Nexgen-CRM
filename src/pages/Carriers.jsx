@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast';
 import React, { useMemo, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import DataTable from '../components/common/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
 import { supabase } from '../lib/supabase';
@@ -55,7 +56,14 @@ const Carriers = () => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('company_name', { header: 'Carrier Name' }),
+      columnHelper.accessor('company_name', { 
+        header: 'Carrier Name',
+        cell: info => (
+          <Link to={`/carriers/${info.row.original.id}`} className={styles.tableLink}>
+            {info.getValue()}
+          </Link>
+        )
+      }),
       columnHelper.accessor('out_of', { header: 'Out Of', cell: info => info.getValue() || '-' }),
       columnHelper.accessor('company_phone', { header: 'Company Phone', cell: info => info.getValue() || '-' }),
       columnHelper.accessor('dispatch_phone', { header: 'Dispatch Phone', cell: info => info.getValue() || '-' }),

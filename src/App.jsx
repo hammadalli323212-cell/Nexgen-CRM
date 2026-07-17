@@ -20,6 +20,7 @@ import Dispatch from './pages/Dispatch';
 import Customers from './pages/Customers';
 import CustomerDetails from './pages/CustomerDetails';
 import Carriers from './pages/Carriers';
+import CarrierDetails from './pages/CarrierDetails';
 import MyTasks from './pages/MyTasks';
 
 import './index.css';
@@ -68,6 +69,7 @@ function App() {
             <Route path="customers/:id" element={<CustomerDetails />} />
             <Route path="users" element={<UserManagement />} />
             <Route path="carriers" element={<Carriers />} />
+            <Route path="carriers/:id" element={<CarrierDetails />} />
             <Route path="reports" element={<Reports />} />
             
             {/* Admin Only Route */}
