@@ -210,7 +210,7 @@ const CarrierDetails = () => {
                 <DataTable 
                   columns={columns} 
                   data={orders}
-                  onRowClick={(row) => navigate(`/orders/${row.id}`)}
+                  onRowClick={(row) => navigate(`/orders/${row.original.lead_number}`)}
                 />
               )}
             </div>
