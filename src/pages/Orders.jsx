@@ -181,14 +181,6 @@ const Orders = () => {
           <h1>Orders</h1>
           <p>Track and manage your booked orders.</p>
         </div>
-        <div className={styles.actions}>
-          <button
-            className={styles.btnPrimary}
-            onClick={() => navigate("/orders/new")}
-          >
-            + New Order
-          </button>
-        </div>
       </div>
       <div className={styles.tableWrapper}>
         <DataTable
