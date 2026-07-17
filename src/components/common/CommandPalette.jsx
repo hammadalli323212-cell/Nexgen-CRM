@@ -56,9 +56,15 @@ const CommandPalette = ({ isOpen, onClose }) => {
           .eq('is_archived', false)
           .limit(5);
 
-        if (isNumeric) {
-          // If it's a number, search lead_number
-          leadQuery = leadQuery.eq('lead_number', parseInt(query));
+        let numericValue = null;
+        const strippedQuery = query.replace(/^ng-/i, '').trim();
+        if (!isNaN(strippedQuery) && strippedQuery !== '') {
+          numericValue = parseInt(strippedQuery, 10);
+        }
+
+        if (numericValue !== null) {
+          // If it resolves to a number (with or without NG-), search both lead_number and order_id
+          leadQuery = leadQuery.or(`lead_number.eq.${numericValue},order_id.ilike.%${query}%`);
         } else {
           // If not a number, search order_id or status
           leadQuery = leadQuery.or(`order_id.ilike.%${query}%,status.ilike.%${query}%`);
