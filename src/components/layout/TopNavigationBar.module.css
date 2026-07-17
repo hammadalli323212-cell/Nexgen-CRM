@@ -1,14 +1,15 @@
 .navbar {
   display: flex;
   align-items: center;
-  background-color: var(--brand-blue);
-  height: 50px;
-  padding: 0 var(--space-md);
+  background: linear-gradient(135deg, #0f4c9c, #1e3a8a); /* Smoother deep blue gradient */
+  height: 56px; /* Slightly taller for breathing room */
+  padding: 0 var(--space-xl);
   color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Softer, wider drop shadow */
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 .logoArea {
@@ -32,23 +33,26 @@
 .navItem {
   color: #ffffff;
   text-decoration: none;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 4px;
-  transition: var(--transition);
-  font-size: 0.9rem;
+  padding: 8px 14px;
+  border-radius: 8px; /* Smoother border radius */
+  transition: all 0.3s ease; /* Buttery smooth transitions */
+  font-size: 0.95rem; /* Slightly larger/readable */
   display: flex;
   align-items: center;
-  gap: 4px;
-  position: relative; /* For dropdown positioning */
+  gap: 6px;
+  position: relative;
+  font-weight: 400;
 }
 
 .navItem:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px); /* Subtle lift effect */
 }
 
 .navItem.active {
   background-color: rgba(255, 255, 255, 0.15);
   font-weight: 500;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* Crisp glass edge */
 }
 
 /* Dropdown Menu Styles */
@@ -56,14 +60,16 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: var(--brand-blue);
+  background-color: #1e3a8a; /* Deep blue to match gradient */
   min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25); /* Smoother shadow */
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  border-radius: 0 0 4px 4px;
+  border-radius: 8px;
   overflow: hidden;
+  margin-top: 8px; /* Gap from the header */
+  border: 1px solid rgba(255,255,255,0.05); /* Glass edge */
 }
 
 .dropdownItem {
