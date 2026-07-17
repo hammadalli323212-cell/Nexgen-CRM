@@ -891,21 +891,21 @@ const LeadDetails = () => {
             </div>
           </div>
           
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button className={styles.btnPrimary} onClick={handleSendOrderForm} disabled={isSendingEmail}>
               {isSendingEmail ? 'Sending...' : 'Send Form'}
             </button>
-            <button className={styles.btnSecondary} onClick={handleSendChangeOrder} disabled={isSendingEmail} style={{ borderColor: '#f59e0b', color: '#f59e0b' }}>
+            <button className={styles.btnWarning} onClick={handleSendChangeOrder} disabled={isSendingEmail}>
               Change Order
             </button>
             <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote} style={{ background: 'linear-gradient(135deg, #0ea5e9, #2563eb)' }}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
             </button>
-            <button className={styles.btnSecondary} onClick={handleArchiveToggle} style={{ borderColor: lead.is_archived ? '#10b981' : '#f59e0b', color: lead.is_archived ? '#10b981' : '#f59e0b' }}>
+            <button className={styles.btnWarning} onClick={handleArchiveToggle}>
               {lead.is_archived ? 'Restore' : 'Archive'}
             </button>
             {isAdmin && (
-              <button className={styles.btnSecondary} onClick={handleDelete} style={{ borderColor: '#ef4444', color: '#ef4444' }}>Delete</button>
+              <button className={styles.btnDanger} onClick={handleDelete}>Delete</button>
             )}
           </div>
         </div>
