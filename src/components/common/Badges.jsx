@@ -2,18 +2,25 @@ import React from 'react';
 
 export const getStatusColors = (status) => {
   const colors = {
-    'New': { bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' }, // Blue
-    'Quoted': { bg: 'rgba(234, 179, 8, 0.15)', text: '#facc15', border: 'rgba(234, 179, 8, 0.3)' }, // Yellow
-    'Follow Up': { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' }, // Purple
-    'Booked': { bg: 'rgba(16, 185, 129, 0.15)', text: '#34d399', border: 'rgba(16, 185, 129, 0.3)' }, // Emerald Green
-    'Dispatched': { bg: 'rgba(6, 182, 212, 0.15)', text: '#22d3ee', border: 'rgba(6, 182, 212, 0.3)' }, // Cyan
-    'In Transit': { bg: 'rgba(249, 115, 22, 0.15)', text: '#fb923c', border: 'rgba(249, 115, 22, 0.3)' }, // Orange
-    'Picked Up': { bg: 'rgba(236, 72, 153, 0.15)', text: '#f472b6', border: 'rgba(236, 72, 153, 0.3)' }, // Pink
-    'Delivered': { bg: 'rgba(99, 102, 241, 0.15)', text: '#818cf8', border: 'rgba(99, 102, 241, 0.3)' }, // Indigo (distinct from Booked)
-    'Completed': { bg: 'rgba(20, 184, 166, 0.15)', text: '#2dd4bf', border: 'rgba(20, 184, 166, 0.3)' }, // Teal
-    'Canceled': { bg: 'rgba(239, 68, 68, 0.15)', text: '#f87171', border: 'rgba(239, 68, 68, 0.3)' }, // Red
+    'New': { hue: 217, sat: 90 }, // Blue
+    'Quoted': { hue: 45, sat: 93 }, // Yellow
+    'Follow Up': { hue: 271, sat: 91 }, // Purple
+    'Booked': { hue: 160, sat: 84 }, // Emerald
+    'Dispatched': { hue: 189, sat: 94 }, // Cyan
+    'In Transit': { hue: 25, sat: 95 }, // Orange
+    'Picked Up': { hue: 330, sat: 81 }, // Pink
+    'Delivered': { hue: 232, sat: 89 }, // Indigo
+    'Completed': { hue: 173, sat: 80 }, // Teal
+    'Canceled': { hue: 0, sat: 84 }, // Red
   };
-  return colors[status] || { bg: 'rgba(255,255,255,0.1)', text: '#a1a1aa', border: 'rgba(255,255,255,0.2)' };
+  const c = colors[status];
+  if (!c) return { bg: 'rgba(255,255,255,0.1)', text: 'var(--text-muted)', border: 'rgba(255,255,255,0.2)' };
+  
+  return {
+    bg: `hsla(${c.hue}, ${c.sat}%, 50%, 0.15)`,
+    text: `hsl(${c.hue}, ${c.sat}%, var(--badge-text-l, 65%))`,
+    border: `hsla(${c.hue}, ${c.sat}%, 50%, 0.3)`
+  };
 };
 
 export const StatusBadge = ({ status }) => {
@@ -66,7 +73,7 @@ export const getAgentColors = (name) => {
   const hue = Math.abs((hash * 137) % 360);
   return {
     bg: `hsla(${hue}, 70%, 50%, 0.15)`,
-    text: `hsl(${hue}, 70%, 65%)`,
+    text: `hsl(${hue}, 70%, var(--badge-text-l, 65%))`,
     border: `hsla(${hue}, 70%, 50%, 0.3)`,
     hue
   };

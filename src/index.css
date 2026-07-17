@@ -12,6 +12,8 @@
   --text-secondary: #cbd5e1; /* Much brighter for readability */
   --text-muted: #9ca3af; /* Brighter muted color */
   
+  --badge-text-l: 75%; /* Bright text for dark theme */
+  
   --border-color: #454d55;
   
   /* Status Colors */
@@ -46,6 +48,8 @@
   --text-primary: #212529;
   --text-secondary: #495057;
   --text-muted: #6c757d;
+  
+  --badge-text-l: 35%; /* Dark text for light theme */
   
   --border-color: #dee2e6;
   

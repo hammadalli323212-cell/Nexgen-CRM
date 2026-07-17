@@ -833,58 +833,63 @@ const LeadDetails = () => {
                 <span>Order created on {new Date(lead.order_created_at).toLocaleString()}</span>
               )}
             </div>
-            <div style={{ transform: 'scale(1.1)', transformOrigin: 'left center' }}>
-              <SourceBadge source={lead.source} />
-            </div>
           </div>
         </div>
         <div className={styles.actions}>
-          {isAdmin && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '16px' }}>
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Assigned Agent:</span>
-              <CustomDropdown
-                value={lead.assigned_to || ''}
-                options={[
-                  { value: '', label: 'Unassigned', color: getAgentColors('Unassigned') },
-                  ...teamMembers.map(m => ({
-                    value: m.id,
-                    label: m.full_name || m.email,
-                    color: getAgentColors(m.full_name || m.email)
-                  }))
-                ]}
-                onChange={handleAssign}
-                dropdownStyle={{ right: 0, left: 'auto', minWidth: '220px' }}
-                renderButton={(selectedOption, isOpen) => {
-                  const mColor = selectedOption?.color || getAgentColors('Unassigned');
-                  return (
-                    <div style={{
-                      display: 'flex', alignItems: 'center', gap: '8px',
-                      padding: '6px 12px',
-                      borderRadius: '12px',
-                      backgroundColor: mColor.bg,
-                      color: mColor.text,
-                      border: `1px solid ${mColor.border}`,
-                      fontWeight: '600',
-                      opacity: isAssigning ? 0.7 : 1
-                    }}>
-                      <span>{selectedOption?.label || 'Unassigned'}</span>
-                      <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                    </div>
-                  );
-                }}
-                renderOption={(opt) => {
-                  return (
-                    <span style={{
-                      fontWeight: '600',
-                      color: opt.color.text,
-                    }}>
-                      {opt.label}
-                    </span>
-                  );
-                }}
-              />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', marginRight: '16px' }}>
+            {isAdmin && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Assigned Agent:</span>
+                <CustomDropdown
+                  value={lead.assigned_to || ''}
+                  options={[
+                    { value: '', label: 'Unassigned', color: getAgentColors('Unassigned') },
+                    ...teamMembers.map(m => ({
+                      value: m.id,
+                      label: m.full_name || m.email,
+                      color: getAgentColors(m.full_name || m.email)
+                    }))
+                  ]}
+                  onChange={handleAssign}
+                  dropdownStyle={{ right: 0, left: 'auto', minWidth: '220px' }}
+                  renderButton={(selectedOption, isOpen) => {
+                    const mColor = selectedOption?.color || getAgentColors('Unassigned');
+                    return (
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        padding: '6px 12px',
+                        borderRadius: '12px',
+                        backgroundColor: mColor.bg,
+                        color: mColor.text,
+                        border: `1px solid ${mColor.border}`,
+                        fontWeight: '600',
+                        opacity: isAssigning ? 0.7 : 1
+                      }}>
+                        <span>{selectedOption?.label || 'Unassigned'}</span>
+                        <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                      </div>
+                    );
+                  }}
+                  renderOption={(opt) => {
+                    return (
+                      <span style={{
+                        fontWeight: '600',
+                        color: opt.color.text,
+                      }}>
+                        {opt.label}
+                      </span>
+                    );
+                  }}
+                />
+              </div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>Source:</span>
+              <div style={{ backgroundColor: 'var(--bg-dark)', padding: '2px 8px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                <SourceBadge source={lead.source} />
+              </div>
             </div>
-          )}
+          </div>
           
           <div style={{ display: 'flex', gap: '8px' }}>
             <button className={styles.btnPrimary} onClick={handleSendOrderForm} disabled={isSendingEmail}>
