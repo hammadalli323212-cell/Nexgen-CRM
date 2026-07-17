@@ -82,8 +82,14 @@ const Customers = () => {
     if (!window.confirm(`Are you sure you want to permanently delete ${selectedCustomers.size} customers? This will also delete their associated leads and cannot be undone.`)) return;
     
     try {
+      // 1. Manually delete associated leads first to prevent foreign key constraint violations
+      const { error: leadsError } = await supabase.from('leads').delete().in('customer_id', Array.from(selectedCustomers));
+      if (leadsError) throw leadsError;
+
+      // 2. Delete the customers
       const { error } = await supabase.from('customers').delete().in('id', Array.from(selectedCustomers));
       if (error) throw error;
+
       toast.success('Customers deleted successfully!');
       setCustomers(prev => prev.filter(c => !selectedCustomers.has(c.id)));
       setSelectedCustomers(new Set());
