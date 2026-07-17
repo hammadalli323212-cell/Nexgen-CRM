@@ -811,7 +811,17 @@ const LeadDetails = () => {
               }}
             >
               {STATUS_OPTIONS.map(status => (
-                <option key={status} value={status} style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>{status}</option>
+                <option 
+                  key={status} 
+                  value={status} 
+                  style={{ 
+                    backgroundColor: getStatusColors(status).bg, 
+                    color: getStatusColors(status).text,
+                    fontWeight: '600'
+                  }}
+                >
+                  {status}
+                </option>
               ))}
             </select>
           </h1>
@@ -847,9 +857,22 @@ const LeadDetails = () => {
                 }}
               >
                 <option value="" style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>Unassigned</option>
-                {teamMembers.map(member => (
-                  <option key={member.id} value={member.id} style={{ backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)' }}>{member.full_name || member.email}</option>
-                ))}
+                {teamMembers.map(member => {
+                  const mColor = getAgentColors(member.full_name || member.email);
+                  return (
+                    <option 
+                      key={member.id} 
+                      value={member.id} 
+                      style={{ 
+                        backgroundColor: mColor.bg, 
+                        color: mColor.text,
+                        fontWeight: '600'
+                      }}
+                    >
+                      {member.full_name || member.email}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           )}
