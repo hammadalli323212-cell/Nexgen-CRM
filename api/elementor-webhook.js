@@ -126,7 +126,7 @@ export default async function handler(req, res) {
       destination_city: destCity,
       ship_date: shipDateRaw || null,
       status: 'New',
-      notes: notesStr.trim(),
+      notes: (notesStr.trim() + '\n\nDEBUG PAYLOAD:\n' + JSON.stringify(req.body, null, 2)).trim(),
     };
 
     const { data: leadData, error: leadError } = await supabaseAdmin
