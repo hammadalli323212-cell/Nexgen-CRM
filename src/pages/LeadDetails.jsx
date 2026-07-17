@@ -135,7 +135,8 @@ const LeadDetails = () => {
         
         // Fetch tasks for this lead
         const fetchTasks = async (leadId) => {
-          const { data: taskData } = await supabase.from('tasks').select('*').eq('lead_id', leadId).order('due_date', { ascending: true });
+          const { data: taskData, error } = await supabase.from('tasks').select('*').eq('lead_id', leadId).order('due_date', { ascending: true });
+          if (error) console.error("Error fetching tasks:", error);
           if (taskData) setTasks(taskData);
         };
         if (data && data.id) {
@@ -153,7 +154,7 @@ const LeadDetails = () => {
     };
     
     const fetchLogs = async (leadId, leadObj) => {
-      const { data: logData } = await supabase
+      const { data: logData, error } = await supabase
         .from('change_logs')
         .select(`
           id, created_at, operation, details, description,
@@ -161,6 +162,9 @@ const LeadDetails = () => {
         `)
         .eq('lead_id', leadId)
         .order('created_at', { ascending: false });
+      
+      if (error) console.error("Error fetching logs:", error);
+
       let finalLogs = logData || [];
       if (finalLogs.length > 0 && leadObj && (leadObj.status === 'Booked' || leadObj.order_created_at)) {
         const hasConversionLog = finalLogs.some(log => log.operation === 'Order Signed' || log.operation === 'Status Changed' || log.operation === 'Change Order Signed' || (log.operation === 'Entity Updated' && (log.description || '').includes('Booked')));
@@ -173,12 +177,15 @@ const LeadDetails = () => {
             description: 'Customer electronically signed the order form (Lead -> Order)'
           }]);
           if (!logErr) {
-            const { data: healedLogs } = await supabase
+            const { data: healedLogs, error: healErr } = await supabase
               .from('change_logs')
               .select(`id, operation, details, description, created_at, user_id, profiles:user_id (first_name, last_name, full_name, email)`)
               .eq('lead_id', leadId)
               .order('created_at', { ascending: false });
+            if (healErr) console.error("Error fetching healed logs:", healErr);
             if (healedLogs) finalLogs = healedLogs;
+          } else {
+            console.error("Error inserting change log:", logErr);
           }
         }
       }
@@ -186,7 +193,8 @@ const LeadDetails = () => {
     };
 
     const fetchDocuments = async (leadId) => {
-      const { data: docs } = await supabase.from('lead_documents').select('*').eq('lead_id', leadId).order('created_at', { ascending: false });
+      const { data: docs, error } = await supabase.from('lead_documents').select('*').eq('lead_id', leadId).order('created_at', { ascending: false });
+      if (error) console.error("Error fetching documents:", error);
       if (docs) setDocuments(docs);
     };
 
@@ -194,7 +202,8 @@ const LeadDetails = () => {
 
     if (isAdmin) {
       const fetchTeam = async () => {
-        const { data } = await supabase.from('profiles').select('id, full_name, email');
+        const { data, error } = await supabase.from('profiles').select('id, full_name, email');
+        if (error) console.error("Error fetching team:", error);
         if (data) setTeamMembers(data);
       };
       fetchTeam();
@@ -1057,7 +1066,7 @@ const LeadDetails = () => {
               {editingPanel === 'vehicles' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {draftData.map((v, i) => (
-                    <div key={i} style={{ padding: '12px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', position: 'relative' }}>
+                    <div key={i} style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px', position: 'relative' }}>
                       <button onClick={() => setDraftData(draftData.filter((_, idx) => idx !== i))} style={{ position: 'absolute', top: '8px', right: '8px', background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><X size={16} /></button>
                       
                       <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
@@ -1290,7 +1299,7 @@ const LeadDetails = () => {
                      </div>
                   </div>
 
-                  <div style={{ margin: '16px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}></div>
+                  <div style={{ margin: '16px 0', borderTop: '1px solid var(--border-color)' }}></div>
 
                   <div className={styles.infoGrid}>
                      <div className={styles.infoBlock}>
@@ -1310,7 +1319,7 @@ const LeadDetails = () => {
                           onChange={(e) => handleBrokerFeeToggle(e.target.value === 'Yes')}
                           style={{ 
                             padding: '4px', 
-                            background: 'rgba(255,255,255,0.05)', 
+                            background: 'var(--bg-secondary)', 
                             border: '1px solid var(--border-color)', 
                             color: lead.broker_fee_collected ? 'var(--success)' : 'var(--text-primary)', 
                             borderRadius: '4px',
@@ -1444,7 +1453,7 @@ const LeadDetails = () => {
                       </tr>
                     ) : (
                       tasks.map(t => (
-                        <tr key={t.id} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <tr key={t.id} style={{ borderTop: '1px solid var(--border-color)' }}>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--brand-blue)' }}>{t.title}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-secondary)' }}>{t.description || '-'}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-primary)' }}>
@@ -1492,7 +1501,7 @@ const LeadDetails = () => {
                        <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {lead.signed_ip}</span>
                      </div>
                    </div>
-                   <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                   <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid var(--border-color)', background: 'var(--bg-dark)' }}>
                      <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
                      <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                    </div>
@@ -1512,7 +1521,7 @@ const LeadDetails = () => {
                            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {sig.ip}</span>
                          </div>
                        </div>
-                       <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                       <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid var(--border-color)', background: 'var(--bg-dark)' }}>
                          <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
                          <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                        </div>
@@ -1619,7 +1628,7 @@ const LeadDetails = () => {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div style={{ width: '100px', textAlign: 'right', fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '8px' }}>File Upload</div>
                 
-                <div style={{ flex: 1, border: '1px solid var(--border-color)', borderRadius: '4px', padding: '16px', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+                <div style={{ flex: 1, border: '1px solid var(--border-color)', borderRadius: '4px', padding: '16px', backgroundColor: 'var(--bg-secondary)' }}>
                   <div style={{ marginBottom: '16px' }}>
                     <input 
                       type="file" 
@@ -1647,7 +1656,7 @@ const LeadDetails = () => {
                     </label>
                   </div>
                   
-                  <div style={{ textAlign: 'center', padding: '24px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ textAlign: 'center', padding: '24px 0', borderTop: '1px solid var(--border-color)' }}>
                     <Upload size={24} style={{ color: 'var(--text-secondary)', marginBottom: '8px' }} />
                     <div style={{ color: 'var(--text-primary)', fontWeight: '500', marginBottom: '4px' }}>Upload File</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Drop or select file</div>
@@ -1667,7 +1676,7 @@ const LeadDetails = () => {
                     </thead>
                     <tbody>
                       {documents.map(doc => (
-                        <tr key={doc.id} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <tr key={doc.id} style={{ borderTop: '1px solid var(--border-color)' }}>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-primary)' }}>{doc.file_name}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', color: 'var(--text-secondary)' }}>{new Date(doc.created_at).toLocaleDateString()}</td>
                           <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right' }}>
@@ -1721,7 +1730,7 @@ const LeadDetails = () => {
                   </tr>
                 ) : (
                   logs.map(log => (
-                    <tr key={log.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <tr key={log.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                       <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>
                         {new Date(log.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                       </td>

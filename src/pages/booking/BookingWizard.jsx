@@ -72,7 +72,7 @@ const BookingWizard = () => {
         generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'download');
       }, 800);
     }
-  }, [isSuccess]);
+  }, [isSuccess, leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress]);
 
   useEffect(() => {
     // Auth Check & Fetch Data
@@ -165,7 +165,6 @@ const BookingWizard = () => {
       const isChangeOrder = new URLSearchParams(window.location.search).get('mode') === 'change_order';
       
       const updatePayload = {
-        status: 'Booked',
         origin_address: formData.originAddress,
         destination_address: formData.destAddress,
         origin_contact_name: formData.isOriginContact ? `${formData.firstName} ${formData.lastName}`.trim() : formData.originContactName,
@@ -175,6 +174,10 @@ const BookingWizard = () => {
         ship_date: formData.pickupDate || leadData.ship_date,
         is_read: false
       };
+
+      if (!isChangeOrder || ['New', 'Quoted', 'Follow Up'].includes(leadData?.status)) {
+        updatePayload.status = 'Booked';
+      }
 
       if (!leadData.order_created_at && !isChangeOrder) {
         updatePayload.order_created_at = new Date().toISOString();
@@ -291,17 +294,17 @@ const BookingWizard = () => {
         <div className={styles.mainArea} style={{ flexDirection: 'column', alignItems: 'center', paddingTop: '40px' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ fontSize: '3rem', color: '#10b981', marginBottom: '20px' }}>✓</div>
-            <h2 style={{ fontSize: '2rem', color: '#0b132b', marginBottom: '10px' }}>Order Successfully Submitted!</h2>
+            <h2 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '10px' }}>Order Successfully Submitted!</h2>
             <p style={{ color: '#555', fontSize: '1.1rem', marginBottom: '30px' }}>Your signed contract has been received and stored securely.</p>
             <button 
               onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'download')}
-              style={{ background: '#0b132b', color: 'var(--text-primary)', border: 'none', padding: '15px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '15px', width: '100%', maxWidth: '350px' }}
+              style={{ background: 'var(--brand-blue)', color: '#fff', border: 'none', padding: '15px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '15px', width: '100%', maxWidth: '350px' }}
             >
               Download PDF Contract
             </button>
             <button 
               onClick={() => generateOrderPDF(leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, 'preview')}
-              style={{ background: '#f8fafc', color: '#0b132b', border: '2px solid #0b132b', padding: '13px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', width: '100%', maxWidth: '350px' }}
+              style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '2px solid var(--border-color)', padding: '13px 30px', borderRadius: '6px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold', width: '100%', maxWidth: '350px' }}
             >
               Preview PDF
             </button>
@@ -499,7 +502,7 @@ const BookingWizard = () => {
                 <span>Final Payment</span>
                 <span>${nextPayment.toFixed(2)}</span>
               </div>
-              <div className={styles.priceRow} style={{ color: '#555', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
+              <div className={styles.priceRow} style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', paddingTop: '0', borderBottom: 'none' }}>
                 <span style={{flex: 1}}>Due: {finalPaymentDue}</span>
                 <span style={{textAlign: 'right'}}>{finalPaymentMethod}</span>
               </div>
@@ -508,13 +511,13 @@ const BookingWizard = () => {
 
           <div className={styles.sideCard} style={{ marginTop: '30px' }}>
             <div className={styles.sideCardHeader}>CARGO</div>
-            <div className={styles.sideCardBody} style={{ backgroundColor: '#f8f9fa' }}>
+            <div className={styles.sideCardBody} style={{ backgroundColor: 'var(--bg-secondary)' }}>
               <div className={styles.cargoRow}>
                 <span className={styles.cargoLabel}>Transport Type:</span>
                 <span className={styles.transportTag}>{transportType}</span>
               </div>
               <div className={styles.cargoDetails}>
-                <div style={{ color: '#555', marginBottom: '4px' }}>Cargo:</div>
+                <div style={{ color: 'var(--text-secondary)', marginBottom: '4px' }}>Cargo:</div>
                 <div style={{ fontWeight: '500' }}>{cargoLabel}</div>
               </div>
             </div>

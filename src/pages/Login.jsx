@@ -48,7 +48,7 @@ const Login = () => {
         <h1 style={{ color: 'var(--text-primary)', marginBottom: '24px', textAlign: 'center' }}>NEXGEN CRM</h1>
         
         {error && (
-          <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.9rem' }}>
+          <div style={{ backgroundColor: 'var(--bg-dark)', border: '1px solid var(--danger)', color: 'var(--danger)', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.9rem' }}>
             {error}
           </div>
         )}

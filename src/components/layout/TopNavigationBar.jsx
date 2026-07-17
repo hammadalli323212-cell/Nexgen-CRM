@@ -51,7 +51,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [isAdmin, user?.id]);
 
   const handleSignOut = async () => {
     await signOut();

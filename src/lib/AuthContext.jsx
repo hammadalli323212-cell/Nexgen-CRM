@@ -10,6 +10,36 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchProfile = async (userId) => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role, phone')
+          .eq('id', userId)
+          .single();
+          
+        if (error) {
+          console.error('Error fetching profile:', error);
+          if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
+            supabase.auth.signOut();
+            return;
+          }
+          const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+          if (savedRole) setRole(savedRole);
+        } else if (data) {
+          setRole(data.role);
+          if (data.phone) setPhone(data.phone);
+          localStorage.setItem(`nexgen_role_${userId}`, data.role);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching profile:', err);
+        const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+        if (savedRole) setRole(savedRole);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     // Check active sessions and sets the user
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
@@ -45,36 +75,6 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchProfile = async (userId) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role, phone')
-        .eq('id', userId)
-        .single();
-        
-      if (error) {
-        console.error('Error fetching profile:', error);
-        // If it's an auth/RLS error (like expired token), don't just fall back to local storage
-        if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
-          supabase.auth.signOut();
-          return;
-        }
-        const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
-        if (savedRole) setRole(savedRole);
-      } else if (data) {
-        setRole(data.role);
-        if (data.phone) setPhone(data.phone);
-        localStorage.setItem(`nexgen_role_${userId}`, data.role);
-      }
-    } catch (err) {
-      console.error('Unexpected error fetching profile:', err);
-      const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
-      if (savedRole) setRole(savedRole);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const value = {
     user,

@@ -285,7 +285,8 @@ const LeadForm = ({ isOrder = false }) => {
         };
 
         if (customer.email) {
-          const { data } = await supabase.from('customers').select('id, first_name, last_name').eq('email', customer.email).limit(10);
+          const { data, error } = await supabase.from('customers').select('id, first_name, last_name').eq('email', customer.email).limit(10);
+          if (error) throw error;
           if (data) {
             existingCustomer = data.find(c => checkNameMatch(c)) || null;
           }
@@ -294,7 +295,8 @@ const LeadForm = ({ isOrder = false }) => {
           const digits = customer.phone.replace(/\D/g, '');
           if (digits.length >= 7) {
             const pattern = '%' + digits.split('').join('%') + '%';
-            const { data } = await supabase.from('customers').select('id, first_name, last_name').ilike('phone', pattern).limit(10);
+            const { data, error } = await supabase.from('customers').select('id, first_name, last_name').ilike('phone', pattern).limit(10);
+            if (error) throw error;
             if (data) {
               existingCustomer = data.find(c => checkNameMatch(c)) || null;
             }

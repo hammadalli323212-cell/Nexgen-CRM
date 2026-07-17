@@ -45,7 +45,8 @@ const Dashboard = () => {
         };
         
         // Fetch all relevant records in the timeframe
-        const { data: records } = await buildQuery('leads', 'id, status, estimated_price, carrier_pay, broker_fee_collected');
+        const { data: records, error: recordsError } = await buildQuery('leads', 'id, status, estimated_price, carrier_pay, broker_fee_collected');
+        if (recordsError) throw recordsError;
         
         let totalLeads = 0;
         let totalOrders = 0;
@@ -82,7 +83,8 @@ const Dashboard = () => {
         });
 
         // 5. Recent Activity
-        const { data: activities } = await buildQuery('leads', 'id, lead_number, created_at, status, customers(first_name, last_name)').order('created_at', { ascending: false }).limit(5);
+        const { data: activities, error: activitiesError } = await buildQuery('leads', 'id, lead_number, created_at, status, customers(first_name, last_name)').order('created_at', { ascending: false }).limit(5);
+        if (activitiesError) throw activitiesError;
         
         if (activities) {
           const formattedActivities = activities.map(a => ({

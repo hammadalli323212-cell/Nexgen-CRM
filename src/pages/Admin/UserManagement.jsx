@@ -99,8 +99,8 @@ const UserManagement = () => {
                     padding: '4px 10px', 
                     borderRadius: '12px', 
                     fontSize: '0.8rem', 
-                    backgroundColor: u.role === 'admin' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                    color: u.role === 'admin' ? '#fbbf24' : '#60a5fa'
+                    backgroundColor: 'var(--bg-dark)',
+                    color: u.role === 'admin' ? 'var(--warning)' : 'var(--brand-blue)'
                   }}>
                     {u.role.toUpperCase()}
                   </span>
@@ -117,13 +117,13 @@ const UserManagement = () => {
           </h2>
           
           {inviteSuccess && (
-            <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ backgroundColor: 'var(--bg-dark)', border: '1px solid var(--success)', color: 'var(--success)', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle size={14} /> {inviteSuccess}
             </div>
           )}
 
           {inviteError && (
-            <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem' }}>
+            <div style={{ backgroundColor: 'var(--bg-dark)', border: '1px solid var(--danger)', color: 'var(--danger)', padding: '10px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem' }}>
               {inviteError}
             </div>
           )}

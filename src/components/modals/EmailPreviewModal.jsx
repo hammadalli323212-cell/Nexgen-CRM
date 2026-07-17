@@ -206,7 +206,7 @@ const styles = {
     fontWeight: 600,
   },
   iframeWrapper: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--bg-panel)',
     borderRadius: '8px',
     border: '1px solid var(--border-color)',
     overflow: 'hidden',
