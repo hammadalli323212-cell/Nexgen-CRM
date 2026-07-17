@@ -112,6 +112,15 @@ ${vRows}
 </tbody>
 </table>
 
+<div style="background:#fdf2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;margin:0 0 24px">
+<h3 style="color:#991b1b;margin:0 0 12px;font-size:16px;font-weight:700">Protect Yourself:</h3>
+<ul style="margin:0;padding:0;list-style:none">
+<li style="margin:0 0 12px;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; Be cautious of unusually low quotes. These companies often collect a deposit upfront, then increase the price at pickup &mdash; a common tactic known as "Bait and Switch."</li>
+<li style="margin:0 0 12px;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; A legitimate broker will never require a deposit before a carrier is assigned. If someone asks for payment upfront, consider it a warning sign.</li>
+<li style="margin:0;font-size:14px;color:#7f1d1d;line-height:1.5">&bull; <strong>NexGen Auto Transport does NOT collect any payment until your vehicle is picked up.</strong></li>
+</ul>
+</div>
+
 <h3 style="color:#1e293b;margin:0 0 12px;font-size:16px">Why Choose NexGen?</h3>
 <ul style="margin:0 0 24px;padding:0;list-style:none">
 <li style="margin:0 0 8px;font-size:14px;color:#4b5563">&bull; <strong>Fully Licensed & Bonded</strong> - FMCSA compliant</li>
@@ -165,6 +174,11 @@ Origin: ${leadData.origin_city || ''}${leadData.origin_state ? ', ' + leadData.o
 Destination: ${leadData.destination_city || ''}${leadData.destination_state ? ', ' + leadData.destination_state : ''} ${leadData.destination_zip || ''}
 Est. Ship Date: ${leadData.ship_date ? new Date(leadData.ship_date).toLocaleDateString() : 'TBD'}
 Total Price: $${leadData.estimated_price||0}
+
+Protect Yourself:
+* Be cautious of unusually low quotes. These companies often collect a deposit upfront, then increase the price at pickup - a common tactic known as "Bait and Switch."
+* A legitimate broker will never require a deposit before a carrier is assigned. If someone asks for payment upfront, consider it a warning sign.
+* NexGen Auto Transport does NOT collect any payment until your vehicle is picked up.
 
 ${bookingLink ? `Book Now Securely: ${bookingLink}\n` : ''}
 Questions? We're here to help.
