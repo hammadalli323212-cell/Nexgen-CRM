@@ -1617,7 +1617,7 @@ const LeadDetails = () => {
                       placeholder="Company Name" />
                     
                     {showCarrierSuggestions && carrierSuggestions.length > 0 && (
-                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--surface-color)', border: '1px solid var(--border-color)', borderRadius: '6px', zIndex: 10, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', marginTop: '4px' }}>
+                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--bg-panel)', border: '1px solid var(--border-color)', borderRadius: '6px', zIndex: 50, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', marginTop: '4px' }}>
                         {carrierSuggestions.map(c => (
                            <div key={c.id} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
                                 onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-dark)'}
