@@ -37,9 +37,7 @@
 }
 
 .leftColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+  /* Removed excessive flex gap */
 }
 
 .panel {
@@ -81,9 +79,9 @@
 
 .avatarWrapper {
   text-align: center;
-  padding: 10px 0 30px;
+  padding: 0 0 20px;
   border-bottom: 1px dashed var(--border-color);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .avatar {
@@ -124,8 +122,8 @@
 }
 
 .infoBlock {
-  margin-bottom: 12px;
-  padding: 12px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
   border-radius: 8px;
   transition: background-color 0.2s;
 }
