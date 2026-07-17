@@ -839,7 +839,7 @@ const LeadDetails = () => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', marginRight: '16px' }}>
             {isAdmin && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Assigned Agent:</span>
+                <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: '600' }}>Assigned Agent:</span>
                 <CustomDropdown
                   value={lead.assigned_to || ''}
                   options={[
@@ -884,7 +884,7 @@ const LeadDetails = () => {
               </div>
             )}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>Source:</span>
+              <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: '600' }}>Source:</span>
               <div style={{ backgroundColor: 'var(--bg-dark)', padding: '2px 8px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                 <SourceBadge source={lead.source} />
               </div>
