@@ -1429,14 +1429,20 @@ const LeadDetails = () => {
           </div>
 
           {/* Signed Documents Panel */}
-          {lead.electronic_signature && (
-            <div className={styles.panel} style={{ marginBottom: '20px' }}>
-              <div className={styles.panelHeader} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <PenTool size={18} /> Signed Documents
-              </div>
-              <div className={styles.panelBody} style={{ padding: '15px' }}>
-                 
-                 {/* Original Signature */}
+          <div className={styles.panel} style={{ marginBottom: '20px' }}>
+            <div className={styles.panelHeader} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <PenTool size={18} /> Signed Documents
+            </div>
+            <div className={styles.panelBody} style={{ padding: '15px' }}>
+               
+               {!lead.electronic_signature && (!lead.change_order_signatures || lead.change_order_signatures.length === 0) ? (
+                 <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textAlign: 'center', padding: '10px 0' }}>
+                   No signed documents yet.
+                 </div>
+               ) : (
+                 <>
+                   {/* Original Signature */}
+                   {lead.electronic_signature && (
                  <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #10b981' }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
                      <div>
@@ -1452,31 +1458,32 @@ const LeadDetails = () => {
                      <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
                      <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', { type: 'original' })} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                    </div>
-                 </div>
+                  </div>
+                  )}
 
-                 {/* Change Order Signatures */}
-                 {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
-                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #f59e0b' }}>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
-                       <div>
-                         <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
-                         <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: 'var(--brand-blue)', lineHeight: '1' }}>{sig.signature}</span>
+                   {/* Change Order Signatures */}
+                   {Array.isArray(lead.change_order_signatures) && lead.change_order_signatures.map((sig, idx) => (
+                     <div key={idx} style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg-dark)', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #f59e0b' }}>
+                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                         <div>
+                           <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', display: 'block', textTransform: 'uppercase', marginBottom: '2px' }}>Change Order {idx + 1}</span>
+                           <span style={{ fontFamily: '"Brush Script MT", "Great Vibes", cursive', fontSize: '1.2rem', color: 'var(--brand-blue)', lineHeight: '1' }}>{sig.signature}</span>
+                         </div>
+                         <div style={{ textAlign: 'right' }}>
+                           <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(sig.date).toLocaleDateString()}</span>
+                           <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {sig.ip}</span>
+                         </div>
                        </div>
-                       <div style={{ textAlign: 'right' }}>
-                         <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-primary)' }}>{new Date(sig.date).toLocaleDateString()}</span>
-                         <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>IP: {sig.ip}</span>
+                       <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+                         <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
+                         <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
                        </div>
                      </div>
-                     <div style={{ display: 'flex', gap: '4px', padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
-                       <button className={styles.btnSecondary} onClick={() => handleGeneratePDF('preview', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#ecfdf5', color: '#065f46', borderColor: '#10b981' }}>Preview</button>
-                       <button className={styles.btnPrimary} onClick={() => handleGeneratePDF('download', sig)} style={{ flex: 1, padding: '4px', fontSize: '0.7rem', background: '#10b981', color: '#fff', borderColor: '#10b981' }}>Download</button>
-                     </div>
-                   </div>
-                 ))}
-                 
-              </div>
+                   ))}
+                 </>
+               )}
             </div>
-          )}
+          </div>
 
           {/* Assigned Carrier Panel */}
           <div className={styles.panel} style={{ marginBottom: '20px' }}>
