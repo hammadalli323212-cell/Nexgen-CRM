@@ -49,6 +49,10 @@ const LeadDetails = () => {
   const [activeEmailEndpoint, setActiveEmailEndpoint] = useState(null);
   const [debugError, setDebugError] = useState(null);
 
+  // Carrier Autocomplete State
+  const [carrierSuggestions, setCarrierSuggestions] = useState([]);
+  const [showCarrierSuggestions, setShowCarrierSuggestions] = useState(false);
+
   const isOrderView = location.pathname.startsWith('/orders');
 
   const STATUS_OPTIONS = isOrderView
@@ -243,6 +247,23 @@ const LeadDetails = () => {
         .catch(() => {});
     }
   }, [draftData?.destination_zip, editingPanel]);
+
+  useEffect(() => {
+    if (editingPanel === 'carrier' && draftData?.carrier_company_name?.length > 1) {
+      const fetchSuggestions = async () => {
+        const { data } = await supabase
+          .from('carriers')
+          .select('*')
+          .ilike('company_name', `%${draftData.carrier_company_name}%`)
+          .limit(5);
+        setCarrierSuggestions(data || []);
+      };
+      const timeoutId = setTimeout(fetchSuggestions, 300);
+      return () => clearTimeout(timeoutId);
+    } else {
+      setCarrierSuggestions([]);
+    }
+  }, [draftData?.carrier_company_name, editingPanel]);
 
   if (loading) {
     return <div className={styles.loading}>Loading lead details...</div>;
@@ -687,9 +708,7 @@ const LeadDetails = () => {
                 dot_number: payload.carrier_usdot_number || '',
               };
 
-              if (existingCarrier) {
-                await supabase.from('carriers').update(carrierPayload).eq('id', existingCarrier.id);
-              } else {
+              if (!existingCarrier) {
                 await supabase.from('carriers').insert([{
                   ...carrierPayload,
                   insurance_status: 'Pending',
@@ -1582,9 +1601,41 @@ const LeadDetails = () => {
             <div className={styles.panelBody}>
               {editingPanel === 'carrier' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div>
+                  <div style={{ position: 'relative' }}>
                     <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Carrier Company Name</label>
-                    <input type="text" className={styles.inlineInput} style={{ marginTop: '4px' }} value={draftData.carrier_company_name} onChange={e => setDraftData({...draftData, carrier_company_name: e.target.value})} placeholder="Company Name" />
+                    <input type="text" className={styles.inlineInput} style={{ marginTop: '4px', width: '100%' }} 
+                      value={draftData.carrier_company_name} 
+                      onChange={e => {
+                        setDraftData({...draftData, carrier_company_name: e.target.value});
+                        setShowCarrierSuggestions(true);
+                      }} 
+                      onFocus={() => setShowCarrierSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowCarrierSuggestions(false), 200)}
+                      placeholder="Company Name" />
+                    
+                    {showCarrierSuggestions && carrierSuggestions.length > 0 && (
+                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--surface-color)', border: '1px solid var(--border-color)', borderRadius: '6px', zIndex: 10, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', marginTop: '4px' }}>
+                        {carrierSuggestions.map(c => (
+                           <div key={c.id} style={{ padding: '10px 12px', cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
+                                onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-dark)'}
+                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                                onClick={() => {
+                                  setDraftData({
+                                    ...draftData,
+                                    carrier_company_name: c.company_name,
+                                    carrier_mc_number: c.mc_number || draftData.carrier_mc_number || '',
+                                    carrier_usdot_number: c.dot_number || draftData.carrier_usdot_number || ''
+                                  });
+                                  setShowCarrierSuggestions(false);
+                                }}>
+                             <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{c.company_name}</div>
+                             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                               MC: {c.mc_number || 'N/A'} | DOT: {c.dot_number || 'N/A'} | Rating: {c.rating || 'N/A'}
+                             </div>
+                           </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div>
