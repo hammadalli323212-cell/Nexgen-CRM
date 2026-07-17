@@ -4,7 +4,8 @@ import { supabase } from "../lib/supabase";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import styles from "./Leads.module.css"; // Reusing the layout styles
+import styles from "./Leads.module.css";
+import { StatusBadge, SourceBadge, AgentBadge } from '../components/common/Badges';
 
 const columnHelper = createColumnHelper();
 
@@ -34,6 +35,7 @@ const Orders = () => {
           ship_date,
           status,
           is_read,
+          source,
           carrier_company_name,
           customers (first_name, last_name),
           lead_vehicles (vehicle_year, vehicle_make, vehicle_model),
@@ -78,6 +80,7 @@ const Orders = () => {
             origin: `${order.origin_city || ''}${order.origin_state ? ', ' + order.origin_state : ''}` || 'Unknown',
             destination: `${order.destination_city || ''}${order.destination_state ? ', ' + order.destination_state : ''}` || 'Unknown',
             pickupDate: order.ship_date || "TBD",
+            source: order.source || "Unknown",
             carrier: order.carrier_company_name || "Unassigned",
             tariff: `$${order.estimated_price?.toFixed(2) || "0.00"}`,
             status: order.status,
@@ -145,13 +148,17 @@ const Orders = () => {
         header: "Est. Pickup",
         cell: (info) => info.getValue(),
       }),
+      columnHelper.accessor("source", {
+        header: "Source",
+        cell: (info) => <SourceBadge source={info.getValue()} />,
+      }),
       columnHelper.accessor("carrier", {
         header: "Carrier",
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("assignedTo", {
         header: "Assigned To",
-        cell: (info) => info.getValue(),
+        cell: (info) => <AgentBadge name={info.getValue()} />,
       }),
       columnHelper.accessor("tariff", {
         header: "Tariff",
@@ -159,22 +166,7 @@ const Orders = () => {
       }),
       columnHelper.accessor("status", {
         header: "Status",
-        cell: (info) => (
-          <span
-            style={{
-              padding: "2px 8px",
-              borderRadius: "12px",
-              fontSize: "0.8rem",
-              backgroundColor:
-                info.getValue() === "Dispatched"
-                  ? "rgba(0, 123, 255, 0.2)"
-                  : "rgba(108, 117, 125, 0.2)",
-              color: info.getValue() === "Dispatched" ? "#66b2ff" : "#adb5bd",
-            }}
-          >
-            {info.getValue()}
-          </span>
-        ),
+        cell: (info) => <StatusBadge status={info.getValue()} />,
       }),
     ],
     [],

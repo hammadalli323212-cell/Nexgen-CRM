@@ -7,6 +7,7 @@ import styles from './Leads.module.css';
 import toast from 'react-hot-toast';
 import * as xlsx from 'xlsx';
 import { useAuth } from '../lib/AuthContext';
+import { StatusBadge, SourceBadge, AgentBadge } from '../components/common/Badges';
 
 // Removed mockLeads
 
@@ -389,25 +390,15 @@ const Leads = () => {
       }),
       columnHelper.accessor('source', {
         header: 'Source',
-        cell: info => info.getValue(),
+        cell: info => <SourceBadge source={info.getValue()} />,
       }),
       columnHelper.accessor('assignedTo', {
         header: 'Assigned To',
-        cell: info => info.getValue(),
+        cell: info => <AgentBadge name={info.getValue()} />,
       }),
       columnHelper.accessor('status', {
         header: 'Status',
-        cell: info => (
-          <span style={{
-            padding: '2px 8px',
-            borderRadius: '12px',
-            fontSize: '0.8rem',
-            backgroundColor: info.getValue() === 'New' ? 'rgba(40, 167, 69, 0.2)' : 'rgba(255, 193, 7, 0.2)',
-            color: info.getValue() === 'New' ? '#28a745' : '#ffc107',
-          }}>
-            {info.getValue()}
-          </span>
-        ),
+        cell: info => <StatusBadge status={info.getValue()} />,
       }),
     ],
     [selectedLeads, leads]
