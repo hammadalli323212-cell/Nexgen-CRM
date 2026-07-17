@@ -127,10 +127,8 @@ const LeadDetails = () => {
         
         if (isOrder && !isOrderRoute) {
           navigate(`/orders/${data.lead_number}`, { replace: true });
-          return;
         } else if (!isOrder && isOrderRoute) {
           navigate(`/leads/${data.lead_number}`, { replace: true });
-          return;
         }
 
         setLead(data);
