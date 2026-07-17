@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import styles from './Dashboard.module.css';
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronRight } from 'lucide-react';
 
 const Reports = () => {
   const { user, isAdmin } = useAuth();
@@ -22,6 +22,7 @@ const Reports = () => {
   const [userPerformance, setUserPerformance] = useState([]);
   const [statusData, setStatusData] = useState([]);
   const [carrierVolume, setCarrierVolume] = useState([]);
+  const [expandedUsers, setExpandedUsers] = useState({});
 
   useEffect(() => {
     const fetchReportData = async () => {
@@ -82,17 +83,31 @@ const Reports = () => {
           // Agg Users
           const userName = lead.assignee ? (lead.assignee.full_name || `${lead.assignee.first_name || ''} ${lead.assignee.last_name || ''}`.trim() || 'Unknown Agent') : 'Unassigned';
           if (!usersMap[userName]) {
-            usersMap[userName] = { name: userName, leads: 0, orders: 0, completed_orders: 0, revenue: 0 };
+            usersMap[userName] = { name: userName, leads: 0, orders: 0, completed_orders: 0, revenue: 0, sourcesMap: {} };
           }
-          usersMap[userName].leads++;
-          if (isOrder) usersMap[userName].orders++;
           
+          const uMap = usersMap[userName];
+          uMap.leads++;
+          if (isOrder) uMap.orders++;
           if (completedStatuses.includes(lead.status)) {
-             usersMap[userName].completed_orders++;
+             uMap.completed_orders++;
+          }
+          if (isOrder && lead.broker_fee_collected) {
+            uMap.revenue += ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
           }
 
+          // Agg Sources for User
+          if (!uMap.sourcesMap[src]) {
+             uMap.sourcesMap[src] = { name: src, leads: 0, orders: 0, completed_orders: 0, revenue: 0 };
+          }
+          const usMap = uMap.sourcesMap[src];
+          usMap.leads++;
+          if (isOrder) usMap.orders++;
+          if (completedStatuses.includes(lead.status)) {
+             usMap.completed_orders++;
+          }
           if (isOrder && lead.broker_fee_collected) {
-            usersMap[userName].revenue += ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
+            usMap.revenue += ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
           }
 
           // Agg Carriers
@@ -122,7 +137,12 @@ const Reports = () => {
         setUserPerformance(Object.values(usersMap).map(u => ({
           ...u,
           conversion_to_order: u.leads > 0 ? parseFloat(((u.orders / u.leads) * 100).toFixed(1)) : 0,
-          conversion_to_completed: u.leads > 0 ? parseFloat(((u.completed_orders / u.leads) * 100).toFixed(1)) : 0
+          conversion_to_completed: u.leads > 0 ? parseFloat(((u.completed_orders / u.leads) * 100).toFixed(1)) : 0,
+          sources: Object.values(u.sourcesMap).map(s => ({
+            ...s,
+            conversion_to_order: s.leads > 0 ? parseFloat(((s.orders / s.leads) * 100).toFixed(1)) : 0,
+            conversion_to_completed: s.leads > 0 ? parseFloat(((s.completed_orders / s.leads) * 100).toFixed(1)) : 0
+          })).sort((a,b) => b.leads - a.leads)
         })).sort((a,b) => b.leads - a.leads));
 
       } catch (err) {
@@ -137,6 +157,13 @@ const Reports = () => {
 
   const handleDateChange = (e) => {
     setDateRange({ ...dateRange, [e.target.name]: e.target.value });
+  };
+
+  const toggleUserExpand = (userName) => {
+    setExpandedUsers(prev => ({
+      ...prev,
+      [userName]: !prev[userName]
+    }));
   };
 
   const formatDisplayDate = (dateStr) => {
@@ -289,16 +316,33 @@ const Reports = () => {
                 </thead>
                 <tbody>
                   {userPerformance.map((u, i) => (
-                    <tr key={i}>
-                      <td style={{ fontWeight: '500' }}>{u.name}</td>
-                      <td style={{ textAlign: 'right' }}>{u.leads}</td>
-                      <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
-                      <td style={{ textAlign: 'right' }}>{u.orders}</td>
-                      <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
-                      <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion_to_order}%</td>
-                      <td style={{ textAlign: 'right', color: 'var(--success)' }}>{u.conversion_to_completed}%</td>
-                      <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
-                    </tr>
+                    <React.Fragment key={i}>
+                      <tr onClick={() => toggleUserExpand(u.name)} style={{ cursor: 'pointer' }}>
+                        <td style={{ fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px', color: expandedUsers[u.name] ? 'var(--brand-blue)' : 'inherit' }}>
+                          {expandedUsers[u.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                          {u.name}
+                        </td>
+                        <td style={{ textAlign: 'right' }}>{u.leads}</td>
+                        <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
+                        <td style={{ textAlign: 'right' }}>{u.orders}</td>
+                        <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
+                        <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion_to_order}%</td>
+                        <td style={{ textAlign: 'right', color: 'var(--success)' }}>{u.conversion_to_completed}%</td>
+                        <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
+                      </tr>
+                      {expandedUsers[u.name] && u.sources.map((s, j) => (
+                        <tr key={`${i}-${j}`} style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                          <td style={{ paddingLeft: '40px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>↳ {s.name}</td>
+                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads}</td>
+                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.leads - s.orders}</td>
+                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.orders}</td>
+                          <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{s.completed_orders}</td>
+                          <td style={{ textAlign: 'right', color: 'rgba(59, 130, 246, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_order}%</td>
+                          <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>{s.conversion_to_completed}%</td>
+                          <td style={{ textAlign: 'right', color: 'rgba(16, 185, 129, 0.7)', fontSize: '0.9rem' }}>${s.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
