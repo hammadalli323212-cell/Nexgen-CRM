@@ -123,7 +123,7 @@ const LeadDetails = () => {
         // Smart Route Redirection
         const isOrderRoute = location.pathname.startsWith('/orders');
         const orderStatuses = ['Booked', 'Dispatched', 'In Transit', 'Delivered', 'Completed'];
-        const isOrder = orderStatuses.includes(data.status);
+        const isOrder = orderStatuses.includes(data.status) || !!data.order_created_at;
         
         if (isOrder && !isOrderRoute) {
           navigate(`/orders/${data.lead_number}`, { replace: true });
