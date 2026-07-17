@@ -706,6 +706,9 @@ const LeadDetails = () => {
                 company_name: carrierName,
                 mc_number: payload.carrier_mc_number || '',
                 dot_number: payload.carrier_usdot_number || '',
+                company_phone: payload.carrier_company_number || '',
+                dispatch_phone: payload.carrier_dispatch_number || '',
+                driver_phone: payload.carrier_driver_number || ''
               };
 
               if (!existingCarrier) {
@@ -1624,7 +1627,10 @@ const LeadDetails = () => {
                                     ...draftData,
                                     carrier_company_name: c.company_name,
                                     carrier_mc_number: c.mc_number || draftData.carrier_mc_number || '',
-                                    carrier_usdot_number: c.dot_number || draftData.carrier_usdot_number || ''
+                                    carrier_usdot_number: c.dot_number || draftData.carrier_usdot_number || '',
+                                    carrier_company_number: c.company_phone || draftData.carrier_company_number || '',
+                                    carrier_dispatch_number: c.dispatch_phone || draftData.carrier_dispatch_number || '',
+                                    carrier_driver_number: c.driver_phone || draftData.carrier_driver_number || ''
                                   });
                                   setShowCarrierSuggestions(false);
                                 }}>

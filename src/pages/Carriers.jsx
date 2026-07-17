@@ -15,7 +15,8 @@ const Carriers = () => {
   
   // Form state
   const [formData, setFormData] = useState({
-    company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: ''
+    company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: '',
+    company_phone: '', dispatch_phone: '', driver_phone: ''
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -43,7 +44,7 @@ const Carriers = () => {
       if (error) throw error;
       
       setIsModalOpen(false);
-      setFormData({ company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: '' });
+      setFormData({ company_name: '', mc_number: '', insurance_status: 'Pending', rating: 5.0, available_trucks: 1, preferred_routes: '', company_phone: '', dispatch_phone: '', driver_phone: '' });
       fetchCarriers();
     } catch (err) {
       toast.error('Error saving carrier: ' + err.message);
@@ -55,6 +56,9 @@ const Carriers = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor('company_name', { header: 'Carrier Name' }),
+      columnHelper.accessor('company_phone', { header: 'Company Phone', cell: info => info.getValue() || '-' }),
+      columnHelper.accessor('dispatch_phone', { header: 'Dispatch Phone', cell: info => info.getValue() || '-' }),
+      columnHelper.accessor('driver_phone', { header: 'Driver Phone', cell: info => info.getValue() || '-' }),
       columnHelper.accessor('mc_number', { header: 'MC Number' }),
       columnHelper.accessor('insurance_status', {
         header: 'Insurance',
@@ -104,6 +108,21 @@ const Carriers = () => {
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '4px', fontSize: '0.9rem' }}>Carrier Name *</label>
                 <input required type="text" value={formData.company_name} onChange={e => setFormData({...formData, company_name: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '4px', fontSize: '0.9rem' }}>Company Phone</label>
+                  <input type="text" value={formData.company_phone} onChange={e => setFormData({...formData, company_phone: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '4px', fontSize: '0.9rem' }}>Dispatch Phone</label>
+                  <input type="text" value={formData.dispatch_phone} onChange={e => setFormData({...formData, dispatch_phone: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '4px', fontSize: '0.9rem' }}>Driver Phone</label>
+                  <input type="text" value={formData.driver_phone} onChange={e => setFormData({...formData, driver_phone: e.target.value})} style={{ width: '100%', padding: '10px', background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }} />
+                </div>
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
