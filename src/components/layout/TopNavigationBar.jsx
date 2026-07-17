@@ -92,8 +92,8 @@ const TopNavigationBar = ({ onSearchClick }) => {
     },
     { name: 'Dispatch', path: '/dispatch' },
     { name: 'Customers', path: '/customers' },
-    { name: 'Carriers', path: '/carriers', hasDropdown: true },
-    { name: 'Reports', path: '/reports', hasDropdown: true },
+    { name: 'Carriers', path: '/carriers' },
+    { name: 'Reports', path: '/reports' },
   ];
 
   if (isAdmin) {
