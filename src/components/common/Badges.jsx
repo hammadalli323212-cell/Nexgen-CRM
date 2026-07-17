@@ -2,16 +2,16 @@ import React from 'react';
 
 export const StatusBadge = ({ status }) => {
   const colors = {
-    'New': { bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' },
-    'Quoted': { bg: 'rgba(234, 179, 8, 0.15)', text: '#facc15', border: 'rgba(234, 179, 8, 0.3)' },
-    'Follow Up': { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' },
-    'Booked': { bg: 'rgba(16, 185, 129, 0.15)', text: '#34d399', border: 'rgba(16, 185, 129, 0.3)' },
-    'Dispatched': { bg: 'rgba(6, 182, 212, 0.15)', text: '#22d3ee', border: 'rgba(6, 182, 212, 0.3)' },
-    'In Transit': { bg: 'rgba(249, 115, 22, 0.15)', text: '#fb923c', border: 'rgba(249, 115, 22, 0.3)' },
-    'Picked Up': { bg: 'rgba(249, 115, 22, 0.15)', text: '#fb923c', border: 'rgba(249, 115, 22, 0.3)' },
-    'Delivered': { bg: 'rgba(34, 197, 94, 0.15)', text: '#4ade80', border: 'rgba(34, 197, 94, 0.3)' },
-    'Completed': { bg: 'rgba(20, 184, 166, 0.15)', text: '#2dd4bf', border: 'rgba(20, 184, 166, 0.3)' },
-    'Canceled': { bg: 'rgba(239, 68, 68, 0.15)', text: '#f87171', border: 'rgba(239, 68, 68, 0.3)' },
+    'New': { bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' }, // Blue
+    'Quoted': { bg: 'rgba(234, 179, 8, 0.15)', text: '#facc15', border: 'rgba(234, 179, 8, 0.3)' }, // Yellow
+    'Follow Up': { bg: 'rgba(168, 85, 247, 0.15)', text: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' }, // Purple
+    'Booked': { bg: 'rgba(16, 185, 129, 0.15)', text: '#34d399', border: 'rgba(16, 185, 129, 0.3)' }, // Emerald Green
+    'Dispatched': { bg: 'rgba(6, 182, 212, 0.15)', text: '#22d3ee', border: 'rgba(6, 182, 212, 0.3)' }, // Cyan
+    'In Transit': { bg: 'rgba(249, 115, 22, 0.15)', text: '#fb923c', border: 'rgba(249, 115, 22, 0.3)' }, // Orange
+    'Picked Up': { bg: 'rgba(236, 72, 153, 0.15)', text: '#f472b6', border: 'rgba(236, 72, 153, 0.3)' }, // Pink
+    'Delivered': { bg: 'rgba(99, 102, 241, 0.15)', text: '#818cf8', border: 'rgba(99, 102, 241, 0.3)' }, // Indigo (distinct from Booked)
+    'Completed': { bg: 'rgba(20, 184, 166, 0.15)', text: '#2dd4bf', border: 'rgba(20, 184, 166, 0.3)' }, // Teal
+    'Canceled': { bg: 'rgba(239, 68, 68, 0.15)', text: '#f87171', border: 'rgba(239, 68, 68, 0.3)' }, // Red
   };
 
   const style = colors[status] || { bg: 'rgba(255,255,255,0.1)', text: '#a1a1aa', border: 'rgba(255,255,255,0.2)' };
@@ -36,7 +36,8 @@ export const SourceBadge = ({ source }) => {
   for (let i = 0; i < s.length; i++) {
     hash = s.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = Math.abs(hash % 360);
+  // Multiply by a large prime to distribute close strings (like "Dealer" / "Repeat") far apart on the color wheel
+  const hue = Math.abs((hash * 137) % 360);
   
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -60,7 +61,8 @@ export const AgentBadge = ({ name }) => {
   for (let i = 0; i < n.length; i++) {
     hash = n.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = Math.abs(hash % 360);
+  // Spread colors out
+  const hue = Math.abs((hash * 137) % 360);
   const initials = n.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
   return (
