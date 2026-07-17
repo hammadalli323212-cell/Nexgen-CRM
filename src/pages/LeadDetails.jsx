@@ -615,7 +615,8 @@ const LeadDetails = () => {
         carrier_driver_number: lead.carrier_driver_number || '',
         carrier_email: lead.carrier_email || '',
         carrier_mc_number: lead.carrier_mc_number || '',
-        carrier_usdot_number: lead.carrier_usdot_number || ''
+        carrier_usdot_number: lead.carrier_usdot_number || '',
+        carrier_out_of: lead.carrier_out_of || ''
       });
     }
   };
@@ -708,7 +709,8 @@ const LeadDetails = () => {
                 dot_number: payload.carrier_usdot_number || '',
                 company_phone: payload.carrier_company_number || '',
                 dispatch_phone: payload.carrier_dispatch_number || '',
-                driver_phone: payload.carrier_driver_number || ''
+                driver_phone: payload.carrier_driver_number || '',
+                out_of: payload.carrier_out_of || ''
               };
 
               if (!existingCarrier) {
@@ -1630,7 +1632,8 @@ const LeadDetails = () => {
                                     carrier_usdot_number: c.dot_number || draftData.carrier_usdot_number || '',
                                     carrier_company_number: c.company_phone || draftData.carrier_company_number || '',
                                     carrier_dispatch_number: c.dispatch_phone || draftData.carrier_dispatch_number || '',
-                                    carrier_driver_number: c.driver_phone || draftData.carrier_driver_number || ''
+                                    carrier_driver_number: c.driver_phone || draftData.carrier_driver_number || '',
+                                    carrier_out_of: c.out_of || draftData.carrier_out_of || ''
                                   });
                                   setShowCarrierSuggestions(false);
                                 }}>
@@ -1642,6 +1645,10 @@ const LeadDetails = () => {
                         ))}
                       </div>
                     )}
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Out of (City, State)</label>
+                    <input type="text" className={styles.inlineInput} style={{ marginTop: '4px', width: '100%' }} value={draftData.carrier_out_of} onChange={e => setDraftData({...draftData, carrier_out_of: e.target.value})} placeholder="e.g. Miami, FL" />
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div>
@@ -1683,6 +1690,10 @@ const LeadDetails = () => {
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Company Name</span>
                     <span className={styles.infoValue}>{lead.carrier_company_name || '-'}</span>
+                  </div>
+                  <div className={styles.infoBlock}>
+                    <span className={styles.infoLabel}>Out of (City, State)</span>
+                    <span className={styles.infoValue}>{lead.carrier_out_of || '-'}</span>
                   </div>
                   <div className={styles.infoBlock}>
                     <span className={styles.infoLabel}>Email</span>
