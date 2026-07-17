@@ -54,7 +54,7 @@ export const CustomDropdown = ({ value, options, onChange, renderButton, renderO
                 setIsOpen(false);
               }}
               style={{
-                padding: '8px 12px',
+                padding: '4px 8px',
                 cursor: 'pointer',
                 borderRadius: '8px',
                 transition: 'all 0.15s ease',
