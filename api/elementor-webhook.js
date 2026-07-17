@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     const nameStr = getField(['name', 'Name']);
     const emailStr = getField(['email', 'Email']);
     const phoneStr = getField(['phone', 'Phone', 'Phone (10 digits)']);
-    const shipDateRaw = getField(['date', 'Ship Date', 'shipDate']);
+    const shipDateRaw = getField(['date', 'Ship Date', 'shipDate', 'Estimated Ship Date', 'pickup_date', 'Pickup Date', 'shipping_date', 'date_1', 'Date']);
     const notesStr = getField(['comments', 'Comment From Shipper', 'notes']);
 
     // DEBUG: Always create a lead if we hit this endpoint, even if fields are missing, 
