@@ -49,7 +49,7 @@
   --text-secondary: #495057;
   --text-muted: #6c757d;
   
-  --badge-text-l: 35%; /* Dark text for light theme */
+  --badge-text-l: 25%; /* Very dark text for light theme for max readability */
   
   --border-color: #dee2e6;
   
