@@ -79,23 +79,25 @@ const Customers = () => {
   }, []);
 
   const handleBulkDelete = async () => {
-    if (!window.confirm(`Are you sure you want to permanently delete ${selectedCustomers.size} customers? This will also delete their associated leads and cannot be undone.`)) return;
+    if (!window.confirm(`Are you sure you want to permanently delete ${selectedCustomers.size} customers?`)) return;
     
     try {
-      // 1. Manually delete associated leads first to prevent foreign key constraint violations
-      const { error: leadsError } = await supabase.from('leads').delete().in('customer_id', Array.from(selectedCustomers));
-      if (leadsError) throw leadsError;
-
-      // 2. Delete the customers
       const { error } = await supabase.from('customers').delete().in('id', Array.from(selectedCustomers));
-      if (error) throw error;
+      
+      if (error) {
+        if (error.code === '23503') {
+          // PostgreSQL foreign key constraint violation
+          throw new Error('Cannot delete customers that still have leads or orders tied to them. Please delete their leads first.');
+        }
+        throw error;
+      }
 
       toast.success('Customers deleted successfully!');
       setCustomers(prev => prev.filter(c => !selectedCustomers.has(c.id)));
       setSelectedCustomers(new Set());
     } catch (err) {
       console.error('Failed to delete customers:', err);
-      toast.error('Failed to delete customers.');
+      toast.error(err.message || 'Failed to delete customers.');
     }
   };
 
