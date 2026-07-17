@@ -113,7 +113,8 @@ const Reports = () => {
 
         setUserPerformance(Object.values(usersMap).map(u => ({
           ...u,
-          conversion: u.leads > 0 ? parseFloat(((u.orders / u.leads) * 100).toFixed(1)) : 0
+          conversion_to_order: u.leads > 0 ? parseFloat(((u.orders / u.leads) * 100).toFixed(1)) : 0,
+          conversion_to_completed: u.leads > 0 ? parseFloat(((u.completed_orders / u.leads) * 100).toFixed(1)) : 0
         })).sort((a,b) => b.leads - a.leads));
 
       } catch (err) {
@@ -261,7 +262,8 @@ const Reports = () => {
                     <th style={{ textAlign: 'right' }}>Active Leads</th>
                     <th style={{ textAlign: 'right' }}>Total Orders</th>
                     <th style={{ textAlign: 'right' }}>Completed Orders</th>
-                    <th style={{ textAlign: 'right' }}>Conversion Rate</th>
+                    <th style={{ textAlign: 'right' }}>Lead to Order Conv.</th>
+                    <th style={{ textAlign: 'right' }}>Lead to Completed Conv.</th>
                     <th style={{ textAlign: 'right' }}>Broker Profit</th>
                   </tr>
                 </thead>
@@ -273,7 +275,8 @@ const Reports = () => {
                       <td style={{ textAlign: 'right' }}>{u.leads - u.orders}</td>
                       <td style={{ textAlign: 'right' }}>{u.orders}</td>
                       <td style={{ textAlign: 'right' }}>{u.completed_orders}</td>
-                      <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion}%</td>
+                      <td style={{ textAlign: 'right', color: 'var(--brand-blue)' }}>{u.conversion_to_order}%</td>
+                      <td style={{ textAlign: 'right', color: 'var(--success)' }}>{u.conversion_to_completed}%</td>
                       <td style={{ textAlign: 'right', color: 'var(--success)' }}>${u.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</td>
                     </tr>
                   ))}
