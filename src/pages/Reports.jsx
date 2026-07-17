@@ -57,7 +57,7 @@ const Reports = () => {
         leads?.forEach(lead => {
           tLeads++;
           
-          const isOrder = orderStatuses.includes(lead.status) || lead.status === 'Canceled';
+          const isOrder = orderStatuses.includes(lead.status);
           if (isOrder) tOrders++;
 
           if (orderStatuses.includes(lead.status) && lead.broker_fee_collected) {
