@@ -29,7 +29,7 @@ const Customers = () => {
             email,
             phone,
             created_at,
-            leads ( id, estimated_price, deposit_amount, created_at, status )
+            leads ( id, estimated_price, carrier_pay, deposit_amount, created_at, status )
           `);
         } else {
           query = query.select(`
@@ -39,7 +39,7 @@ const Customers = () => {
             email,
             phone,
             created_at,
-            leads!inner ( id, estimated_price, deposit_amount, created_at, status )
+            leads!inner ( id, estimated_price, carrier_pay, deposit_amount, created_at, status )
           `).or(`created_by.eq.${user?.id},assigned_to.eq.${user?.id}`, { foreignTable: 'leads' });
         }
 
@@ -52,7 +52,10 @@ const Customers = () => {
           const collectedStatuses = ['Booked', 'Dispatched', 'In Transit', 'Delivered'];
           const ltv = c.leads ? c.leads.reduce((sum, lead) => {
             if (collectedStatuses.includes(lead.status)) {
-              return sum + (lead.deposit_amount || 0);
+              const brokerFee = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
+                ? lead.deposit_amount 
+                : ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
+              return sum + brokerFee;
             }
             return sum;
           }, 0) : 0;

@@ -32,6 +32,7 @@ const CustomerDetails = () => {
               order_id, 
               status, 
               estimated_price,
+              carrier_pay,
               deposit_amount, 
               created_at, 
               origin_city, 
@@ -109,7 +110,10 @@ const CustomerDetails = () => {
   const collectedStatuses = ['Booked', 'Dispatched', 'In Transit', 'Delivered'];
   const ltv = customer.leads ? customer.leads.reduce((sum, lead) => {
     if (collectedStatuses.includes(lead.status)) {
-      return sum + (lead.deposit_amount || 0);
+      const brokerFee = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
+        ? lead.deposit_amount 
+        : ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
+      return sum + brokerFee;
     }
     return sum;
   }, 0) : 0;
