@@ -851,7 +851,7 @@ const LeadDetails = () => {
     <div className={styles.pageContainer}>
       <button 
         onClick={() => navigate(isOrderView ? '/orders' : '/leads')} 
-        style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}
+        className={styles.btnBack}
       >
         <ArrowLeft size={16} /> Back to {isOrderView ? 'Orders' : 'Leads'}
       </button>
