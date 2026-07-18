@@ -34,28 +34,29 @@
 }
 
 .navItem {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 8px; /* Smoother border radius */
-  transition: all 0.3s ease; /* Buttery smooth transitions */
-  font-size: 0.95rem; /* Slightly larger/readable */
+  padding: 8px 16px;
+  border-radius: 20px; /* Full pill shape */
+  transition: all 0.3s ease; 
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
   gap: 6px;
   position: relative;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .navItem:hover {
+  color: #ffffff;
   background-color: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px); /* Subtle lift effect */
+  transform: translateY(-1px);
 }
 
 .navItem.active {
-  background-color: rgba(255, 255, 255, 0.12);
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.15); /* Crisp glass edge */
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4); /* Clean white pill border */
   backdrop-filter: blur(8px);
 }
 
@@ -133,13 +134,15 @@
 }
 
 .avatar {
-  width: 28px;
-  height: 28px;
-  background-color: var(--text-primary);
-  color: var(--brand-blue);
+  width: 32px;
+  height: 32px;
+  background-color: #ffc107;
+  color: #000000;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }

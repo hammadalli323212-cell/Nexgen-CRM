@@ -13,8 +13,8 @@
 }
 
 .table th {
-  background-color: var(--bg-header);
-  color: var(--text-secondary);
+  background-color: var(--brand-blue);
+  color: #ffffff;
   padding: var(--space-md);
   font-size: 0.85rem;
   font-weight: 600;
@@ -27,7 +27,7 @@
 }
 
 .table th:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: color-mix(in srgb, var(--brand-blue) 85%, black);
 }
 
 .table td {
