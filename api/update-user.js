@@ -34,17 +34,26 @@ export default async function handler(req, res) {
     const { data: { user: requestingUser }, error: verifyError } = await supabaseAdmin.auth.getUser(token);
     if (verifyError || !requestingUser) return res.status(401).json({ error: 'Unauthorized' });
 
+    // Fetch the requesting user's profile
+    const { data: reqUserProfile } = await supabaseAdmin.from('profiles').select('role, email').eq('id', requestingUser.id).single();
+    const isReqSuperAdmin = reqUserProfile?.role === 'super_admin' || reqUserProfile?.email === 'info@nexgenautotransport.com';
+
     // Fetch the target user's profile
-    const { data: targetUser } = await supabaseAdmin.from('profiles').select('email').eq('id', id).single();
+    const { data: targetUser } = await supabaseAdmin.from('profiles').select('email, role').eq('id', id).single();
     
     // Super Admin Protection Logic
     let finalRole = role;
+    
+    if (role === 'super_admin' && !isReqSuperAdmin) {
+      return res.status(403).json({ error: 'Only Super Administrators can assign the Super Admin role.' });
+    }
+
     if (targetUser && targetUser.email === 'info@nexgenautotransport.com') {
       if (requestingUser.email !== 'info@nexgenautotransport.com') {
-        return res.status(403).json({ error: 'Only the Super Admin can modify this account.' });
+        return res.status(403).json({ error: 'Only the main Super Admin can modify this account.' });
       }
       // Even if Hammad A is editing himself, he cannot demote himself from admin
-      finalRole = 'admin';
+      finalRole = role === 'super_admin' ? 'super_admin' : 'admin';
     }
 
     // 1. Update the user in Supabase Auth

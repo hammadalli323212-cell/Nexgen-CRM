@@ -28,6 +28,22 @@ export default async function handler(req, res) {
       }
     });
 
+    // Verify who is making the request
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
+    const token = authHeader.split(' ')[1];
+    
+    const { data: { user: requestingUser }, error: verifyError } = await supabaseAdmin.auth.getUser(token);
+    if (verifyError || !requestingUser) return res.status(401).json({ error: 'Unauthorized' });
+
+    // Fetch the requesting user's profile to get their role
+    const { data: reqUserProfile } = await supabaseAdmin.from('profiles').select('role, email').eq('id', requestingUser.id).single();
+    const isReqSuperAdmin = reqUserProfile?.role === 'super_admin' || reqUserProfile?.email === 'info@nexgenautotransport.com';
+
+    if (role === 'super_admin' && !isReqSuperAdmin) {
+      return res.status(403).json({ error: 'Only Super Administrators can create other Super Admins.' });
+    }
+
     // 1. Create the user in Supabase Auth
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: email,

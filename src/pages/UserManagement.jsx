@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Plus, X, Edit2, Trash2, Lock } from 'lucide-react';
 
 const UserManagement = () => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isSuperAdmin } = useAuth();
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -316,6 +316,7 @@ const UserManagement = () => {
                 >
                   <option value="user">Standard User</option>
                   <option value="admin">Administrator</option>
+                  {isSuperAdmin && <option value="super_admin">Super Administrator</option>}
                 </select>
               </div>
 
