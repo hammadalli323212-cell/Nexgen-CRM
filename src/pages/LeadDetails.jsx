@@ -960,13 +960,13 @@ const LeadDetails = () => {
           </div>
           
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <button className={styles.btnPrimary} onClick={handleSendOrderForm} disabled={isSendingEmail}>
+            <button className={styles.btnSuccess} onClick={handleSendOrderForm} disabled={isSendingEmail}>
               {isSendingEmail ? 'Sending...' : 'Send Form'}
             </button>
-            <button className={styles.btnSecondary} onClick={handleSendChangeOrder} disabled={isSendingEmail}>
+            <button className={styles.btnWarning} onClick={handleSendChangeOrder} disabled={isSendingEmail}>
               Change Order
             </button>
-            <button className={styles.btnSuccess} onClick={handleSendQuoteEmail} disabled={isSendingQuote}>
+            <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
             </button>
             {!isOrderView && (
