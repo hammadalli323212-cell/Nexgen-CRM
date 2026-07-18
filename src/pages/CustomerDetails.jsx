@@ -108,9 +108,9 @@ const CustomerDetails = () => {
 
   const totalOrders = customer.leads ? customer.leads.length : 0;
   const ltv = customer.leads ? customer.leads.reduce((sum, lead) => {
-    const brokerFee = lead.deposit_amount !== null && lead.deposit_amount !== undefined 
-      ? lead.deposit_amount 
-      : ((lead.estimated_price || 0) - (lead.carrier_pay || 0));
+    const deposit = Number(lead.deposit_amount || 0);
+    const fallbackFee = (Number(lead.estimated_price || 0) - Number(lead.carrier_pay || 0));
+    const brokerFee = deposit > 0 ? deposit : fallbackFee;
     return sum + brokerFee;
   }, 0) : 0;
   
