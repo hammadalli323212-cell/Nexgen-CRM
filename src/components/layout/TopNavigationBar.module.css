@@ -1,11 +1,14 @@
 .navbar {
   display: flex;
   align-items: center;
-  background-color: var(--brand-blue);
-  height: 56px; /* Slightly taller for breathing room */
+  background-color: color-mix(in srgb, var(--brand-blue) 80%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  height: 60px; /* Slightly taller for breathing room */
   padding: 0 var(--space-xl);
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Softer, wider drop shadow */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Softer, wider drop shadow */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -50,9 +53,10 @@
 }
 
 .navItem.active {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.12);
   font-weight: 500;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* Crisp glass edge */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.15); /* Crisp glass edge */
+  backdrop-filter: blur(8px);
 }
 
 /* Dropdown Menu Styles */
@@ -60,16 +64,18 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: var(--brand-blue);
+  background-color: color-mix(in srgb, var(--brand-blue) 85%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   min-width: 200px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25); /* Smoother shadow */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Smoother shadow */
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  margin-top: 0px; /* Removed the gap so the mouse doesn't fall into a dead zone */
-  border: 1px solid rgba(255,255,255,0.05); /* Glass edge */
+  margin-top: 4px; 
+  border: 1px solid rgba(255,255,255,0.15); /* Glass edge */
 }
 
 .dropdownItem {
@@ -100,18 +106,22 @@
 }
 
 .iconButton {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.8;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
 .iconButton:hover {
-  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .userProfile {
