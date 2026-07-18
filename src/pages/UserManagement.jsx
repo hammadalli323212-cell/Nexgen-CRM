@@ -276,7 +276,7 @@ const UserManagement = () => {
                   type="tel" 
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
-                  placeholder="(832) 886-1321"
+                  placeholder={TENANT.MAIN_PHONE}
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-dark)', color: 'var(--text-primary)', boxSizing: 'border-box' }}
                 />
               </div>
