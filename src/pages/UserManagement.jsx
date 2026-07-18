@@ -105,7 +105,7 @@ const UserManagement = () => {
       name: u.full_name || '',
       email: u.email || '',
       password: '', // Empty password field so they only enter if they want to change it
-      role: u.role || 'user',
+      role: u.email === TENANT.ADMIN_EMAIL ? 'super_admin' : (u.role || 'user'),
       smtp_password: u.smtp_password || '',
       phone: u.phone || ''
     });
