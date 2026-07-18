@@ -207,18 +207,18 @@ const UserManagement = () => {
                   <td style={{ padding: '15px' }}>
                     <span style={{ 
                       padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold',
-                      backgroundColor: u.role === 'admin' ? 'rgba(0, 123, 255, 0.2)' : 'rgba(108, 117, 125, 0.2)',
-                      color: u.role === 'admin' ? '#66b2ff' : '#adb5bd'
+                      backgroundColor: (u.role === 'admin' || u.email === TENANT.ADMIN_EMAIL) ? 'rgba(0, 123, 255, 0.2)' : 'rgba(108, 117, 125, 0.2)',
+                      color: (u.role === 'admin' || u.email === TENANT.ADMIN_EMAIL) ? '#66b2ff' : '#adb5bd'
                     }}>
-                      {u.role.toUpperCase()}
+                      {u.email === TENANT.ADMIN_EMAIL ? 'SUPER ADMIN' : u.role.toUpperCase()}
                     </span>
                   </td>
                   <td style={{ padding: '15px', color: 'var(--text-secondary)' }}>
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
                   <td style={{ padding: '15px', textAlign: 'right' }}>
-                    {u.email === TENANT.ADMIN_EMAIL ? (
-                      <div title="System Admin cannot be modified" style={{ display: 'inline-flex', padding: '8px', opacity: 0.5 }}>
+                    {u.email === TENANT.ADMIN_EMAIL && user?.email !== TENANT.ADMIN_EMAIL ? (
+                      <div title="System Admin cannot be modified by others" style={{ display: 'inline-flex', padding: '8px', opacity: 0.5 }}>
                         <Lock size={18} />
                       </div>
                     ) : (
@@ -226,9 +226,11 @@ const UserManagement = () => {
                         <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit User">
                           <Edit2 size={18} />
                         </button>
-                        <button onClick={() => confirmDelete(u)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete User">
-                          <Trash2 size={18} />
-                        </button>
+                        {u.email !== TENANT.ADMIN_EMAIL && (
+                          <button onClick={() => confirmDelete(u)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete User">
+                            <Trash2 size={18} />
+                          </button>
+                        )}
                       </>
                     )}
                   </td>
