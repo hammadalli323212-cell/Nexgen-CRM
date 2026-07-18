@@ -68,7 +68,7 @@
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 8px; /* Gap from the header */
+  margin-top: 0px; /* Removed the gap so the mouse doesn't fall into a dead zone */
   border: 1px solid rgba(255,255,255,0.05); /* Glass edge */
 }
 
