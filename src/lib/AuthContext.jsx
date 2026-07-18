@@ -20,10 +20,9 @@ export const AuthProvider = ({ children }) => {
           
         if (error) {
           console.error('Error fetching profile:', error);
-          if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
-            supabase.auth.signOut();
-            return;
-          }
+          // If it's a JWT error, don't aggressively log out! 
+          // Supabase auto-refreshes tokens in the background. If we sign out here, 
+          // we interrupt the refresh process.
           const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
           if (savedRole) setRole(savedRole);
         } else if (data) {
