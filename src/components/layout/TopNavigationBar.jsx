@@ -91,7 +91,6 @@ const TopNavigationBar = ({ onSearchClick }) => {
         { name: 'Canceled Orders', icon: <Star size={14} style={{opacity: 0.5}} />, path: '/orders/canceled' }
       ]
     },
-    { name: 'Dispatch', path: '/dispatch' },
     { name: 'Customers', path: '/customers' },
     { name: 'Carriers', path: '/carriers' },
     { name: 'Reports', path: '/reports' },
