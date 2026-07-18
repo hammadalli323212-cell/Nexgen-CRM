@@ -106,7 +106,13 @@ const CustomerDetails = () => {
   }
 
   const totalOrders = customer.leads ? customer.leads.length : 0;
-  const ltv = customer.leads ? customer.leads.reduce((sum, lead) => sum + (lead.deposit_amount || 0), 0) : 0;
+  const collectedStatuses = ['Booked', 'Dispatched', 'In Transit', 'Delivered'];
+  const ltv = customer.leads ? customer.leads.reduce((sum, lead) => {
+    if (collectedStatuses.includes(lead.status)) {
+      return sum + (lead.deposit_amount || 0);
+    }
+    return sum;
+  }, 0) : 0;
   
   const leadsData = (customer.leads || []).map(lead => ({
     ...lead,

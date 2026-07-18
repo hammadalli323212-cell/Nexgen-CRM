@@ -49,7 +49,13 @@ const Customers = () => {
 
         const formatted = data.map(c => {
           const totalOrders = c.leads ? c.leads.length : 0;
-          const ltv = c.leads ? c.leads.reduce((sum, lead) => sum + (lead.deposit_amount || 0), 0) : 0;
+          const collectedStatuses = ['Booked', 'Dispatched', 'In Transit', 'Delivered'];
+          const ltv = c.leads ? c.leads.reduce((sum, lead) => {
+            if (collectedStatuses.includes(lead.status)) {
+              return sum + (lead.deposit_amount || 0);
+            }
+            return sum;
+          }, 0) : 0;
           
           let lastActive = c.created_at;
           if (c.leads && c.leads.length > 0) {
