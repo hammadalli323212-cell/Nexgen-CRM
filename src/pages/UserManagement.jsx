@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { TENANT } from '../config/tenant';
 import toast from 'react-hot-toast';
-import { Plus, X, Edit2, Trash2 } from 'lucide-react';
+import { Plus, X, Edit2, Trash2, Lock } from 'lucide-react';
 
 const UserManagement = () => {
   const { user, isAdmin } = useAuth();
@@ -216,14 +217,10 @@ const UserManagement = () => {
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
                   <td style={{ padding: '15px', textAlign: 'right' }}>
-                    {u.email === 'info@nexgenautotransport.com' ? (
-                      user?.email === 'info@nexgenautotransport.com' ? (
-                        <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit Your Account">
-                          <Edit2 size={18} />
-                        </button>
-                      ) : (
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', paddingRight: '10px' }}>Super Admin</span>
-                      )
+                    {u.email === TENANT.ADMIN_EMAIL ? (
+                      <div title="System Admin cannot be modified" style={{ display: 'inline-flex', padding: '8px', opacity: 0.5 }}>
+                        <Lock size={18} />
+                      </div>
                     ) : (
                       <>
                         <button onClick={() => openEditModal(u)} style={{ background: 'none', border: 'none', color: 'var(--brand-blue)', cursor: 'pointer', marginRight: '15px' }} title="Edit User">

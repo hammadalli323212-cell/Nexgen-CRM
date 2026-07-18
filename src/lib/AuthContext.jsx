@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { TENANT } from '../config/tenant';
 
 const AuthContext = createContext();
 
@@ -23,16 +24,16 @@ export const AuthProvider = ({ children }) => {
           // If it's a JWT error, don't aggressively log out! 
           // Supabase auto-refreshes tokens in the background. If we sign out here, 
           // we interrupt the refresh process.
-          const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+          const savedRole = localStorage.getItem(`${TENANT.LOCAL_STORAGE_PREFIX}role_${userId}`);
           if (savedRole) setRole(savedRole);
         } else if (data) {
           setRole(data.role);
           if (data.phone) setPhone(data.phone);
-          localStorage.setItem(`nexgen_role_${userId}`, data.role);
+          localStorage.setItem(`${TENANT.LOCAL_STORAGE_PREFIX}role_${userId}`, data.role);
         }
       } catch (err) {
         console.error('Unexpected error fetching profile:', err);
-        const savedRole = localStorage.getItem(`nexgen_role_${userId}`);
+        const savedRole = localStorage.getItem(`${TENANT.LOCAL_STORAGE_PREFIX}role_${userId}`);
         if (savedRole) setRole(savedRole);
       } finally {
         setLoading(false);
@@ -77,10 +78,10 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
-    role: user?.email === 'info@nexgenautotransport.com' ? 'admin' : role,
-    isAdmin: role === 'admin' || role === 'super_admin' || user?.email === 'info@nexgenautotransport.com',
-    isSuperAdmin: role === 'super_admin' || user?.email === 'info@nexgenautotransport.com',
-    phone: phone || '(832) 886-1321',
+    role: user?.email === TENANT.ADMIN_EMAIL ? 'admin' : role,
+    isAdmin: role === 'admin' || role === 'super_admin' || user?.email === TENANT.ADMIN_EMAIL,
+    isSuperAdmin: role === 'super_admin' || user?.email === TENANT.ADMIN_EMAIL,
+    phone: phone || TENANT.MAIN_PHONE,
     loading,
     signOut: () => supabase.auth.signOut(),
   };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useParams, useSearchParams } from 'react-router-dom';
-import { Phone, User } from 'lucide-react';
+import { Phone, User, Truck } from 'lucide-react';
 import styles from './BookingPortalLayout.module.css';
+import { TENANT } from '../../config/tenant';
 
 const BookingPortalLayout = () => {
   const { id } = useParams();
@@ -32,9 +33,16 @@ const BookingPortalLayout = () => {
     <div className={styles.layoutContainer}>
       <header className={styles.header}>
         <div className={styles.logoSection}>
-          <div className={styles.logo}>
-            <img src="/logo-dark.jpg" alt="NexGen Auto Transport" style={{ height: '75px', maxWidth: '280px', objectFit: 'contain' }} />
-          </div>
+          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          {TENANT.LOGO_DARK ? (
+            <img src={TENANT.LOGO_DARK} alt={TENANT.COMPANY_NAME} style={{ height: '75px', maxWidth: '280px', objectFit: 'contain' }} />
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+              <Truck size={36} color="var(--brand-blue)" />
+              <h1 style={{ color: 'var(--brand-blue)', fontSize: '24px', margin: 0 }}>{TENANT.COMPANY_NAME}</h1>
+            </div>
+          )}
+        </div>
         </div>
 
         <div className={styles.agentSection}>

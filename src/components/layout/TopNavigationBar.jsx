@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, Bell, Star, PlusCircle, LogOut, Users, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { TENANT } from '../../config/tenant';
 import styles from './TopNavigationBar.module.css';
 
 const TopNavigationBar = ({ onSearchClick }) => {
@@ -103,7 +104,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logoArea}>
-        <img src="/logo-dark.jpg" alt="NexGen CRM" style={{ height: '42px', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+        <img src={TENANT.LOGO_DARK} alt={`${TENANT.COMPANY_NAME} CRM`} style={{ height: '42px', objectFit: 'contain', mixBlendMode: 'multiply' }} />
       </div>
       
       <nav className={styles.navLinks}>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { TENANT } from '../../config/tenant';
 
 export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPreview, customerEmail }) {
   const [cc, setCc] = useState('');
@@ -43,7 +44,7 @@ export default function EmailPreviewModal({ isOpen, onClose, onSend, emailPrevie
         <div style={styles.body}>
           <div style={styles.fieldGroup}>
             <span style={styles.label}>From:</span>
-            <div style={styles.valueBox}>{emailPreview.from || 'NexGen Auto Transport'}</div>
+            <div style={styles.valueBox}>{emailPreview.from || TENANT.COMPANY_NAME}</div>
           </div>
           
           <div style={styles.fieldGroup}>

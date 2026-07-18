@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { TENANT } from '../config/tenant';
 
 const Login = () => {
   const { user, loading } = useAuth();
@@ -45,7 +46,7 @@ const Login = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-dark)' }}>
       <div style={{ backgroundColor: 'var(--bg-panel)', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}>
-        <h1 style={{ color: 'var(--text-primary)', marginBottom: '24px', textAlign: 'center' }}>NEXGEN CRM</h1>
+        <h1 style={{ color: 'var(--text-primary)', marginBottom: '24px', textAlign: 'center' }}>{TENANT.COMPANY_NAME.toUpperCase()} CRM</h1>
         
         {error && (
           <div style={{ backgroundColor: 'var(--bg-dark)', border: '1px solid var(--danger)', color: 'var(--danger)', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.9rem' }}>
