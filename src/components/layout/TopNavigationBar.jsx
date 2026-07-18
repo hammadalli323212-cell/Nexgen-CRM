@@ -6,6 +6,15 @@ import { supabase } from '../../lib/supabase';
 import { TENANT } from '../../config/tenant';
 import styles from './TopNavigationBar.module.css';
 
+const getInitials = (name) => {
+  if (!name) return 'U';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length > 1) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.substring(0, 2).toUpperCase();
+};
+
 const TopNavigationBar = ({ onSearchClick }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -157,7 +166,7 @@ const TopNavigationBar = ({ onSearchClick }) => {
           onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
         >
           <div className={styles.avatar}>
-            {user?.user_metadata?.full_name ? user.user_metadata.full_name.substring(0, 2).toUpperCase() : 'U'}
+            {getInitials(user?.user_metadata?.full_name)}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <span>{user?.user_metadata?.full_name || user?.email || 'User'}</span>
