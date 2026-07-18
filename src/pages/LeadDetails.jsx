@@ -963,10 +963,10 @@ const LeadDetails = () => {
             <button className={styles.btnPrimary} onClick={handleSendOrderForm} disabled={isSendingEmail}>
               {isSendingEmail ? 'Sending...' : 'Send Form'}
             </button>
-            <button className={styles.btnWarning} onClick={handleSendChangeOrder} disabled={isSendingEmail}>
+            <button className={styles.btnSecondary} onClick={handleSendChangeOrder} disabled={isSendingEmail}>
               Change Order
             </button>
-            <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote} style={{ background: 'linear-gradient(135deg, #0ea5e9, #2563eb)' }}>
+            <button className={styles.btnSuccess} onClick={handleSendQuoteEmail} disabled={isSendingQuote}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
             </button>
             {!isOrderView && (
