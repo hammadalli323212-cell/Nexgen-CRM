@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
-    role: user?.email === TENANT.ADMIN_EMAIL ? 'admin' : role,
+    role: user?.email === TENANT.ADMIN_EMAIL ? 'super_admin' : role,
     isAdmin: role === 'admin' || role === 'super_admin' || user?.email === TENANT.ADMIN_EMAIL,
     isSuperAdmin: role === 'super_admin' || user?.email === TENANT.ADMIN_EMAIL,
     phone: phone || TENANT.MAIN_PHONE,
