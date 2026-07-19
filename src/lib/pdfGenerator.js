@@ -13,6 +13,13 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
 
   try {
     const doc = new jsPDF();
+    
+    doc.setProperties({
+      title: `Order Form ${quoteNumber}`,
+      subject: 'Signed Order Form',
+      author: TENANT.COMPANY_NAME
+    });
+
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     
@@ -318,7 +325,7 @@ export const generateOrderPDF = async (leadData, formData, quoteNumber, transpor
       doc.autoPrint();
       window.open(doc.output('bloburl'), '_blank');
     } else {
-      doc.save(`${TENANT.COMPANY_NAME.replace(/ /g, '_')}_Order_${quoteNumber}.pdf`);
+      doc.save(`Order Form ${quoteNumber}.pdf`);
     }
   } catch (error) {
     console.error("PDF Generation Error:", error);
