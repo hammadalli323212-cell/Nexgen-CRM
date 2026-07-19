@@ -1,27 +1,28 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import { AuthProvider } from './lib/AuthContext';
-import Login from './pages/Login';
-import SetPassword from './pages/SetPassword';
-import Dashboard from './pages/Dashboard';
-import Reports from './pages/Reports';
-import UserManagement from './pages/UserManagement';
-import Leads from './pages/Leads';
-import Archive from './pages/Archive';
-import LeadForm from './pages/LeadForm';
-import LeadDetails from './pages/LeadDetails';
-import BookingPortalLayout from './pages/booking/BookingPortalLayout';
-import BookingAuth from './pages/booking/BookingAuth';
-import BookingWizard from './pages/booking/BookingWizard';
-import Orders from './pages/Orders';
-import Dispatch from './pages/Dispatch';
-import Customers from './pages/Customers';
-import CustomerDetails from './pages/CustomerDetails';
-import Carriers from './pages/Carriers';
-import CarrierDetails from './pages/CarrierDetails';
-import MyTasks from './pages/MyTasks';
+
+const Login = lazy(() => import('./pages/Login'));
+const SetPassword = lazy(() => import('./pages/SetPassword'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Reports = lazy(() => import('./pages/Reports'));
+const UserManagement = lazy(() => import('./pages/UserManagement'));
+const Leads = lazy(() => import('./pages/Leads'));
+const Archive = lazy(() => import('./pages/Archive'));
+const LeadForm = lazy(() => import('./pages/LeadForm'));
+const LeadDetails = lazy(() => import('./pages/LeadDetails'));
+const BookingPortalLayout = lazy(() => import('./pages/booking/BookingPortalLayout'));
+const BookingAuth = lazy(() => import('./pages/booking/BookingAuth'));
+const BookingWizard = lazy(() => import('./pages/booking/BookingWizard'));
+const Orders = lazy(() => import('./pages/Orders'));
+const Dispatch = lazy(() => import('./pages/Dispatch'));
+const Customers = lazy(() => import('./pages/Customers'));
+const CustomerDetails = lazy(() => import('./pages/CustomerDetails'));
+const Carriers = lazy(() => import('./pages/Carriers'));
+const CarrierDetails = lazy(() => import('./pages/CarrierDetails'));
+const MyTasks = lazy(() => import('./pages/MyTasks'));
 
 import './index.css';
 
@@ -35,12 +36,20 @@ const Placeholder = ({ title }) => (
   </div>
 );
 
+const LoadingFallback = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'var(--bg-app)' }}>
+    <div style={{ width: '40px', height: '40px', border: '3px solid rgba(59, 130, 246, 0.2)', borderTopColor: 'var(--brand-blue)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
+
 function App() {
   return (
     <AuthProvider>
       <Toaster position="top-center" />
       <BrowserRouter>
-        <Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
           {/* Public Booking Portal Routes */}
           <Route path="/booking/:id" element={<BookingPortalLayout />}>
             <Route index element={<BookingAuth />} />
@@ -77,7 +86,8 @@ function App() {
             
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
-        </Routes>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </AuthProvider>
   );
