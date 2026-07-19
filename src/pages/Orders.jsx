@@ -46,7 +46,8 @@ const Orders = () => {
           )
           .in("status", isCanceledTab ? ["Cancelled"] : ["Booked", "Dispatched", "In Transit", "Delivered"])
           .eq("is_archived", false)
-          .order("order_created_at", { ascending: false, nullsFirst: false });
+          .order("order_created_at", { ascending: false, nullsFirst: false })
+          .limit(250);
 
         if (!isAdmin && user) {
           query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
