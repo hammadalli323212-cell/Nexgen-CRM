@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { TENANT } from '../config/tenant';
 
 export const generateOrderPDF = async (leadData, formData, quoteNumber, transportType, cargoLabel, tariff, deposit, nextPayment, firstPaymentDue, firstPaymentMethod, finalPaymentDue, finalPaymentMethod, ipAddress, action = 'download', targetSignature = null, agentPhone = TENANT.MAIN_PHONE) => {
