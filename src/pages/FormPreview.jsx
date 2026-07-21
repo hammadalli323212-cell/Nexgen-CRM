@@ -20,7 +20,7 @@ const ElementorSimulator = ({ children }) => (
   }
 
   .fake-elementor-heading {
-    background-color: #42819d;
+    background-color: #3b9add; /* Nexgen Brand Blue */
     color: white;
     text-align: center;
     padding: 30px;
@@ -79,7 +79,7 @@ const ElementorSimulator = ({ children }) => (
       background-color: #ffffff; 
       padding: 0 5px;
       font-size: 13px;
-      color: #5c7b99; 
+      color: #2980b9; /* Nexgen Darker Blue */
       font-weight: 500;
       z-index: 2;
   }
@@ -104,7 +104,7 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form input:focus, 
   .elementor-form select:focus, 
   .elementor-form textarea:focus {
-      border: 2px solid #3f7b97;
+      border: 2px solid #3b9add; /* Nexgen Brand Blue */
       padding: 15px 14px; 
       outline: none;
   }
@@ -112,7 +112,7 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form select {
       appearance: none;
       -webkit-appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c7b99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b9add' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
       background-position: right 15px center;
       background-size: 15px;
@@ -127,7 +127,7 @@ const ElementorSimulator = ({ children }) => (
       position: relative;
       display: flex;
       align-items: center;
-      color: #3f7b97;
+      color: #2980b9; /* Nexgen Darker Blue */
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 15px;
@@ -169,7 +169,7 @@ const ElementorSimulator = ({ children }) => (
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked {
-      border-color: #5c7b99; 
+      border-color: #3b9add; /* Nexgen Brand Blue */
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked::after {
@@ -180,7 +180,7 @@ const ElementorSimulator = ({ children }) => (
       transform: translate(-50%, -50%);
       width: 12px;
       height: 12px;
-      background-color: #5c7b99;
+      background-color: #3b9add; /* Nexgen Brand Blue */
       border-radius: 50%;
   }
 
@@ -193,7 +193,7 @@ const ElementorSimulator = ({ children }) => (
   }
 
   .elementor-form .elementor-button {
-      background-color: #c5cfd6;
+      background-color: #3b9add; /* Nexgen Brand Blue */
       color: #ffffff;
       border: none;
       border-radius: 50px;
@@ -209,7 +209,7 @@ const ElementorSimulator = ({ children }) => (
   }
   
   .elementor-form .elementor-button:hover {
-      background-color: #a8b6c0;
+      background-color: #2980b9; /* Nexgen Brand Blue Hover */
   }
 
   /* Utility classes for layout simulation */
