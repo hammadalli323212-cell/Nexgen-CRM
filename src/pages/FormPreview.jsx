@@ -135,13 +135,13 @@ const ElementorSimulator = ({ children }) => (
   
   .elementor-form .elementor-field-subgroup {
       display: flex;
-      gap: 30px;
+      gap: 15px;
   }
   
   .elementor-form .elementor-field-option {
       display: flex;
       align-items: center;
-      font-size: 16px;
+      font-size: 15px;
       color: #4b5563;
       cursor: pointer;
   }
@@ -149,11 +149,11 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form .elementor-field-option input[type="radio"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 24px;
-      height: 24px;
-      border: 2px solid #94a8bc;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #94a8bc;
       border-radius: 50%;
-      margin-right: 10px;
+      margin-right: 8px;
       position: relative;
       outline: none;
       background-color: transparent;
@@ -161,7 +161,7 @@ const ElementorSimulator = ({ children }) => (
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked {
-      border-color: #3b9add; /* Nexgen Brand Blue */
+      border: 2px solid #3b9add; /* Nexgen Brand Blue */
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked::after {
@@ -170,8 +170,8 @@ const ElementorSimulator = ({ children }) => (
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 12px;
-      height: 12px;
+      width: 8px;
+      height: 8px;
       background-color: #3b9add; /* Nexgen Brand Blue */
       border-radius: 50%;
   }
@@ -207,7 +207,7 @@ const ElementorSimulator = ({ children }) => (
   /* Utility classes for layout simulation */
   .row {
     display: flex;
-    gap: 20px;
+    gap: 40px;
   }
   .col {
     flex: 1;
