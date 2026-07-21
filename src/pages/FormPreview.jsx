@@ -321,7 +321,7 @@ export default function FormPreview() {
           <div className="row">
             <div className="col elementor-field-type-date elementor-field-group">
               <label className="elementor-field-label">First Available Pick-up Date</label>
-              <input type="date" className="elementor-field" />
+              <input type="date" className="elementor-field" onClick={(e) => { if(e.target.showPicker) e.target.showPicker(); }} />
             </div>
           </div>
 
