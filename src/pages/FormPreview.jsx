@@ -225,8 +225,6 @@ const ElementorSimulator = ({ children }) => (
   </div>
 );
 
-import { useState } from 'react';
-
 const FormPreview = () => {
   const [step, setStep] = useState(1);
 
