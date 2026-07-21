@@ -251,18 +251,6 @@ export default function FormPreview() {
             </div>
           </div>
 
-          <div className="elementor-field-type-radio elementor-field-group">
-            <label className="elementor-field-label">Transport Type</label>
-            <div className="elementor-field-subgroup">
-              <label className="elementor-field-option">
-                <input type="radio" name="transport" defaultChecked /> Open
-              </label>
-              <label className="elementor-field-option">
-                <input type="radio" name="transport" /> Enclosed
-              </label>
-            </div>
-          </div>
-
           <div className="row">
             <div className="col elementor-field-type-select elementor-field-group">
               <label className="elementor-field-label">Year</label>
@@ -292,15 +280,29 @@ export default function FormPreview() {
             </div>
           </div>
 
-          <div className="elementor-field-type-radio elementor-field-group">
-            <label className="elementor-field-label">Condition</label>
-            <div className="elementor-field-subgroup">
-              <label className="elementor-field-option">
-                <input type="radio" name="condition" defaultChecked /> Operable
-              </label>
-              <label className="elementor-field-option">
-                <input type="radio" name="condition" /> Inoperable
-              </label>
+          <div className="row">
+            <div className="col elementor-field-type-radio elementor-field-group">
+              <label className="elementor-field-label">Transport Type</label>
+              <div className="elementor-field-subgroup">
+                <label className="elementor-field-option">
+                  <input type="radio" name="transport" defaultChecked /> Open
+                </label>
+                <label className="elementor-field-option">
+                  <input type="radio" name="transport" /> Enclosed
+                </label>
+              </div>
+            </div>
+
+            <div className="col elementor-field-type-radio elementor-field-group">
+              <label className="elementor-field-label">Condition</label>
+              <div className="elementor-field-subgroup">
+                <label className="elementor-field-option">
+                  <input type="radio" name="condition" defaultChecked /> Operable
+                </label>
+                <label className="elementor-field-option">
+                  <input type="radio" name="condition" /> Inoperable
+                </label>
+              </div>
             </div>
           </div>
 
