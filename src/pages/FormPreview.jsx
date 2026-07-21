@@ -343,30 +343,28 @@ const FormPreview = () => {
                   </select>
                 </div>
                 
-                <div className="col elementor-field-type-select elementor-field-group">
+                <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Year <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-                    <option value="">Select Year</option>
-                    {years.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
+                  <input type="text" className="elementor-field" required value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} list="year-options" placeholder="Select or type" />
+                  <datalist id="year-options">
+                    {years.map(y => <option key={y} value={y} />)}
+                  </datalist>
                 </div>
                 
-                <div className="col elementor-field-type-select elementor-field-group">
+                <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Vehicle Make <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required value={selectedMake} onChange={(e) => setSelectedMake(e.target.value)} disabled={!selectedYear}>
-                    <option value="">{selectedYear ? "Select Make" : "Select Year First"}</option>
-                    {popularMakes.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
+                  <input type="text" className="elementor-field" required value={selectedMake} onChange={(e) => setSelectedMake(e.target.value)} list="make-options" placeholder="Select or type" />
+                  <datalist id="make-options">
+                    {popularMakes.map(m => <option key={m} value={m} />)}
+                  </datalist>
                 </div>
                 
-                <div className="col elementor-field-type-select elementor-field-group">
+                <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Vehicle Model <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)} disabled={!selectedMake || isLoadingModels}>
-                    <option value="">
-                      {isLoadingModels ? "Loading models..." : (!selectedMake ? "Select Make First" : "Select Model")}
-                    </option>
-                    {modelsList.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
+                  <input type="text" className="elementor-field" required value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)} list="model-options" placeholder={isLoadingModels ? "Loading models..." : "Select or type"} />
+                  <datalist id="model-options">
+                    {modelsList.map(m => <option key={m} value={m} />)}
+                  </datalist>
                 </div>
               </div>
 
