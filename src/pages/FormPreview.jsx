@@ -133,14 +133,6 @@ const ElementorSimulator = ({ children }) => (
       margin-bottom: 15px;
   }
   
-  .elementor-form .elementor-field-type-radio > .elementor-field-label::after {
-      content: "";
-      flex-grow: 1;
-      height: 1px;
-      background-color: #94a8bc;
-      margin-left: 15px;
-  }
-
   .elementor-form .elementor-field-subgroup {
       display: flex;
       gap: 30px;
