@@ -242,12 +242,12 @@ export default function FormPreview() {
           <div className="row">
             <div className="col elementor-field-type-text elementor-field-group">
               <label className="elementor-field-label">Pick-up</label>
-              <input type="text" placeholder="ZIP or City" className="elementor-field" />
+              <input type="text" placeholder="Zipcode" className="elementor-field" />
             </div>
             
             <div className="col elementor-field-type-text elementor-field-group">
               <label className="elementor-field-label">Delivery</label>
-              <input type="text" placeholder="ZIP or City" className="elementor-field" />
+              <input type="text" placeholder="Zipcode" className="elementor-field" />
             </div>
           </div>
 
