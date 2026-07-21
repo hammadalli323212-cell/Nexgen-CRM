@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ElementorSimulator = ({ children }) => (
   <div style={{
@@ -225,114 +225,161 @@ const ElementorSimulator = ({ children }) => (
   </div>
 );
 
-export default function FormPreview() {
+import { useState } from 'react';
+
+const FormPreview = () => {
+  const [step, setStep] = useState(1);
+
   return (
     <ElementorSimulator>
-      <div className="form-container">
-        
-        {/* Fake Elementor Heading Widget */}
+      <div className="elementor-widget-container">
         <div className="fake-elementor-heading">
-          <h2>Get Your Free Quote</h2>
-          <p>No obligation. No upfront charges.</p>
+          <h2 style={{ margin: 0, fontSize: '28px', fontWeight: 'bold' }}>Calculate Your Car Shipping Cost</h2>
         </div>
 
-        {/* Fake Elementor Form Widget */}
         <form className="elementor-form" onSubmit={(e) => e.preventDefault()}>
           
-          <div className="row">
-            <div className="col elementor-field-type-text elementor-field-group">
-              <label className="elementor-field-label">Pick-up</label>
-              <input type="text" placeholder="Zipcode" className="elementor-field" />
+          {/* Mock Elementor Progress Bar */}
+          <div className="e-form__indicators" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <div className={`e-form__indicator ${step >= 1 ? 'e-form__indicator--active' : ''}`}>
+               <span className="e-form__indicator-number">1</span>
+               <span className="e-form__indicator-text">Vehicle Details</span>
             </div>
-            
-            <div className="col elementor-field-type-text elementor-field-group">
-              <label className="elementor-field-label">Delivery</label>
-              <input type="text" placeholder="Zipcode" className="elementor-field" />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col elementor-field-type-select elementor-field-group">
-              <label className="elementor-field-label">Vehicle Type</label>
-              <select className="elementor-field">
-                <option>Select</option>
-                <option>Car</option>
-                <option>SUV</option>
-                <option>Pickup</option>
-                <option>Van</option>
-                <option>Other</option>
-              </select>
-            </div>
-            
-            <div className="col elementor-field-type-select elementor-field-group">
-              <label className="elementor-field-label">Year</label>
-              <select className="elementor-field">
-                <option>Select</option>
-                <option>2024</option>
-                <option>2023</option>
-              </select>
-            </div>
-            
-            <div className="col elementor-field-type-select elementor-field-group">
-              <label className="elementor-field-label">Vehicle Make</label>
-              <select className="elementor-field">
-                <option>Type or select</option>
-                <option>Toyota</option>
-                <option>Honda</option>
-              </select>
-            </div>
-            
-            <div className="col elementor-field-type-select elementor-field-group">
-              <label className="elementor-field-label">Vehicle Model</label>
-              <select className="elementor-field">
-                <option>Type or select</option>
-                <option>Camry</option>
-                <option>Civic</option>
-              </select>
+            <div className={`e-form__indicator ${step >= 2 ? 'e-form__indicator--active' : ''}`}>
+               <span className="e-form__indicator-number">2</span>
+               <span className="e-form__indicator-text">Your Details</span>
             </div>
           </div>
 
-          <div className="row row-gap-large">
-            <div className="col elementor-field-type-radio elementor-field-group">
-              <label className="elementor-field-label">Transport Type</label>
-              <div className="elementor-field-subgroup">
-                <label className="elementor-field-option">
-                  <input type="radio" name="transport" defaultChecked /> Open
-                </label>
-                <label className="elementor-field-option">
-                  <input type="radio" name="transport" /> Enclosed
-                </label>
+          {step === 1 && (
+            <div className="step-1-content">
+              <div className="row">
+                <div className="col elementor-field-type-text elementor-field-group">
+                  <label className="elementor-field-label">Pick-up</label>
+                  <input type="text" placeholder="Zipcode" className="elementor-field" />
+                </div>
+                
+                <div className="col elementor-field-type-text elementor-field-group">
+                  <label className="elementor-field-label">Delivery</label>
+                  <input type="text" placeholder="Zipcode" className="elementor-field" />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col elementor-field-type-select elementor-field-group">
+                  <label className="elementor-field-label">Vehicle Type</label>
+                  <select className="elementor-field">
+                    <option>Select</option>
+                    <option>Car</option>
+                    <option>SUV</option>
+                    <option>Pickup</option>
+                    <option>Van</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                
+                <div className="col elementor-field-type-select elementor-field-group">
+                  <label className="elementor-field-label">Year</label>
+                  <select className="elementor-field">
+                    <option>Select</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                  </select>
+                </div>
+                
+                <div className="col elementor-field-type-select elementor-field-group">
+                  <label className="elementor-field-label">Vehicle Make</label>
+                  <select className="elementor-field">
+                    <option>Type or select</option>
+                    <option>Toyota</option>
+                    <option>Honda</option>
+                  </select>
+                </div>
+                
+                <div className="col elementor-field-type-select elementor-field-group">
+                  <label className="elementor-field-label">Vehicle Model</label>
+                  <select className="elementor-field">
+                    <option>Type or select</option>
+                    <option>Camry</option>
+                    <option>Civic</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="row row-gap-large">
+                <div className="col elementor-field-type-radio elementor-field-group">
+                  <label className="elementor-field-label">Transport Type</label>
+                  <div className="elementor-field-subgroup">
+                    <label className="elementor-field-option">
+                      <input type="radio" name="transport" defaultChecked /> Open
+                    </label>
+                    <label className="elementor-field-option">
+                      <input type="radio" name="transport" /> Enclosed
+                    </label>
+                  </div>
+                </div>
+
+                <div className="col elementor-field-type-radio elementor-field-group">
+                  <label className="elementor-field-label">Condition</label>
+                  <div className="elementor-field-subgroup">
+                    <label className="elementor-field-option">
+                      <input type="radio" name="condition" defaultChecked /> Operable
+                    </label>
+                    <label className="elementor-field-option">
+                      <input type="radio" name="condition" /> Inoperable
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col elementor-field-type-date elementor-field-group">
+                  <label className="elementor-field-label">First Available Pick-up Date</label>
+                  <input type="date" className="elementor-field" onClick={(e) => { if(e.target.showPicker) e.target.showPicker(); }} />
+                </div>
+              </div>
+
+              <div className="elementor-field-type-submit elementor-field-group">
+                <button type="button" className="elementor-button" onClick={() => setStep(2)}>
+                  Next →
+                </button>
               </div>
             </div>
+          )}
 
-            <div className="col elementor-field-type-radio elementor-field-group">
-              <label className="elementor-field-label">Condition</label>
-              <div className="elementor-field-subgroup">
-                <label className="elementor-field-option">
-                  <input type="radio" name="condition" defaultChecked /> Operable
-                </label>
-                <label className="elementor-field-option">
-                  <input type="radio" name="condition" /> Inoperable
-                </label>
+          {step === 2 && (
+            <div className="step-2-content">
+              <div className="row">
+                <div className="col elementor-field-type-text elementor-field-group">
+                  <label className="elementor-field-label">Full Name</label>
+                  <input type="text" className="elementor-field" placeholder="John Doe" />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col elementor-field-type-email elementor-field-group">
+                  <label className="elementor-field-label">Email Address</label>
+                  <input type="email" className="elementor-field" placeholder="john@example.com" />
+                </div>
+                <div className="col elementor-field-type-tel elementor-field-group">
+                  <label className="elementor-field-label">Phone Number</label>
+                  <input type="tel" className="elementor-field" placeholder="(555) 000-0000" />
+                </div>
+              </div>
+
+              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '20px' }}>
+                <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', width: '30%' }} onClick={() => setStep(1)}>
+                  ← Previous
+                </button>
+                <button type="submit" className="elementor-button" style={{ width: '70%' }}>
+                  Get a Quote →
+                </button>
               </div>
             </div>
-          </div>
-
-          <div className="row">
-            <div className="col elementor-field-type-date elementor-field-group">
-              <label className="elementor-field-label">First Available Pick-up Date</label>
-              <input type="date" className="elementor-field" onClick={(e) => { if(e.target.showPicker) e.target.showPicker(); }} />
-            </div>
-          </div>
-
-          <div className="elementor-field-type-submit elementor-field-group">
-            <button type="submit" className="elementor-button">
-              Get a Quote →
-            </button>
-          </div>
-
+          )}
         </form>
       </div>
     </ElementorSimulator>
   );
-}
+};
+
+export default FormPreview;
