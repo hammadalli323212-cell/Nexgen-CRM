@@ -23,7 +23,7 @@ const ElementorSimulator = ({ children }) => (
     background-color: #3b9add; /* Nexgen Brand Blue */
     color: white;
     text-align: center;
-    padding: 30px;
+    padding: 25px 30px 15px 30px; /* Reduced top/bottom padding to tighten up space */
     border-radius: 12px 12px 0 0;
     margin-bottom: 0;
   }
@@ -43,7 +43,7 @@ const ElementorSimulator = ({ children }) => (
   /* ---- THE EXACT CSS WE ARE TESTING (Targeting .elementor-form instead of 'selector') ---- */
   .elementor-form {
       background-color: #ffffff;
-      padding: 30px;
+      padding: 10px 30px 30px 30px; /* Reduced top padding from 30px to 10px */
       border-radius: 0 0 12px 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
@@ -263,7 +263,7 @@ const FormPreview = () => {
         <form className="elementor-form" onSubmit={(e) => e.preventDefault()}>
           
           {/* Mock Elementor Progress Bar */}
-          <div className="e-form__indicators" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div className="e-form__indicators" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <div className={`e-form__indicator ${step >= 1 ? 'e-form__indicator--active' : ''}`}>
                <span className="e-form__indicator-number">1</span>
                <span className="e-form__indicator-text">Vehicle Details</span>
