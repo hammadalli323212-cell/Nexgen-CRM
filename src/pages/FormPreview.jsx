@@ -252,6 +252,48 @@ const ElementorSimulator = ({ children }) => (
 
 const FormPreview = () => {
   const [step, setStep] = useState(1);
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedMake, setSelectedMake] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
+  const [modelsList, setModelsList] = useState([]);
+  const [isLoadingModels, setIsLoadingModels] = useState(false);
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 1980 + 2 }, (v, i) => currentYear + 1 - i);
+  
+  const popularMakes = [
+    "Acura", "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "BMW", "Buick", "Cadillac",
+    "Chevrolet", "Chrysler", "Dodge", "Ferrari", "FIAT", "Ford", "Genesis", "GMC",
+    "Honda", "Hyundai", "INFINITI", "Jaguar", "Jeep", "Kia", "Lamborghini", "Land Rover",
+    "Lexus", "Lincoln", "Maserati", "Mazda", "McLaren", "Mercedes-Benz", "MINI", "Mitsubishi",
+    "Nissan", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Subaru", "Tesla", "Toyota",
+    "Volkswagen", "Volvo"
+  ];
+
+  React.useEffect(() => {
+    if (selectedYear && selectedMake && selectedMake !== 'Type or select' && selectedYear !== 'Select') {
+      setIsLoadingModels(true);
+      setSelectedModel('');
+      fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${selectedMake}/modelyear/${selectedYear}?format=json`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.Results) {
+            const uniqueModels = [...new Set(data.Results.map(item => item.Model_Name))].sort();
+            setModelsList(uniqueModels);
+          } else {
+            setModelsList([]);
+          }
+          setIsLoadingModels(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setModelsList([]);
+          setIsLoadingModels(false);
+        });
+    } else {
+      setModelsList([]);
+    }
+  }, [selectedYear, selectedMake]);
 
   return (
     <ElementorSimulator>
@@ -303,28 +345,27 @@ const FormPreview = () => {
                 
                 <div className="col elementor-field-type-select elementor-field-group">
                   <label className="elementor-field-label">Year <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required>
-                    <option>Select</option>
-                    <option>2024</option>
-                    <option>2023</option>
+                  <select className="elementor-field" required value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+                    <option value="">Select Year</option>
+                    {years.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
                 </div>
                 
                 <div className="col elementor-field-type-select elementor-field-group">
                   <label className="elementor-field-label">Vehicle Make <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required>
-                    <option>Type or select</option>
-                    <option>Toyota</option>
-                    <option>Honda</option>
+                  <select className="elementor-field" required value={selectedMake} onChange={(e) => setSelectedMake(e.target.value)} disabled={!selectedYear}>
+                    <option value="">{selectedYear ? "Select Make" : "Select Year First"}</option>
+                    {popularMakes.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
                 </div>
                 
                 <div className="col elementor-field-type-select elementor-field-group">
                   <label className="elementor-field-label">Vehicle Model <span className="elementor-mark-required">*</span></label>
-                  <select className="elementor-field" required>
-                    <option>Type or select</option>
-                    <option>Camry</option>
-                    <option>Civic</option>
+                  <select className="elementor-field" required value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)} disabled={!selectedMake || isLoadingModels}>
+                    <option value="">
+                      {isLoadingModels ? "Loading models..." : (!selectedMake ? "Select Make First" : "Select Model")}
+                    </option>
+                    {modelsList.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
                 </div>
               </div>
