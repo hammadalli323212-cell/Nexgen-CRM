@@ -110,8 +110,9 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form input:focus, 
   .elementor-form select:focus, 
   .elementor-form textarea:focus {
-      border: 2px solid #335ad6; /* Nexgen Brand Blue */
-      padding: 13px 14px; /* Adjust padding to prevent jumping when border gets thicker */
+      border: 1px solid #335ad6; /* Nexgen Brand Blue */
+      box-shadow: 0 0 0 1px #335ad6; /* Adds thickness without changing geometry */
+      padding: 14px 15px; /* Matches unfocused padding exactly */
       outline: none;
   }
 
