@@ -93,27 +93,30 @@ const ElementorSimulator = ({ children }) => (
       border: 1px solid #94a8bc; 
       border-radius: 6px;
       color: #333333;
-      padding: 16px 15px;
-      font-size: 16px;
+      padding: 14px 15px;
+      font-size: 15px;
       width: 100%;
-      box-sizing: border-box;
       box-shadow: none;
       transition: border-color 0.2s ease;
       position: relative;
       z-index: 1;
+      box-sizing: border-box;
   }
 
+  /* Input Focus State */
   .elementor-form input:focus, 
   .elementor-form select:focus, 
   .elementor-form textarea:focus {
       border: 2px solid #3b9add; /* Nexgen Brand Blue */
-      padding: 15px 14px; 
+      padding: 13px 14px; /* Adjust padding to prevent jumping when border gets thicker */
       outline: none;
   }
 
+  /* Custom Dropdown Arrow */
   .elementor-form select {
       appearance: none;
       -webkit-appearance: none;
+      padding-right: 35px; /* Prevent text from overlapping the arrow */
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b9add' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
       background-position: right 15px center;
@@ -209,6 +212,9 @@ const ElementorSimulator = ({ children }) => (
   /* Utility classes for layout simulation */
   .row {
     display: flex;
+    gap: 15px;
+  }
+  .row-gap-large {
     gap: 40px;
   }
   .col {
@@ -286,7 +292,7 @@ export default function FormPreview() {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row row-gap-large">
             <div className="col elementor-field-type-radio elementor-field-group">
               <label className="elementor-field-label">Transport Type</label>
               <div className="elementor-field-subgroup">
