@@ -245,6 +245,18 @@ export default function FormPreview() {
 
           <div className="row">
             <div className="col elementor-field-type-select elementor-field-group">
+              <label className="elementor-field-label">Vehicle Type</label>
+              <select className="elementor-field">
+                <option>Select</option>
+                <option>Car</option>
+                <option>SUV</option>
+                <option>Pickup</option>
+                <option>Van</option>
+                <option>Other</option>
+              </select>
+            </div>
+            
+            <div className="col elementor-field-type-select elementor-field-group">
               <label className="elementor-field-label">Year</label>
               <select className="elementor-field">
                 <option>Select</option>
