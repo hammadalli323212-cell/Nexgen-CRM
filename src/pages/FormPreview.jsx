@@ -220,7 +220,14 @@ const ElementorSimulator = ({ children }) => (
   .col {
     flex: 1;
   }
-    `}</style>
+  
+  /* Required Asterisk */
+  .elementor-mark-required {
+    color: #dc3545; /* Nexgen Brand Red */
+    margin-left: 3px;
+    font-weight: bold;
+  }
+</style>
     {children}
   </div>
 );
@@ -253,20 +260,20 @@ const FormPreview = () => {
             <div className="step-1-content">
               <div className="row">
                 <div className="col elementor-field-type-text elementor-field-group">
-                  <label className="elementor-field-label">Pick-up</label>
-                  <input type="text" placeholder="Zipcode" className="elementor-field" />
+                  <label className="elementor-field-label">Pick-up <span className="elementor-mark-required">*</span></label>
+                  <input type="text" placeholder="Zipcode" className="elementor-field" required />
                 </div>
                 
                 <div className="col elementor-field-type-text elementor-field-group">
-                  <label className="elementor-field-label">Delivery</label>
-                  <input type="text" placeholder="Zipcode" className="elementor-field" />
+                  <label className="elementor-field-label">Delivery <span className="elementor-mark-required">*</span></label>
+                  <input type="text" placeholder="Zipcode" className="elementor-field" required />
                 </div>
               </div>
 
               <div className="row">
                 <div className="col elementor-field-type-select elementor-field-group">
-                  <label className="elementor-field-label">Vehicle Type</label>
-                  <select className="elementor-field">
+                  <label className="elementor-field-label">Vehicle Type <span className="elementor-mark-required">*</span></label>
+                  <select className="elementor-field" required>
                     <option>Select</option>
                     <option>Car</option>
                     <option>SUV</option>
@@ -277,8 +284,8 @@ const FormPreview = () => {
                 </div>
                 
                 <div className="col elementor-field-type-select elementor-field-group">
-                  <label className="elementor-field-label">Year</label>
-                  <select className="elementor-field">
+                  <label className="elementor-field-label">Year <span className="elementor-mark-required">*</span></label>
+                  <select className="elementor-field" required>
                     <option>Select</option>
                     <option>2024</option>
                     <option>2023</option>
@@ -286,8 +293,8 @@ const FormPreview = () => {
                 </div>
                 
                 <div className="col elementor-field-type-select elementor-field-group">
-                  <label className="elementor-field-label">Vehicle Make</label>
-                  <select className="elementor-field">
+                  <label className="elementor-field-label">Vehicle Make <span className="elementor-mark-required">*</span></label>
+                  <select className="elementor-field" required>
                     <option>Type or select</option>
                     <option>Toyota</option>
                     <option>Honda</option>
@@ -295,8 +302,8 @@ const FormPreview = () => {
                 </div>
                 
                 <div className="col elementor-field-type-select elementor-field-group">
-                  <label className="elementor-field-label">Vehicle Model</label>
-                  <select className="elementor-field">
+                  <label className="elementor-field-label">Vehicle Model <span className="elementor-mark-required">*</span></label>
+                  <select className="elementor-field" required>
                     <option>Type or select</option>
                     <option>Camry</option>
                     <option>Civic</option>
@@ -306,25 +313,25 @@ const FormPreview = () => {
 
               <div className="row row-gap-large">
                 <div className="col elementor-field-type-radio elementor-field-group">
-                  <label className="elementor-field-label">Transport Type</label>
+                  <label className="elementor-field-label">Transport Type <span className="elementor-mark-required">*</span></label>
                   <div className="elementor-field-subgroup">
                     <label className="elementor-field-option">
-                      <input type="radio" name="transport" defaultChecked /> Open
+                      <input type="radio" name="transport" defaultChecked required /> Open
                     </label>
                     <label className="elementor-field-option">
-                      <input type="radio" name="transport" /> Enclosed
+                      <input type="radio" name="transport" required /> Enclosed
                     </label>
                   </div>
                 </div>
 
                 <div className="col elementor-field-type-radio elementor-field-group">
-                  <label className="elementor-field-label">Condition</label>
+                  <label className="elementor-field-label">Condition <span className="elementor-mark-required">*</span></label>
                   <div className="elementor-field-subgroup">
                     <label className="elementor-field-option">
-                      <input type="radio" name="condition" defaultChecked /> Operable
+                      <input type="radio" name="condition" defaultChecked required /> Operable
                     </label>
                     <label className="elementor-field-option">
-                      <input type="radio" name="condition" /> Inoperable
+                      <input type="radio" name="condition" required /> Inoperable
                     </label>
                   </div>
                 </div>
@@ -332,8 +339,8 @@ const FormPreview = () => {
 
               <div className="row">
                 <div className="col elementor-field-type-date elementor-field-group">
-                  <label className="elementor-field-label">First Available Pick-up Date</label>
-                  <input type="date" className="elementor-field" onClick={(e) => { if(e.target.showPicker) e.target.showPicker(); }} />
+                  <label className="elementor-field-label">First Available Pick-up Date <span className="elementor-mark-required">*</span></label>
+                  <input type="date" className="elementor-field" required onClick={(e) => { if(e.target.showPicker) e.target.showPicker(); }} />
                 </div>
               </div>
 
@@ -349,18 +356,18 @@ const FormPreview = () => {
             <div className="step-2-content">
               <div className="row">
                 <div className="col elementor-field-type-text elementor-field-group">
-                  <label className="elementor-field-label">Full Name</label>
-                  <input type="text" className="elementor-field" placeholder="John Doe" />
+                  <label className="elementor-field-label">Full Name <span className="elementor-mark-required">*</span></label>
+                  <input type="text" className="elementor-field" placeholder="John Doe" required />
                 </div>
               </div>
               <div className="row">
                 <div className="col elementor-field-type-email elementor-field-group">
-                  <label className="elementor-field-label">Email Address</label>
-                  <input type="email" className="elementor-field" placeholder="john@example.com" />
+                  <label className="elementor-field-label">Email Address <span className="elementor-mark-required">*</span></label>
+                  <input type="email" className="elementor-field" placeholder="john@example.com" required />
                 </div>
                 <div className="col elementor-field-type-tel elementor-field-group">
-                  <label className="elementor-field-label">Phone Number</label>
-                  <input type="tel" className="elementor-field" placeholder="(555) 000-0000" />
+                  <label className="elementor-field-label">Phone Number <span className="elementor-mark-required">*</span></label>
+                  <input type="tel" className="elementor-field" placeholder="(555) 000-0000" required />
                 </div>
               </div>
 
