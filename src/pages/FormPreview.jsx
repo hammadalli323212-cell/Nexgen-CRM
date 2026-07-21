@@ -61,7 +61,8 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form .elementor-field-type-email,
   .elementor-form .elementor-field-type-tel,
   .elementor-form .elementor-field-type-number,
-  .elementor-form .elementor-field-type-select {
+  .elementor-form .elementor-field-type-select,
+  .elementor-form .elementor-field-type-date {
       position: relative;
       margin-top: 15px; 
       margin-bottom: 20px;
@@ -72,7 +73,8 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form .elementor-field-type-email .elementor-field-label,
   .elementor-form .elementor-field-type-tel .elementor-field-label,
   .elementor-form .elementor-field-type-number .elementor-field-label,
-  .elementor-form .elementor-field-type-select .elementor-field-label {
+  .elementor-form .elementor-field-type-select .elementor-field-label,
+  .elementor-form .elementor-field-type-date .elementor-field-label {
       position: absolute;
       top: -10px;
       left: 12px;
