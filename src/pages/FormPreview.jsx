@@ -1,0 +1,313 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const ElementorSimulator = styled.div`
+  min-height: 100vh;
+  background-color: #e5e7eb;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: 'Roboto', sans-serif;
+
+  .form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .fake-elementor-heading {
+    background-color: #42819d;
+    color: white;
+    text-align: center;
+    padding: 30px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 0;
+  }
+  
+  .fake-elementor-heading h2 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    font-weight: 800;
+  }
+  
+  .fake-elementor-heading p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  /* ---- THE EXACT CSS WE ARE TESTING (Targeting .elementor-form instead of 'selector') ---- */
+  .elementor-form {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .elementor-form input[type=number]::-webkit-inner-spin-button, 
+  .elementor-form input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+  .elementor-form input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .elementor-form .elementor-field-type-text,
+  .elementor-form .elementor-field-type-email,
+  .elementor-form .elementor-field-type-tel,
+  .elementor-form .elementor-field-type-number,
+  .elementor-form .elementor-field-type-select {
+      position: relative;
+      margin-top: 15px; 
+      margin-bottom: 20px;
+      padding: 0;
+  }
+
+  .elementor-form .elementor-field-type-text .elementor-field-label,
+  .elementor-form .elementor-field-type-email .elementor-field-label,
+  .elementor-form .elementor-field-type-tel .elementor-field-label,
+  .elementor-form .elementor-field-type-number .elementor-field-label,
+  .elementor-form .elementor-field-type-select .elementor-field-label {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background-color: #ffffff; 
+      padding: 0 5px;
+      font-size: 13px;
+      color: #5c7b99; 
+      font-weight: 500;
+      z-index: 2;
+  }
+
+  .elementor-form input, 
+  .elementor-form select, 
+  .elementor-form textarea {
+      background-color: #ffffff;
+      border: 1px solid #94a8bc; 
+      border-radius: 6px;
+      color: #333333;
+      padding: 16px 15px;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: none;
+      transition: border-color 0.2s ease;
+      position: relative;
+      z-index: 1;
+  }
+
+  .elementor-form input:focus, 
+  .elementor-form select:focus, 
+  .elementor-form textarea:focus {
+      border: 2px solid #3f7b97;
+      padding: 15px 14px; 
+      outline: none;
+  }
+
+  .elementor-form select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c7b99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 15px;
+  }
+
+  .elementor-form .elementor-field-type-radio {
+      margin-top: 15px;
+      margin-bottom: 25px;
+  }
+  
+  .elementor-form .elementor-field-type-radio > .elementor-field-label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: #3f7b97;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 15px;
+  }
+  
+  .elementor-form .elementor-field-type-radio > .elementor-field-label::after {
+      content: "";
+      flex-grow: 1;
+      height: 1px;
+      background-color: #94a8bc;
+      margin-left: 15px;
+  }
+
+  .elementor-form .elementor-field-subgroup {
+      display: flex;
+      gap: 30px;
+  }
+  
+  .elementor-form .elementor-field-option {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: #4b5563;
+      cursor: pointer;
+  }
+  
+  .elementor-form .elementor-field-option input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #94a8bc;
+      border-radius: 50%;
+      margin-right: 10px;
+      position: relative;
+      outline: none;
+      background-color: transparent;
+      cursor: pointer;
+  }
+  
+  .elementor-form .elementor-field-option input[type="radio"]:checked {
+      border-color: #5c7b99; 
+  }
+  
+  .elementor-form .elementor-field-option input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background-color: #5c7b99;
+      border-radius: 50%;
+  }
+
+  .elementor-form .elementor-field-type-submit {
+      background-color: #f3f4f6;
+      margin: 20px -30px -30px -30px;
+      padding: 30px;
+      border-radius: 0 0 12px 12px;
+      text-align: center;
+  }
+
+  .elementor-form .elementor-button {
+      background-color: #c5cfd6;
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: none;
+      width: 80%;
+      margin: 0 auto;
+      display: block;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+  }
+  
+  .elementor-form .elementor-button:hover {
+      background-color: #a8b6c0;
+  }
+
+  /* Utility classes for layout simulation */
+  .row {
+    display: flex;
+    gap: 20px;
+  }
+  .col {
+    flex: 1;
+  }
+`;
+
+export default function FormPreview() {
+  return (
+    <ElementorSimulator>
+      <div className="form-container">
+        
+        {/* Fake Elementor Heading Widget */}
+        <div className="fake-elementor-heading">
+          <h2>Get Your Free Quote</h2>
+          <p>No obligation. No upfront charges.</p>
+        </div>
+
+        {/* Fake Elementor Form Widget */}
+        <form className="elementor-form" onSubmit={(e) => e.preventDefault()}>
+          
+          <div className="row">
+            <div className="col elementor-field-type-text elementor-field-group">
+              <label className="elementor-field-label">Pick-up</label>
+              <input type="text" placeholder="ZIP or City" className="elementor-field" />
+            </div>
+            
+            <div className="col elementor-field-type-text elementor-field-group">
+              <label className="elementor-field-label">Delivery</label>
+              <input type="text" placeholder="ZIP or City" className="elementor-field" />
+            </div>
+          </div>
+
+          <div className="elementor-field-type-radio elementor-field-group">
+            <label className="elementor-field-label">Transport Type</label>
+            <div className="elementor-field-subgroup">
+              <label className="elementor-field-option">
+                <input type="radio" name="transport" defaultChecked /> Open
+              </label>
+              <label className="elementor-field-option">
+                <input type="radio" name="transport" /> Enclosed
+              </label>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col elementor-field-type-select elementor-field-group">
+              <label className="elementor-field-label">Year</label>
+              <select className="elementor-field">
+                <option>Select</option>
+                <option>2024</option>
+                <option>2023</option>
+              </select>
+            </div>
+            
+            <div className="col elementor-field-type-select elementor-field-group">
+              <label className="elementor-field-label">Vehicle Make</label>
+              <select className="elementor-field">
+                <option>Type or select</option>
+                <option>Toyota</option>
+                <option>Honda</option>
+              </select>
+            </div>
+            
+            <div className="col elementor-field-type-select elementor-field-group">
+              <label className="elementor-field-label">Vehicle Model</label>
+              <select className="elementor-field">
+                <option>Type or select</option>
+                <option>Camry</option>
+                <option>Civic</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="elementor-field-type-radio elementor-field-group">
+            <label className="elementor-field-label">Condition</label>
+            <div className="elementor-field-subgroup">
+              <label className="elementor-field-option">
+                <input type="radio" name="condition" defaultChecked /> Operable
+              </label>
+              <label className="elementor-field-option">
+                <input type="radio" name="condition" /> Inoperable
+              </label>
+            </div>
+          </div>
+
+          <div className="elementor-field-type-submit elementor-field-group">
+            <button type="submit" className="elementor-button">
+              Get a Quote →
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </ElementorSimulator>
+  );
+}
