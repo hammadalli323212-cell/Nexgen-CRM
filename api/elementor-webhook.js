@@ -45,14 +45,14 @@ export default async function handler(req, res) {
     const transportType = getField(['transport_type', 'Transport Type', 'transportType']) || 'Open';
     const vehicleType = getField(['vehicle_type', 'Select Vehicle Type', 'vehicleType']) || 'Car';
     const vehicleMake = getField(['make', 'Vehicle Make', 'vehicleMake']);
-    const vehicleYear = getField(['year', 'Vehicle Model Year', 'vehicleYear']);
+    const vehicleYear = getField(['year', 'Vehicle Model Year', 'vehicleYear', 'Year']);
     const vehicleModel = getField(['model', 'Vehicle Model', 'vehicleModel']);
-    const conditionStr = getField(['condition', 'Vehicle Condition', 'vehicleCondition']) || 'Operable';
+    const conditionStr = getField(['condition', 'Vehicle Condition', 'vehicleCondition', 'Condition']) || 'Operable';
     const nameStr = getField(['name', 'Name']);
-    const emailStr = getField(['email', 'Email']);
-    const phoneStr = getField(['phone', 'Phone', 'Phone (10 digits)']);
+    const emailStr = getField(['email', 'Email', 'Email Address']);
+    const phoneStr = getField(['phone', 'Phone', 'Phone Number', 'Phone (10 digits)']);
     const shipDateRaw = getField(['date', 'Ship Date', 'shipDate', 'Estimated Ship Date', 'pickup_date', 'Pickup Date', 'shipping_date', 'date_1', 'Date', 'Ship Date (mm/dd/yyyy)']);
-    const notesStr = getField(['comments', 'Comment From Shipper', 'notes']);
+    const notesStr = getField(['comments', 'Comment From Shipper', 'notes', 'Additional Notes', 'additional_notes']);
 
     // DEBUG: Always create a lead if we hit this endpoint, even if fields are missing, 
     // so we can see the exact payload Elementor sent!
