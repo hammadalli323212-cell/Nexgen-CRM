@@ -20,7 +20,7 @@ const ElementorSimulator = ({ children }) => (
   }
 
   .fake-elementor-heading {
-    background-color: #3b9add; /* Nexgen Brand Blue */
+    background-color: #335ad6; /* Nexgen Brand Blue */
     color: white;
     text-align: center;
     padding: 25px 30px 15px 30px; /* Reduced top/bottom padding to tighten up space */
@@ -83,7 +83,7 @@ const ElementorSimulator = ({ children }) => (
       background-color: #ffffff; 
       padding: 0 5px;
       font-size: 13px;
-      color: #2980b9; /* Nexgen Darker Blue */
+      color: #23439b; /* Nexgen Darker Blue */
       font-weight: 500;
       z-index: 2;
   }
@@ -110,7 +110,7 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form input:focus, 
   .elementor-form select:focus, 
   .elementor-form textarea:focus {
-      border: 2px solid #3b9add; /* Nexgen Brand Blue */
+      border: 2px solid #335ad6; /* Nexgen Brand Blue */
       padding: 13px 14px; /* Adjust padding to prevent jumping when border gets thicker */
       outline: none;
   }
@@ -120,7 +120,7 @@ const ElementorSimulator = ({ children }) => (
       appearance: none;
       -webkit-appearance: none;
       padding-right: 35px; /* Prevent text from overlapping the arrow */
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b9add' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23335ad6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
       background-position: right 15px center;
       background-size: 15px;
@@ -135,7 +135,7 @@ const ElementorSimulator = ({ children }) => (
       position: relative;
       display: flex;
       align-items: center;
-      color: #2980b9; /* Nexgen Darker Blue */
+      color: #23439b; /* Nexgen Darker Blue */
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 15px;
@@ -184,7 +184,7 @@ const ElementorSimulator = ({ children }) => (
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked {
-      border: 2px solid #3b9add; /* Nexgen Brand Blue */
+      border: 2px solid #335ad6; /* Nexgen Brand Blue */
   }
   
   .elementor-form .elementor-field-option input[type="radio"]:checked::after {
@@ -195,7 +195,7 @@ const ElementorSimulator = ({ children }) => (
       transform: translate(-50%, -50%);
       width: 8px;
       height: 8px;
-      background-color: #3b9add; /* Nexgen Brand Blue */
+      background-color: #335ad6; /* Nexgen Brand Blue */
       border-radius: 50%;
   }
 
@@ -208,7 +208,7 @@ const ElementorSimulator = ({ children }) => (
   }
 
   .elementor-form .elementor-button {
-      background-color: #3b9add; /* Nexgen Brand Blue */
+      background-color: #335ad6; /* Nexgen Brand Blue */
       color: #ffffff;
       border: none;
       border-radius: 50px;
@@ -224,7 +224,7 @@ const ElementorSimulator = ({ children }) => (
   }
   
   .elementor-form .elementor-button:hover {
-      background-color: #2980b9; /* Nexgen Brand Blue Hover */
+      background-color: #23439b; /* Nexgen Brand Blue Hover */
   }
 
   /* Utility classes for layout simulation */
