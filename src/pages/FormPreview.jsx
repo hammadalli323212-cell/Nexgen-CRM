@@ -62,7 +62,8 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form .elementor-field-type-tel,
   .elementor-form .elementor-field-type-number,
   .elementor-form .elementor-field-type-select,
-  .elementor-form .elementor-field-type-date {
+  .elementor-form .elementor-field-type-date,
+  .elementor-form .elementor-field-type-textarea {
       position: relative;
       margin-top: 15px; 
       margin-bottom: 20px;
@@ -74,7 +75,8 @@ const ElementorSimulator = ({ children }) => (
   .elementor-form .elementor-field-type-tel .elementor-field-label,
   .elementor-form .elementor-field-type-number .elementor-field-label,
   .elementor-form .elementor-field-type-select .elementor-field-label,
-  .elementor-form .elementor-field-type-date .elementor-field-label {
+  .elementor-form .elementor-field-type-date .elementor-field-label,
+  .elementor-form .elementor-field-type-textarea .elementor-field-label {
       position: absolute;
       top: -10px;
       left: 12px;
@@ -377,7 +379,7 @@ const FormPreview = () => {
                 </div>
               </div>
 
-              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '15px' }}>
+              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
                 <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', flex: '0 0 auto', padding: '15px 25px', whiteSpace: 'nowrap' }} onClick={() => setStep(1)}>
                   ← Previous
                 </button>
