@@ -140,9 +140,24 @@ const ElementorSimulator = ({ children }) => (
       margin-bottom: 15px;
   }
   
+  .elementor-form .elementor-field-type-submit {
+      margin-top: 30px;
+      text-align: center;
+      background-color: #f8f9fa; /* Light grey footer */
+      padding: 30px 20px; /* Reduced to give buttons more room on mobile */
+      margin-left: -30px; 
+      margin-right: -30px; 
+      margin-bottom: -30px;
+      border-radius: 0 0 12px 12px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+  }
+  
   .elementor-form .elementor-field-subgroup {
       display: flex;
       gap: 15px;
+      flex-wrap: wrap;
   }
   
   .elementor-form .elementor-field-option {
@@ -379,11 +394,11 @@ const FormPreview = () => {
                 </div>
               </div>
 
-              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', flex: '0 0 auto', padding: '15px 25px', whiteSpace: 'nowrap' }} onClick={() => setStep(1)}>
+              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', flex: '1 1 auto', padding: '15px 15px', whiteSpace: 'nowrap', minWidth: '120px' }} onClick={() => setStep(1)}>
                   ← Previous
                 </button>
-                <button type="submit" className="elementor-button" style={{ flex: '1', whiteSpace: 'nowrap' }}>
+                <button type="submit" className="elementor-button" style={{ flex: '2 1 auto', padding: '15px 15px', whiteSpace: 'nowrap', minWidth: '160px' }}>
                   Get a Quote →
                 </button>
               </div>
