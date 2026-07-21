@@ -1,17 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
 
-const ElementorSimulator = styled.div`
-  min-height: 100vh;
-  background-color: #e5e7eb;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  font-family: 'Roboto', sans-serif;
-
+const ElementorSimulator = ({ children }) => (
+  <div style={{
+    minHeight: '100vh',
+    backgroundColor: '#e5e7eb',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '40px 20px',
+    fontFamily: '"Roboto", sans-serif'
+  }}>
+    <style>{`
   .form-container {
     width: 100%;
     max-width: 600px;
@@ -219,7 +220,10 @@ const ElementorSimulator = styled.div`
   .col {
     flex: 1;
   }
-`;
+    `}</style>
+    {children}
+  </div>
+);
 
 export default function FormPreview() {
   return (
