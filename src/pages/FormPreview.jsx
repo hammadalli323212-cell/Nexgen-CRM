@@ -252,48 +252,6 @@ const ElementorSimulator = ({ children }) => (
 
 const FormPreview = () => {
   const [step, setStep] = useState(1);
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedMake, setSelectedMake] = useState('');
-  const [selectedModel, setSelectedModel] = useState('');
-  const [modelsList, setModelsList] = useState([]);
-  const [isLoadingModels, setIsLoadingModels] = useState(false);
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 1980 + 2 }, (v, i) => currentYear + 1 - i);
-  
-  const popularMakes = [
-    "Acura", "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "BMW", "Buick", "Cadillac",
-    "Chevrolet", "Chrysler", "Dodge", "Ferrari", "FIAT", "Ford", "Genesis", "GMC",
-    "Honda", "Hyundai", "INFINITI", "Jaguar", "Jeep", "Kia", "Lamborghini", "Land Rover",
-    "Lexus", "Lincoln", "Maserati", "Mazda", "McLaren", "Mercedes-Benz", "MINI", "Mitsubishi",
-    "Nissan", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Subaru", "Tesla", "Toyota",
-    "Volkswagen", "Volvo"
-  ];
-
-  React.useEffect(() => {
-    if (selectedYear && selectedMake && selectedMake !== 'Type or select' && selectedYear !== 'Select') {
-      setIsLoadingModels(true);
-      setSelectedModel('');
-      fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${selectedMake}/modelyear/${selectedYear}?format=json`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.Results) {
-            const uniqueModels = [...new Set(data.Results.map(item => item.Model_Name))].sort();
-            setModelsList(uniqueModels);
-          } else {
-            setModelsList([]);
-          }
-          setIsLoadingModels(false);
-        })
-        .catch(err => {
-          console.error(err);
-          setModelsList([]);
-          setIsLoadingModels(false);
-        });
-    } else {
-      setModelsList([]);
-    }
-  }, [selectedYear, selectedMake]);
 
   return (
     <ElementorSimulator>
@@ -342,29 +300,21 @@ const FormPreview = () => {
                     <option>Other</option>
                   </select>
                 </div>
-                
+              </div>
+              <div className="row">
                 <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Year <span className="elementor-mark-required">*</span></label>
-                  <input type="text" className="elementor-field" required value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} list="year-options" placeholder="Select or type" />
-                  <datalist id="year-options">
-                    {years.map(y => <option key={y} value={y} />)}
-                  </datalist>
+                  <input type="text" className="elementor-field" placeholder="e.g. 2024" required />
                 </div>
                 
                 <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Vehicle Make <span className="elementor-mark-required">*</span></label>
-                  <input type="text" className="elementor-field" required value={selectedMake} onChange={(e) => setSelectedMake(e.target.value)} list="make-options" placeholder="Select or type" />
-                  <datalist id="make-options">
-                    {popularMakes.map(m => <option key={m} value={m} />)}
-                  </datalist>
+                  <input type="text" className="elementor-field" placeholder="e.g. Toyota" required />
                 </div>
                 
                 <div className="col elementor-field-type-text elementor-field-group">
                   <label className="elementor-field-label">Vehicle Model <span className="elementor-mark-required">*</span></label>
-                  <input type="text" className="elementor-field" required value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)} list="model-options" placeholder={isLoadingModels ? "Loading models..." : "Select or type"} />
-                  <datalist id="model-options">
-                    {modelsList.map(m => <option key={m} value={m} />)}
-                  </datalist>
+                  <input type="text" className="elementor-field" placeholder="e.g. Camry" required />
                 </div>
               </div>
 
