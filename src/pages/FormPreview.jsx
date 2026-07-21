@@ -227,7 +227,7 @@ const ElementorSimulator = ({ children }) => (
     margin-left: 3px;
     font-weight: bold;
   }
-</style>
+    `}</style>
     {children}
   </div>
 );
