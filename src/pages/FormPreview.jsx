@@ -370,6 +370,12 @@ const FormPreview = () => {
                   <input type="tel" className="elementor-field" placeholder="(555) 000-0000" required />
                 </div>
               </div>
+              <div className="row">
+                <div className="col elementor-field-type-textarea elementor-field-group">
+                  <label className="elementor-field-label">Additional notes</label>
+                  <textarea className="elementor-field" rows="3" placeholder="Any special instructions or details..."></textarea>
+                </div>
+              </div>
 
               <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '20px' }}>
                 <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', width: '30%' }} onClick={() => setStep(1)}>
