@@ -377,11 +377,11 @@ const FormPreview = () => {
                 </div>
               </div>
 
-              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '20px' }}>
-                <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', width: '30%' }} onClick={() => setStep(1)}>
+              <div className="elementor-field-type-submit elementor-field-group" style={{ display: 'flex', gap: '15px' }}>
+                <button type="button" className="elementor-button" style={{ backgroundColor: '#94a8bc', flex: '0 0 auto', padding: '15px 25px', whiteSpace: 'nowrap' }} onClick={() => setStep(1)}>
                   ← Previous
                 </button>
-                <button type="submit" className="elementor-button" style={{ width: '70%' }}>
+                <button type="submit" className="elementor-button" style={{ flex: '1', whiteSpace: 'nowrap' }}>
                   Get a Quote →
                 </button>
               </div>
