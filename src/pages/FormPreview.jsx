@@ -103,6 +103,7 @@ const ElementorSimulator = ({ children }) => (
       position: relative;
       z-index: 1;
       box-sizing: border-box;
+      resize: none;
   }
 
   /* Input Focus State */
