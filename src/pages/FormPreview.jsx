@@ -310,6 +310,13 @@ export default function FormPreview() {
             </div>
           </div>
 
+          <div className="row">
+            <div className="col elementor-field-type-date elementor-field-group">
+              <label className="elementor-field-label">First Available Pick-up Date</label>
+              <input type="date" className="elementor-field" />
+            </div>
+          </div>
+
           <div className="elementor-field-type-submit elementor-field-group">
             <button type="submit" className="elementor-button">
               Get a Quote →
