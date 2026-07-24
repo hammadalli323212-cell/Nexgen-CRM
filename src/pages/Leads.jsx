@@ -19,8 +19,11 @@ const Leads = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const { user, isAdmin, isSuperAdmin, loading: authLoading } = useAuth();
+  const [isFetching, setIsFetching] = useState(false);
 
-  const fetchLeads = async () => {
+  const fetchLeads = async (silent = false) => {
+    if (isFetching) return;
+    setIsFetching(true);
     try {
       let query = supabase.from('leads').select(`
           id, 
@@ -81,9 +84,32 @@ const Leads = () => {
           }));
           
           setLeads(formattedLeads);
+        } else {
+          setLeads([]); // Ensure it clears if 0 rows (e.g. RLS changed)
         }
       } catch (err) {
         console.error('Error fetching leads:', err);
+        const errorDetails = err.message || JSON.stringify(err);
+        const isJwtError = err.code === 'PGRST301' || (typeof errorDetails === 'string' && errorDetails.toLowerCase().includes('jwt'));
+        
+        // Handle expired JWT token
+        if (isJwtError) {
+          // Force Supabase to check/refresh the session
+          const { data, error: sessionError } = await supabase.auth.getSession();
+          if (sessionError || !data.session) {
+             toast.error('Your session has expired. Please log in again.');
+             supabase.auth.signOut();
+             return;
+          } else if (!silent) {
+             // Session was just refreshed! Try one more time.
+             toast.success('Session refreshed. Loading leads...');
+             fetchLeads(true);
+             return;
+          }
+        }
+        if (!silent) toast.error(`Failed to load leads: ${errorDetails}`);
+      } finally {
+        setIsFetching(false);
       }
   };
 
@@ -91,6 +117,39 @@ const Leads = () => {
     if (!authLoading) {
       fetchLeads();
     }
+    
+    // Auto-refresh when returning to the tab after inactivity
+    const handleFocus = () => {
+      if (!authLoading) fetchLeads(true);
+    };
+
+    // Auto-refresh every 10 seconds for real-time lead updates without refreshing
+    const pollInterval = setInterval(() => {
+      if (!authLoading) fetchLeads(true);
+    }, 10000);
+
+    // Listen for custom realtime insert event from TopNavigationBar
+    const handleLeadInserted = () => {
+      if (!authLoading) fetchLeads(true);
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('crm-lead-inserted', handleLeadInserted);
+
+    // Supabase Realtime Channel fallback
+    const channel = supabase
+      .channel('leads-page-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, () => {
+        if (!authLoading) fetchLeads(true);
+      })
+      .subscribe();
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('crm-lead-inserted', handleLeadInserted);
+      clearInterval(pollInterval);
+      supabase.removeChannel(channel);
+    };
   }, [user, isAdmin, authLoading]);
 
   const handleBulkDelete = async () => {
@@ -443,6 +502,14 @@ const Leads = () => {
                 ref={fileInputRef} 
                 onChange={handleImport} 
               />
+              <button 
+                className={styles.btnSecondary} 
+                style={{ marginRight: '10px' }} 
+                onClick={() => fetchLeads()}
+                disabled={isFetching}
+              >
+                {isFetching ? 'Refreshing...' : 'Refresh'}
+              </button>
               <button 
                 className={styles.btnSecondary} 
                 style={{ marginRight: '10px' }} 

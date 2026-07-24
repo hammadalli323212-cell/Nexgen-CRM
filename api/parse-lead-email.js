@@ -82,13 +82,27 @@ export default async function handler(req, res) {
       auth: { autoRefreshToken: false, persistSession: false }
     });
 
-    // 3a. Customer
+    // 2. Customer Profile
     let customerId = null;
-    const { data: existingCustomer } = await supabaseAdmin.from('customers').select('id').eq('email', emailStr).single();
     
-    if (existingCustomer) {
-      customerId = existingCustomer.id;
-    } else {
+    // Check if there's an exact match for email, phone, and name
+    const { data: matches } = await supabaseAdmin
+      .from('customers')
+      .select('id, first_name, last_name, phone')
+      .ilike('email', emailStr);
+
+    if (matches && matches.length > 0) {
+      const exactMatch = matches.find(m => 
+        (m.phone || '') === (phoneStr || '') &&
+        (m.first_name || '').toLowerCase() === (firstName || '').toLowerCase() &&
+        (m.last_name || '').toLowerCase() === (lastName || '').toLowerCase()
+      );
+      if (exactMatch) {
+        customerId = exactMatch.id;
+      }
+    }
+    
+    if (!customerId) {
       const { data: newCustomer, error: customerError } = await supabaseAdmin
         .from('customers')
         .insert([{

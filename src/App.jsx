@@ -26,8 +26,6 @@ const MyTasks = lazy(() => import('./pages/MyTasks'));
 
 import './index.css';
 
-import FormPreview from './pages/FormPreview';
-
 import { Toaster } from 'react-hot-toast';
 
 // Placeholder components for other routes
@@ -62,7 +60,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/set-password" element={<SetPassword />} />
           <Route path="/booking/:tenantId" element={<BookingPortalLayout />} />
-          <Route path="/form-preview" element={<FormPreview />} />
+          <Route path="/form-preview" element={<Navigate to="/" replace />} />
 
           {/* Internal CRM Routes (Protected) */}
           <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>

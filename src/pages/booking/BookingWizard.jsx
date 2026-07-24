@@ -57,7 +57,8 @@ const BookingWizard = () => {
     firstName: '', lastName: '', email: '', phone: '', pickupDate: '',
     originAddress: '', originCity: '', isOriginContact: false, originContactName: '', originContactEmail: '', originContactPhone: '',
     destAddress: '', destCity: '', isDestContact: false, destContactName: '', destContactEmail: '', destContactPhone: '',
-    agreed: false, signature: ''
+    agreed: false, signature: '',
+    cardName: '', cardNumber: '', cardExpMonth: '', cardExpYear: '', cardCvc: '', billingZip: ''
   });
   const [ipAddress, setIpAddress] = useState('Fetching...');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,13 +160,49 @@ const BookingWizard = () => {
   };
 
   const handleBookOrder = async () => {
-    if (!formData.agreed || !formData.signature) {
-      toast.error("Please agree to the terms and provide an electronic signature.");
+    if (!formData.agreed) {
+      toast.error("You must agree to the Terms & Conditions.");
       return;
+    }
+    if (!formData.signature.trim()) {
+      toast.error("Please enter your electronic signature.");
+      return;
+    }
+
+    const isRequireCC = leadData?.notes?.includes('[REQUIRE_CC_ON_FILE: true]');
+    if (isRequireCC) {
+      if (!formData.cardNumber || !formData.cardExpMonth || !formData.cardExpYear || !formData.cardCvc || !formData.billingZip) {
+        toast.error("Please fill in all Credit Card on File details before completing your order.");
+        return;
+      }
     }
     
     setIsSubmitting(true);
     try {
+      // 0. Tokenize and Save Credit Card in Stripe Vault if required
+      if (isRequireCC && formData.cardNumber) {
+        const saveRes = await fetch('/api/stripe-save-card', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            leadId: leadData.id,
+            leadNumber: id,
+            cardNumber: formData.cardNumber,
+            cardExpMonth: formData.cardExpMonth,
+            cardExpYear: formData.cardExpYear,
+            cardCvc: formData.cardCvc,
+            cardName: formData.cardName || `${formData.firstName} ${formData.lastName}`.trim(),
+            billingZip: formData.billingZip,
+            customerEmail: formData.email
+          })
+        });
+
+        const saveJson = await saveRes.json();
+        if (!saveRes.ok) {
+          throw new Error(saveJson.error || 'Credit card validation failed with Stripe.');
+        }
+      }
+
       // 1. Sync updated Customer data
       if (leadData?.customers?.id) {
         const { error: customerError } = await supabase.from('customers').update({
@@ -465,6 +502,47 @@ const BookingWizard = () => {
                 <label>Electronic signature (Your full name)*</label>
                 <input type="text" value={formData.signature} onChange={e => setFormData({...formData, signature: e.target.value})} />
               </div>
+
+              {leadData?.notes?.includes('[REQUIRE_CC_ON_FILE: true]') && (
+                <div style={{ marginTop: '24px', padding: '18px', backgroundColor: 'rgba(59, 130, 246, 0.08)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1d4ed8', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    💳 CREDIT CARD ON FILE AUTHORIZATION (REQUIRED)
+                  </h3>
+                  <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '16px' }}>
+                    Please enter your credit card details below to save on file for order confirmation. Your card will be stored securely with Stripe (PCI Compliant).
+                  </p>
+
+                  <div className={styles.inputGroup}>
+                    <label>Cardholder Full Name*</label>
+                    <input type="text" value={formData.cardName} onChange={e => setFormData({...formData, cardName: e.target.value})} placeholder="Full Name on Card" required />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label>Credit Card Number*</label>
+                    <input type="text" value={formData.cardNumber} onChange={e => setFormData({...formData, cardNumber: e.target.value})} placeholder="4242 4242 4242 4242" required />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                    <div className={styles.inputGroup}>
+                      <label>Exp Month (MM)*</label>
+                      <input type="text" maxLength={2} value={formData.cardExpMonth} onChange={e => setFormData({...formData, cardExpMonth: e.target.value})} placeholder="12" required />
+                    </div>
+                    <div className={styles.inputGroup}>
+                      <label>Exp Year (YY)*</label>
+                      <input type="text" maxLength={2} value={formData.cardExpYear} onChange={e => setFormData({...formData, cardExpYear: e.target.value})} placeholder="28" required />
+                    </div>
+                    <div className={styles.inputGroup}>
+                      <label>CVC / CVV*</label>
+                      <input type="text" maxLength={4} value={formData.cardCvc} onChange={e => setFormData({...formData, cardCvc: e.target.value})} placeholder="123" required />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                    <label>Billing ZIP Code*</label>
+                    <input type="text" value={formData.billingZip} onChange={e => setFormData({...formData, billingZip: e.target.value})} placeholder="90210" required />
+                  </div>
+                </div>
+              )}
 
               <div className={styles.ipGroup}>
                 <div className={styles.ipBox}>

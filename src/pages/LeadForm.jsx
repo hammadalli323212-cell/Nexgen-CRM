@@ -22,6 +22,14 @@ const LeadForm = ({ isOrder = false }) => {
   const { id } = useParams();
   const isEditMode = !!id;
   const { user } = useAuth();
+
+  const formatPhone = (val) => {
+    if (!val) return val;
+    const digits = val.replace(/\D/g, '');
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  };
   
   // Form State
   const [internalLeadId, setInternalLeadId] = useState(null); // The UUID in the db
@@ -462,7 +470,7 @@ const LeadForm = ({ isOrder = false }) => {
                 value={customer.phone} 
                 onChange={e => {
                   setActiveSuggestionField('phone');
-                  setCustomer({...customer, phone: e.target.value});
+                  setCustomer({...customer, phone: formatPhone(e.target.value)});
                 }} 
                 onFocus={() => {
                   if (customer.phone?.length >= 3) {

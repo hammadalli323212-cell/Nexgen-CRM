@@ -1,10 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ChevronDown, Search, Bell, Star, PlusCircle, LogOut, Users, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { TENANT } from '../../config/tenant';
+import { toast } from 'react-hot-toast';
 import styles from './TopNavigationBar.module.css';
+
+let globalAudioCtx = null;
+
+const unlockAudio = () => {
+  try {
+    if (!globalAudioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) globalAudioCtx = new AudioContext();
+    }
+    if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+      globalAudioCtx.resume();
+    }
+  } catch (e) {}
+};
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('click', unlockAudio, { passive: true });
+  window.addEventListener('keydown', unlockAudio, { passive: true });
+}
+
+const playNotificationSound = (isOrder = false) => {
+  try {
+    unlockAudio();
+    if (globalAudioCtx) {
+      const now = globalAudioCtx.currentTime;
+      const osc1 = globalAudioCtx.createOscillator();
+      const osc2 = globalAudioCtx.createOscillator();
+      const gain = globalAudioCtx.createGain();
+
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+
+      if (isOrder) {
+        osc1.frequency.setValueAtTime(523.25, now); // C5
+        osc2.frequency.setValueAtTime(783.99, now + 0.15); // G5
+      } else {
+        osc1.frequency.setValueAtTime(440, now); // A4
+        osc2.frequency.setValueAtTime(659.25, now + 0.15); // E5
+      }
+
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(globalAudioCtx.destination);
+
+      osc1.start(now);
+      osc1.stop(now + 0.15);
+      osc2.start(now + 0.15);
+      osc2.stop(now + 0.5);
+    }
+  } catch (err) {
+    console.error('Audio playback error:', err);
+  }
+};
 
 const getInitials = (name) => {
   if (!name) return 'U';
@@ -22,43 +79,147 @@ const TopNavigationBar = ({ onSearchClick }) => {
   const [unreadOrders, setUnreadOrders] = useState(0);
   const { user, role, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const lastMaxLeadNumRef = useRef(null);
+
+  const triggerPopUpNotification = async (record) => {
+    if (!record) return;
+    const isOrder = ['Booked', 'Dispatched', 'In Transit', 'Delivered'].includes(record.status);
+    const leadNum = record.lead_number ? `NG-${record.lead_number}` : 'New';
+
+    let customerName = 'Website Customer';
+    if (record.customer_id) {
+      const { data: cust } = await supabase
+        .from('customers')
+        .select('first_name, last_name')
+        .eq('id', record.customer_id)
+        .maybeSingle();
+      if (cust && (cust.first_name || cust.last_name)) {
+        customerName = `${cust.first_name || ''} ${cust.last_name || ''}`.trim();
+      }
+    }
+
+    playNotificationSound(isOrder);
+    window.dispatchEvent(new CustomEvent('crm-lead-inserted'));
+
+    toast.custom(
+      (t) => (
+        <div
+          onClick={() => {
+            toast.dismiss(t.id);
+            navigate(isOrder ? `/orders/${record.lead_number}` : `/leads/${record.lead_number}`);
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            backgroundColor: isOrder ? '#065f46' : '#1e3a8a',
+            color: '#ffffff',
+            padding: '14px 20px',
+            borderRadius: '10px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            fontWeight: '500',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            transition: 'all 0.2s ease',
+            zIndex: 99999
+          }}
+        >
+          <span style={{ fontSize: '1.5rem' }}>{isOrder ? '🎉' : '🔔'}</span>
+          <div>
+            <div style={{ fontWeight: 'bold', fontSize: '1rem', color: isOrder ? '#6ee7b7' : '#93c5fd' }}>
+              {isOrder ? 'New Order Received!' : 'New Lead Received!'} ({leadNum})
+            </div>
+            <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>
+              From {customerName}. Click to view details.
+            </div>
+          </div>
+        </div>
+      ),
+      { duration: 8000, position: 'top-right' }
+    );
+  };
 
   useEffect(() => {
-    const fetchUnreadCounts = async () => {
-      // Base query builder helper
-      const buildQuery = (table, selectStr, countOpts) => {
-        let query = supabase.from(table).select(selectStr, countOpts);
-        if (!isAdmin) {
-           query = query.or(`assigned_to.eq.${user?.id},created_by.eq.${user?.id}`);
-        }
-        return query;
-      };
+    if (!user?.id) return;
 
-      const { count: leadsCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
-        .eq('is_read', false)
-        .neq('status', 'Booked')
-        .eq('is_archived', false);
-      
-      const { count: ordersCount } = await buildQuery('leads', '*', { count: 'exact', head: true })
-        .eq('is_read', false)
-        .eq('status', 'Booked')
-        .eq('is_archived', false);
+    let isSubscribed = true;
+
+    const fetchUnreadCounts = async () => {
+      try {
+        const buildQuery = (table, selectStr, countOpts) => {
+          let query = supabase.from(table).select(selectStr, countOpts);
+          if (!isAdmin) {
+             query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`);
+          }
+          return query;
+        };
+
+        const { count: leadsCount, error: leadsErr } = await buildQuery('leads', '*', { count: 'exact', head: true })
+          .eq('is_read', false)
+          .in('status', ['New', 'Quoted', 'Follow Up'])
+          .eq('is_archived', false);
         
-      setUnreadLeads(leadsCount || 0);
-      setUnreadOrders(ordersCount || 0);
+        const { count: ordersCount, error: ordersErr } = await buildQuery('leads', '*', { count: 'exact', head: true })
+          .eq('is_read', false)
+          .in('status', ['Booked', 'Dispatched', 'In Transit', 'Delivered'])
+          .eq('is_archived', false);
+          
+        if (isSubscribed) {
+          if (!leadsErr) setUnreadLeads(leadsCount || 0);
+          if (!ordersErr) setUnreadOrders(ordersCount || 0);
+        }
+
+        // Check for newest lead for polling notification trigger
+        const { data: newestLead } = await supabase
+          .from('leads')
+          .select('id, lead_number, status, customer_id, created_at')
+          .order('lead_number', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (isSubscribed && newestLead?.lead_number) {
+          if (lastMaxLeadNumRef.current !== null && newestLead.lead_number > lastMaxLeadNumRef.current) {
+            triggerPopUpNotification(newestLead);
+          }
+          lastMaxLeadNumRef.current = newestLead.lead_number;
+        }
+      } catch (err) {
+        console.error('Error in fetchUnreadCounts:', err);
+      }
     };
     
     fetchUnreadCounts();
+
+    // Polling backup every 10 seconds
+    const pollInterval = setInterval(fetchUnreadCounts, 10000);
+
+    // Supabase Realtime Listener with unique channel name
+    const channelName = `topnav-changes-${user.id}-${Date.now()}`;
     const channel = supabase
-      .channel('schema-db-changes')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'leads' },
-        (payload) => fetchUnreadCounts()
+        async (payload) => {
+          if (!isSubscribed) return;
+          fetchUnreadCounts();
+          const isInsert = payload.eventType === 'INSERT';
+          const isConvertedToOrder = payload.eventType === 'UPDATE' && payload.old?.status !== 'Booked' && payload.new?.status === 'Booked';
+
+          if (isInsert || isConvertedToOrder) {
+            if (payload.new?.lead_number) {
+              lastMaxLeadNumRef.current = Math.max(lastMaxLeadNumRef.current || 0, payload.new.lead_number);
+            }
+            triggerPopUpNotification(payload.new);
+          }
+        }
       )
       .subscribe();
 
     return () => {
+      isSubscribed = false;
+      clearInterval(pollInterval);
       supabase.removeChannel(channel);
     };
   }, [isAdmin, user?.id]);

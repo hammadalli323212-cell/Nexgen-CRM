@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool, ChevronDown } from 'lucide-react';
+import { User, MapPin, DollarSign, Truck, ArrowLeft, Upload, Paperclip, Trash2, Edit2, Check, X, PenTool, ChevronDown, CreditCard } from 'lucide-react';
 import { getStatusColors, getAgentColors, SourceBadge } from '../components/common/Badges';
 import { CustomDropdown } from '../components/common/CustomDropdown';
 import { supabase } from '../lib/supabase';
@@ -9,6 +9,7 @@ import { generateOrderPDF } from '../lib/pdfGenerator';
 import { useAuth } from '../lib/AuthContext';
 import { logActivity } from '../lib/activityLogger';
 import EmailPreviewModal from '../components/modals/EmailPreviewModal';
+import StripePaymentModal from '../components/modals/StripePaymentModal';
 import styles from './LeadDetails.module.css';
 
 const LeadDetails = () => {
@@ -48,6 +49,7 @@ const LeadDetails = () => {
   const [activeEmailPayload, setActiveEmailPayload] = useState(null);
   const [activeEmailEndpoint, setActiveEmailEndpoint] = useState(null);
   const [debugError, setDebugError] = useState(null);
+  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
 
   // Carrier Autocomplete State
   const [carrierSuggestions, setCarrierSuggestions] = useState([]);
@@ -827,6 +829,65 @@ const LeadDetails = () => {
     }
   };
 
+  const handleToggleRequireCC = async () => {
+    try {
+      const currentNotes = lead.notes || '';
+      const isCurrentlyRequired = currentNotes.includes('[REQUIRE_CC_ON_FILE: true]');
+      let updatedNotes;
+      
+      if (isCurrentlyRequired) {
+        updatedNotes = currentNotes.replace(/\[REQUIRE_CC_ON_FILE: true\]/g, '').trim();
+      } else {
+        updatedNotes = `${currentNotes}\n[REQUIRE_CC_ON_FILE: true]`.trim();
+      }
+
+      const { error } = await supabase.from('leads').update({ notes: updatedNotes }).eq('id', lead.id);
+      if (error) throw error;
+
+      setLead(prev => ({ ...prev, notes: updatedNotes }));
+      toast.success(isCurrentlyRequired ? 'Require CC on File disabled.' : 'Require CC on File enabled for Booking Wizard!');
+    } catch (err) {
+      toast.error('Failed to update CC Requirement: ' + err.message);
+    }
+  };
+
+  const handleChargeSavedCard = async (paymentMethodId, cardSummary) => {
+    const defaultAmount = (() => {
+      const est = parseFloat(lead.tariff?.replace(/[^0-9.]/g, '') || lead.estimated_price || 0);
+      const pay = parseFloat(lead.carrierPay?.replace(/[^0-9.]/g, '') || lead.carrier_pay || 0);
+      const dep = est > pay ? est - pay : 150;
+      return dep > 0 ? dep.toFixed(2) : '150.00';
+    })();
+
+    const inputAmount = window.prompt(`Charge saved card (${cardSummary}) for Lead NG-${lead.lead_number}:`, defaultAmount);
+    if (!inputAmount || parseFloat(inputAmount) <= 0) return;
+
+    const toastId = toast.loading(`Charging $${inputAmount} on ${cardSummary}...`);
+    try {
+      const response = await fetch('/api/stripe-charge-card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          leadId: lead.id,
+          leadNumber: lead.lead_number,
+          amount: parseFloat(inputAmount),
+          paymentMethodId: paymentMethodId,
+          customerEmail: lead.customers?.email,
+          customerName: `${lead.customers?.first_name || ''} ${lead.customers?.last_name || ''}`.trim(),
+          description: `Direct charge on saved card for NG-${lead.lead_number}`
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to charge saved card.');
+
+      toast.success(`Successfully charged $${inputAmount} on ${cardSummary}!`, { id: toastId });
+      fetchLeadDetails();
+    } catch (err) {
+      toast.error(err.message || 'Charge failed.', { id: toastId });
+    }
+  };
+
   const handleDelete = async () => {
     if (!window.confirm('WARNING: Are you sure you want to PERMANENTLY delete this record? This action cannot be undone!')) return;
     
@@ -968,6 +1029,13 @@ const LeadDetails = () => {
             </button>
             <button className={styles.btnPrimary} onClick={handleSendQuoteEmail} disabled={isSendingQuote}>
               {isSendingQuote ? 'Sending...' : 'Quote Email'}
+            </button>
+            <button 
+              className={styles.btnPrimary} 
+              style={{ backgroundColor: '#6366f1', borderColor: '#4f46e5', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              onClick={() => setIsStripeModalOpen(true)}
+            >
+              <CreditCard size={15} /> Stripe Payment
             </button>
             {!isOrderView && (
               <button className={styles.btnWarning} onClick={handleArchiveToggle}>
@@ -1460,6 +1528,62 @@ const LeadDetails = () => {
                     <span className={styles.infoLabel}>Phone</span>
                     <span className={styles.infoValue}>{lead.customers?.phone || 'N/A'}</span>
                   </div>
+
+                  <div className={styles.infoBlock} style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px dashed var(--border-color)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span className={styles.infoLabel} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: '600' }}>
+                        <CreditCard size={15} color="#3b82f6" /> Require CC on File
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleToggleRequireCC}
+                        style={{
+                          padding: '4px 12px',
+                          borderRadius: '16px',
+                          border: 'none',
+                          fontWeight: '600',
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          backgroundColor: lead?.notes?.includes('[REQUIRE_CC_ON_FILE: true]') ? '#10b981' : 'var(--border-color)',
+                          color: '#ffffff',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {lead?.notes?.includes('[REQUIRE_CC_ON_FILE: true]') ? '✓ ON (Required)' : 'OFF'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Saved Card on File Badge if present */}
+                  {(() => {
+                    const cardMatch = lead?.notes?.match(/\[STRIPE_CARD_SAVED:\s*(.*?)\s*\|\s*(pm_\w+)\s*\|\s*(cus_\w+)\]/);
+                    if (!cardMatch) return null;
+                    const [, cardSummary, pmId] = cardMatch;
+                    return (
+                      <div style={{ marginTop: '10px', padding: '10px', backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div>
+                          <div style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: '700', textTransform: 'uppercase' }}>💳 Card Saved in Vault</div>
+                          <div style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-primary)' }}>{cardSummary}</div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleChargeSavedCard(pmId, cardSummary)}
+                          style={{
+                            backgroundColor: '#2563eb',
+                            color: '#ffffff',
+                            border: 'none',
+                            padding: '6px 12px',
+                            borderRadius: '6px',
+                            fontWeight: '600',
+                            fontSize: '0.82rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          ⚡ Charge Card
+                        </button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
@@ -1866,6 +1990,13 @@ const LeadDetails = () => {
         onSend={confirmSendEmail}
         emailPreview={emailPreviewData}
         customerEmail={activeEmailPayload?.customerEmail}
+      />
+
+      <StripePaymentModal
+        isOpen={isStripeModalOpen}
+        onClose={() => setIsStripeModalOpen(false)}
+        lead={lead}
+        onPaymentComplete={() => window.location.reload()}
       />
     </div>
   );
